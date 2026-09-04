@@ -1,17 +1,86 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>MEDIA MARKET MARKETING LLC</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CRM Personal · Mensajería</title>
+<style>
+:root{
+  --bg:#0b0d10; --panel:#101318; --panel2:#151922; --line:#222834;
+  --text:#f4f7fb; --muted:#8f98a8; --green:#25D366; --violet:#7c5cff;
+  --orange:#ffb84d; --red:#ff6b6b; --blue:#54a8ff;
+}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,#161b25 0,#0b0d10 42%);color:var(--text);height:100vh;overflow:hidden}
+button,input{font:inherit}.app{height:100vh;display:grid;grid-template-columns:360px minmax(0,1fr) 320px;background:rgba(7,9,12,.65)}
+.sidebar,.inspector{background:rgba(13,16,21,.93);backdrop-filter:blur(18px)}.sidebar{border-right:1px solid var(--line);display:flex;flex-direction:column}.inspector{border-left:1px solid var(--line);padding:22px;overflow:auto}.chat{display:flex;flex-direction:column;min-width:0}
+.brand{padding:20px 18px 14px;border-bottom:1px solid var(--line)}.brand-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.title{font-size:19px;font-weight:760;letter-spacing:-.3px}.status{display:flex;align-items:center;gap:7px;font-size:11px;color:#b7c0cc}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px rgba(37,211,102,.55)}
+.search{margin:16px 0 12px;position:relative}.search input{width:100%;background:#171b22;border:1px solid #262c37;border-radius:12px;padding:11px 12px 11px 38px;color:white;outline:none}.search input:focus{border-color:#3a4352}.search .icon{position:absolute;left:13px;top:10px;color:#778196}.chips{display:flex;gap:8px;overflow:auto;padding-bottom:3px}.chip{white-space:nowrap;border:1px solid #2a303b;background:#151920;color:#9ba4b2;border-radius:999px;padding:7px 10px;font-size:11px}.chip.active{background:#232838;color:#fff;border-color:#353d4d}
+.list{overflow:auto;padding:8px}.conversation{display:grid;grid-template-columns:46px 1fr auto;gap:11px;padding:12px;border-radius:14px;cursor:pointer;border:1px solid transparent;margin-bottom:2px}.conversation:hover{background:#141820}.conversation.active{background:linear-gradient(90deg,rgba(124,92,255,.14),rgba(37,211,102,.05));border-color:#2a3140}.avatar{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;background:linear-gradient(145deg,#303748,#171c25);border:1px solid #343d4b}.name{font-size:13px;font-weight:700;margin-bottom:5px}.preview{font-size:12px;color:#8e98a7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}.meta{font-size:10px;color:#7f8998;text-align:right}.badge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:99px;background:var(--green);color:#07130b;font-size:10px;font-weight:800;margin-top:8px}.priority{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:5px}.p-high{background:var(--red)}.p-med{background:var(--orange)}.p-low{background:var(--blue)}
+.chat-head{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(12,15,20,.8);backdrop-filter:blur(18px)}.person{display:flex;align-items:center;gap:12px}.person .avatar{width:42px;height:42px}.sub{font-size:11px;color:#8791a0;margin-top:3px}.actions{display:flex;gap:8px}.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid #2b323e;background:#161a21;color:#b8c1cf;cursor:pointer}.icon-btn:hover{background:#202631;color:white}
+.messages{flex:1;overflow:auto;padding:26px 7vw;background-image:radial-gradient(circle at 20% 20%,rgba(124,92,255,.06),transparent 25%),radial-gradient(circle at 80% 70%,rgba(37,211,102,.04),transparent 30%)}.day{text-align:center;color:#667080;font-size:10px;margin:6px 0 20px}.row{display:flex;margin:8px 0}.row.me{justify-content:flex-end}.bubble{max-width:min(620px,72%);padding:10px 12px;border-radius:16px 16px 16px 5px;background:#171b22;border:1px solid #272e38;font-size:13px;line-height:1.45;box-shadow:0 8px 20px rgba(0,0,0,.08)}.row.me .bubble{background:#153224;border-color:#1f4a31;border-radius:16px 16px 5px 16px}.time{font-size:9px;color:#7e8996;margin-top:6px;text-align:right}.audio{display:flex;align-items:center;gap:10px;margin-bottom:7px}.play{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#284a36;color:#afffc8}.wave{height:18px;flex:1;background:repeating-linear-gradient(90deg,#648372 0 2px,transparent 2px 5px);opacity:.7}.transcript{padding-top:8px;border-top:1px solid rgba(255,255,255,.08);color:#cfd6df;font-size:12px}.transcript b{color:#8d98a8;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+.composer{padding:14px 20px 18px;border-top:1px solid var(--line);background:#0f1217}.compose-box{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;background:#171b22;border:1px solid #29313c;border-radius:14px;padding:7px}.compose-box input{background:transparent;border:none;outline:none;color:white;padding:8px}.send{border:none;background:var(--green);color:#06150b;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}
+.inspector h3{font-size:14px;margin:0 0 16px}.contact-card{text-align:center;padding:8px 0 18px;border-bottom:1px solid var(--line)}.contact-card .avatar{width:70px;height:70px;margin:0 auto 10px;font-size:20px}.contact-card .name{font-size:15px}.phone{color:#8993a2;font-size:11px}.tag-row{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-top:10px}.tag{font-size:10px;padding:5px 8px;border-radius:8px;background:#1b2029;color:#adb6c4;border:1px solid #2a303b}.tag.hot{background:#3b2221;color:#ffb0ad;border-color:#5b302e}.section{padding:17px 0;border-bottom:1px solid var(--line)}.label{font-size:10px;color:#687383;text-transform:uppercase;letter-spacing:.7px;margin-bottom:9px}.value{font-size:12px;line-height:1.5;color:#d8dee7}.next-action{padding:11px;border-radius:12px;background:linear-gradient(135deg,rgba(124,92,255,.13),rgba(84,168,255,.07));border:1px solid #30374a}.due{color:#aab4c2;font-size:10px;margin-top:6px}.task{display:flex;gap:9px;align-items:flex-start;margin:9px 0;font-size:12px;color:#c8d0da}.check{width:15px;height:15px;border-radius:4px;border:1px solid #3a4350;margin-top:1px}.quick{display:grid;gap:8px;margin-top:16px}.quick button{border:1px solid #2b333f;background:#171b22;color:#cbd3dd;border-radius:11px;padding:10px;text-align:left;cursor:pointer}.quick button.primary{background:#183824;border-color:#255537;color:#baffcf}
+.mobile-back{display:none}.empty-note{font-size:10px;color:#626c7b;padding:8px 18px 14px}
+@media(max-width:1050px){.app{grid-template-columns:330px 1fr}.inspector{display:none}}
+@media(max-width:720px){body{overflow:auto}.app{display:block;height:100vh}.sidebar{height:100vh;border:none}.chat{display:none;height:100vh}.app.chat-open .sidebar{display:none}.app.chat-open .chat{display:flex}.brand{padding-top:16px}.conversation{grid-template-columns:48px 1fr auto}.preview{max-width:220px}.chat-head{padding:0 12px}.mobile-back{display:inline-grid}.messages{padding:20px 12px}.bubble{max-width:84%}.composer{padding:10px}.actions .hide-mobile{display:none}}
+</style>
 </head>
 <body>
-    <h1>MEDIA MARKET MARKETING LLC</h1>
-    <p>Consultoría estratégica y sistemas de automatización de alto rendimiento.</p>
-    <footer>
-        <p>Dirección: 500 4th St Nw Ste 102, #3129, Albuquerque, New Mexico 87102</p>
-        <p>Email: adrian@kortexrealstate.com</p>
-        <p>&copy; 2026 MEDIA MARKET MARKETING LLC. All rights reserved.</p>
-        <a href="#">Política de privacidad</a>
-    </footer>
+<div class="app" id="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-top"><div class="title">CRM PERSONAL</div><div class="status"><span class="dot"></span> WhatsApp conectado</div></div>
+      <div class="search"><span class="icon">⌕</span><input id="search" placeholder="Buscar contacto o conversación…" /></div>
+      <div class="chips"><button class="chip active">Todos</button><button class="chip">Pendientes</button><button class="chip">Prioridad</button><button class="chip">Seguimiento</button></div>
+    </div>
+    <div class="list" id="conversationList"></div>
+    <div class="empty-note">Preview visual · todavía sin datos reales</div>
+  </aside>
+
+  <main class="chat">
+    <header class="chat-head">
+      <div class="person"><button class="icon-btn mobile-back" onclick="closeChat()">←</button><div class="avatar" id="headAvatar">DM</div><div><div class="name" id="headName">David · Clínica Norte</div><div class="sub" id="headSub">WhatsApp · prioridad alta</div></div></div>
+      <div class="actions"><button class="icon-btn hide-mobile">⌕</button><button class="icon-btn">⋯</button></div>
+    </header>
+    <section class="messages" id="messages"></section>
+    <footer class="composer"><div class="compose-box"><button class="icon-btn">＋</button><input placeholder="Escribe un mensaje…" /><button class="send">Enviar</button></div></footer>
+  </main>
+
+  <aside class="inspector">
+    <div class="contact-card"><div class="avatar" id="sideAvatar">DM</div><div class="name" id="sideName">David · Clínica Norte</div><div class="phone" id="sidePhone">+34 611 483 921</div><div class="tag-row"><span class="tag hot">Prioridad alta</span><span class="tag">Prospecto</span><span class="tag">WhatsApp</span></div></div>
+    <div class="section"><div class="label">Próxima acción</div><div class="next-action"><div class="value">Enviar propuesta y confirmar llamada</div><div class="due">Hoy · 16:30</div></div></div>
+    <div class="section"><div class="label">Notas</div><div class="value">Interesado en automatizar recepción y seguimiento. Decide él mismo. Quiere verlo sencillo.</div></div>
+    <div class="section"><div class="label">Tareas</div><div class="task"><span class="check"></span><span>Preparar propuesta corta</span></div><div class="task"><span class="check"></span><span>Confirmar disponibilidad viernes</span></div></div>
+    <div class="quick"><button class="primary">↗ Abrir en WhatsApp</button><button>＋ Crear tarea</button><button>✎ Añadir nota</button></div>
+  </aside>
+</div>
+<script>
+const data=[
+ {name:'David · Clínica Norte',initials:'DM',phone:'+34 611 483 921',preview:'Me interesa, dime cómo funciona',time:'09:14',unread:3,priority:'high',sub:'WhatsApp · prioridad alta',messages:[['in','Buenos días, Adrián. He visto lo que haces con automatizaciones.'],['in','Me interesa, dime cómo funciona'],['me','Perfecto. La idea es quitar trabajo manual de recepción y seguimiento. Te enseño primero dónde se está perdiendo tiempo y luego automatizamos solo lo que tenga ROI.'],['in','Vale, mándame algo y lo veo hoy.']]},
+ {name:'Laura',initials:'LR',phone:'+34 634 228 104',preview:'Perfecto, hablamos mañana',time:'08:47',unread:0,priority:'med',sub:'WhatsApp · seguimiento',messages:[['me','¿Te viene bien mañana por la tarde?'],['in','Sí, a partir de las 17:00 perfecto.'],['me','Hecho. Te escribo antes.'],['in','Perfecto, hablamos mañana']]},
+ {name:'Carlos Martínez',initials:'CM',phone:'+34 622 714 993',preview:'Te paso los datos esta tarde',time:'Ayer',unread:1,priority:'med',sub:'WhatsApp · pendiente',messages:[['in','Te paso los datos esta tarde'],['me','Perfecto, con eso ya puedo revisar el cuello de botella.']]},
+ {name:'Andrea',initials:'AN',phone:'+34 648 037 555',preview:'🎤 Nota de voz · 0:18',time:'Ayer',unread:0,priority:'low',sub:'WhatsApp · audio transcrito',messages:[['audio','audio']]},
+ {name:'Javier · Real Estate',initials:'JR',phone:'+34 610 522 408',preview:'Lo reviso con mi socio',time:'Mar',unread:0,priority:'low',sub:'WhatsApp · en espera',messages:[['in','Lo reviso con mi socio y te digo algo esta semana.']]}
+];
+let current=0;
+function renderList(filter=''){
+ const list=document.getElementById('conversationList'); list.innerHTML='';
+ data.forEach((c,i)=>{if(!c.name.toLowerCase().includes(filter.toLowerCase())&&!c.preview.toLowerCase().includes(filter.toLowerCase()))return;
+ const el=document.createElement('div'); el.className='conversation '+(i===current?'active':'');
+ el.innerHTML=`<div class="avatar">${c.initials}</div><div><div class="name">${c.name}<span class="priority p-${c.priority}"></span></div><div class="preview">${c.preview}</div></div><div class="meta">${c.time}${c.unread?`<div class="badge">${c.unread}</div>`:''}</div>`;
+ el.onclick=()=>selectConversation(i);list.appendChild(el);
+ });
+}
+function selectConversation(i){current=i;const c=data[i];
+ ['headName','sideName'].forEach(id=>document.getElementById(id).textContent=c.name);['headAvatar','sideAvatar'].forEach(id=>document.getElementById(id).textContent=c.initials);document.getElementById('sidePhone').textContent=c.phone;document.getElementById('headSub').textContent=c.sub;
+ const box=document.getElementById('messages');box.innerHTML='<div class="day">HOY</div>';
+ c.messages.forEach((m,idx)=>{const row=document.createElement('div');row.className='row '+(m[0]==='me'?'me':'');let body='';
+ if(m[0]==='audio'){body=`<div class="audio"><div class="play">▶</div><div class="wave"></div><span style="font-size:10px;color:#8b95a3">0:18</span></div><div class="transcript"><b>Transcripción</b><br>“Sí, me cuadra. Lo único es que esta semana voy bastante justa; si quieres lo vemos el lunes y me enseñas un ejemplo.”</div>`}else body=m[1];
+ row.innerHTML=`<div class="bubble">${body}<div class="time">${idx%2?'09:14':'09:11'}</div></div>`;box.appendChild(row)});
+ renderList(document.getElementById('search').value);document.getElementById('app').classList.add('chat-open');box.scrollTop=box.scrollHeight;
+}
+function closeChat(){document.getElementById('app').classList.remove('chat-open')}
+document.getElementById('search').addEventListener('input',e=>renderList(e.target.value));renderList();selectConversation(0);
+</script>
 </body>
 </html>
