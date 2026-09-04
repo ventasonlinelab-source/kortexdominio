@@ -3,48 +3,72 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>WhatsApp · Nuevos mensajes</title>
+<title>WhatsApp · Pendientes</title>
 <style>
-:root{--bg:#0b0d10;--panel:#11151a;--line:#232a33;--text:#f5f7fa;--muted:#8993a1;--green:#25D366;--soft:#171c22;--audio:#1a2b22}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#101419 0,#090b0e 100%);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}.wrap{width:min(760px,100%);margin:0 auto;padding:22px 16px 40px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}.title{font-size:22px;font-weight:800;letter-spacing:-.5px}.status{display:flex;align-items:center;gap:7px;color:#b6c0cb;font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px rgba(37,211,102,.5)}.subtitle{color:var(--muted);font-size:13px;margin-top:5px}.feed{display:grid;gap:10px}.item{background:rgba(17,21,26,.92);border:1px solid var(--line);border-radius:16px;padding:15px 16px}.head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:10px}.person{font-weight:760;font-size:14px}.phone{font-size:11px;color:var(--muted);margin-top:3px}.time{font-size:11px;color:#73808f;white-space:nowrap}.message{font-size:14px;line-height:1.5;color:#e8edf3}.type{display:inline-flex;align-items:center;gap:6px;font-size:10px;text-transform:uppercase;letter-spacing:.65px;color:#8d98a6;margin-bottom:8px}.audio{background:var(--audio);border:1px solid #244534;border-radius:12px;padding:12px 13px}.trans-label{font-size:10px;color:#78a68a;text-transform:uppercase;letter-spacing:.65px;margin-bottom:6px}.transcript{font-size:14px;line-height:1.5;color:#eef7f1}.empty{border:1px dashed #2a323d;border-radius:16px;padding:28px;text-align:center;color:#6f7a88;font-size:13px;margin-top:12px}.note{font-size:10px;color:#5f6975;text-align:center;margin-top:18px}
-@media(max-width:560px){.wrap{padding:16px 12px 28px}.title{font-size:19px}.top{align-items:flex-start}.status{font-size:11px}.item{padding:14px}.message,.transcript{font-size:13px}}
+:root{--bg:#0b0d10;--panel:#11151a;--line:#232a33;--text:#f5f7fa;--muted:#8993a1;--green:#25D366;--soft:#171c22;--audio:#1a2b22;--chip:#161b21;--chipon:#203428}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#101419 0,#090b0e 100%);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}.wrap{width:min(760px,100%);margin:0 auto;padding:22px 16px 40px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}.title{font-size:22px;font-weight:800;letter-spacing:-.5px}.status{display:flex;align-items:center;gap:7px;color:#b6c0cb;font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px rgba(37,211,102,.5)}.subtitle{color:var(--muted);font-size:13px;margin-top:5px}.chips{display:flex;gap:8px;overflow:auto;padding:4px 0 18px}.chip{border:1px solid #29313a;background:var(--chip);color:#aab4c0;border-radius:999px;padding:7px 11px;font-size:11px;white-space:nowrap;cursor:pointer}.chip.active{background:var(--chipon);border-color:#2f5d41;color:#caffd8}.feed{display:grid;gap:10px}.item{background:rgba(17,21,26,.92);border:1px solid var(--line);border-radius:16px;padding:15px 16px}.head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:10px}.person{font-weight:760;font-size:14px}.phone{font-size:11px;color:var(--muted);margin-top:3px}.time{font-size:11px;color:#73808f;white-space:nowrap}.group{display:inline-block;margin-left:7px;font-size:9px;padding:3px 6px;border-radius:999px;background:#1c232a;color:#9eabb8;border:1px solid #2c343e;vertical-align:1px}.message{font-size:14px;line-height:1.5;color:#e8edf3}.type{display:inline-flex;align-items:center;gap:6px;font-size:10px;text-transform:uppercase;letter-spacing:.65px;color:#8d98a6;margin-bottom:8px}.audio{background:var(--audio);border:1px solid #244534;border-radius:12px;padding:12px 13px}.trans-label{font-size:10px;color:#78a68a;text-transform:uppercase;letter-spacing:.65px;margin-bottom:6px}.transcript{font-size:14px;line-height:1.5;color:#eef7f1}.reply{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:13px;padding-top:12px;border-top:1px solid #202730}.reply input{width:100%;background:#151a20;border:1px solid #2a323c;color:#f4f7fa;border-radius:10px;padding:10px 11px;outline:none}.reply input:focus{border-color:#3a4b41}.send{border:0;background:var(--green);color:#07130b;border-radius:10px;padding:0 15px;font-weight:800;cursor:pointer}.sent{font-size:11px;color:#80d99a;margin-top:8px;display:none}.empty{border:1px dashed #2a323d;border-radius:16px;padding:28px;text-align:center;color:#6f7a88;font-size:13px;margin-top:12px}.note{font-size:10px;color:#5f6975;text-align:center;margin-top:18px}.hidden{display:none!important}
+@media(max-width:560px){.wrap{padding:16px 12px 28px}.title{font-size:19px}.top{align-items:flex-start}.status{font-size:11px}.item{padding:14px}.message,.transcript{font-size:13px}.reply{grid-template-columns:1fr}.send{padding:10px 14px}}
 </style>
 </head>
 <body>
 <main class="wrap">
   <header class="top">
-    <div>
-      <div class="title">Nuevos mensajes</div>
-      <div class="subtitle">Solo entradas nuevas de WhatsApp</div>
-    </div>
+    <div><div class="title">Pendientes de WhatsApp</div><div class="subtitle">Solo aparece lo nuevo que necesita tu atención</div></div>
     <div class="status"><span class="dot"></span> WhatsApp conectado</div>
   </header>
 
-  <section class="feed">
-    <article class="item">
-      <div class="head"><div><div class="person">David</div><div class="phone">+34 611 483 921</div></div><div class="time">09:14</div></div>
-      <div class="type">● Texto</div>
-      <div class="message">Me interesa, dime cómo funciona.</div>
+  <nav class="chips" id="chips">
+    <button class="chip active" data-filter="todos">Todos · 4</button>
+    <button class="chip" data-filter="familia">Familia · 1</button>
+    <button class="chip" data-filter="amigos">Amigos · 1</button>
+    <button class="chip" data-filter="clientes">Clientes · 2</button>
+  </nav>
+
+  <section class="feed" id="feed">
+    <article class="item" data-group="clientes">
+      <div class="head"><div><div class="person">David <span class="group">Clientes</span></div><div class="phone">+34 611 483 921</div></div><div class="time">09:14</div></div>
+      <div class="type">● Texto</div><div class="message">Me interesa, dime cómo funciona.</div>
+      <div class="reply"><input placeholder="Responder a David…"><button class="send">Enviar</button></div><div class="sent">✓ Respuesta preparada como enviada</div>
     </article>
 
-    <article class="item">
-      <div class="head"><div><div class="person">Andrea</div><div class="phone">+34 648 037 555</div></div><div class="time">09:08</div></div>
-      <div class="type">🎤 Audio</div>
-      <div class="audio">
-        <div class="trans-label">Transcripción</div>
-        <div class="transcript">Hola Adrián, sí, lo he estado mirando y creo que tiene bastante sentido. Si quieres esta tarde hablamos cinco minutos y me cuentas cómo lo montarías.</div>
-      </div>
+    <article class="item" data-group="familia">
+      <div class="head"><div><div class="person">Mamá <span class="group">Familia</span></div><div class="phone">+34 600 123 456</div></div><div class="time">09:10</div></div>
+      <div class="type">● Texto</div><div class="message">¿Vienes a comer luego?</div>
+      <div class="reply"><input placeholder="Responder a Mamá…"><button class="send">Enviar</button></div><div class="sent">✓ Respuesta preparada como enviada</div>
     </article>
 
-    <article class="item">
-      <div class="head"><div><div class="person">Carlos Martínez</div><div class="phone">+34 622 714 993</div></div><div class="time">08:56</div></div>
-      <div class="type">● Texto</div>
-      <div class="message">Te paso los datos esta tarde.</div>
+    <article class="item" data-group="amigos">
+      <div class="head"><div><div class="person">Andrea <span class="group">Amigos</span></div><div class="phone">+34 648 037 555</div></div><div class="time">09:08</div></div>
+      <div class="type">🎤 Audio</div><div class="audio"><div class="trans-label">Transcripción</div><div class="transcript">Bro, esta tarde estoy libre. Si quieres nos vemos un rato y me cuentas.</div></div>
+      <div class="reply"><input placeholder="Responder a Andrea…"><button class="send">Enviar</button></div><div class="sent">✓ Respuesta preparada como enviada</div>
+    </article>
+
+    <article class="item" data-group="clientes">
+      <div class="head"><div><div class="person">Carlos Martínez <span class="group">Clientes</span></div><div class="phone">+34 622 714 993</div></div><div class="time">08:56</div></div>
+      <div class="type">● Texto</div><div class="message">Te paso los datos esta tarde.</div>
+      <div class="reply"><input placeholder="Responder a Carlos…"><button class="send">Enviar</button></div><div class="sent">✓ Respuesta preparada como enviada</div>
     </article>
   </section>
 
-  <div class="empty">Aquí aparecerán únicamente los mensajes nuevos. Nada de conversaciones antiguas ni interfaz de chat.</div>
-  <div class="note">Preview visual · todavía sin datos reales</div>
+  <div class="empty hidden" id="empty">No hay mensajes pendientes en este grupo.</div>
+  <div class="note">Preview visual · grupos y envío todavía sin backend real</div>
 </main>
+<script>
+const chips=[...document.querySelectorAll('.chip')];
+const items=[...document.querySelectorAll('.item')];
+const empty=document.getElementById('empty');
+chips.forEach(chip=>chip.addEventListener('click',()=>{
+  chips.forEach(c=>c.classList.remove('active'));chip.classList.add('active');
+  const f=chip.dataset.filter;let visible=0;
+  items.forEach(item=>{const show=f==='todos'||item.dataset.group===f;item.classList.toggle('hidden',!show);if(show)visible++;});
+  empty.classList.toggle('hidden',visible!==0);
+}));
+document.querySelectorAll('.send').forEach(btn=>btn.addEventListener('click',()=>{
+  const item=btn.closest('.item');const input=item.querySelector('input');const sent=item.querySelector('.sent');
+  if(!input.value.trim()){input.focus();return;}
+  btn.textContent='Enviando…';btn.disabled=true;
+  setTimeout(()=>{btn.textContent='Enviar';btn.disabled=false;sent.style.display='block';input.value='';},500);
+}));
+</script>
 </body>
 </html>
