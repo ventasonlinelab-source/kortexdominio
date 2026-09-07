@@ -3,27 +3,27 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<meta name="theme-color" content="#f1efe8"/>
+<meta name="theme-color" content="#e8decf"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <title>A.R.I. · Música</title>
 <style>
 :root{
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color-scheme:light;
-  --bg:#eceae4;
-  --chrome:#f8f7f3;
-  --chrome2:#f1efe9;
-  --panel:#ffffff;
-  --grid:#e4e1d9;
-  --grid-strong:#d1cdc2;
-  --line:#d8d4ca;
-  --text:#1e211f;
-  --muted:#7b7d78;
-  --accent:#b78b36;
-  --accent-soft:#f2e8d2;
-  --record:#d85b58;
-  --record-soft:#f9e4e2;
-  --dark:#202320;
+  --bg:#e8decf;
+  --chrome:#f4eadb;
+  --chrome2:#eadfce;
+  --panel:#f7efe3;
+  --grid:#e2d4c1;
+  --grid-strong:#cbb99f;
+  --line:#d3c2aa;
+  --text:#2d261f;
+  --muted:#7f705e;
+  --accent:#a9792d;
+  --accent-soft:#ead9b8;
+  --record:#c85a55;
+  --record-soft:#f3d8d2;
+  --dark:#2c2823;
 }
 html[data-theme="dark"]{
   color-scheme:dark;
@@ -109,11 +109,15 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </main>
 <script>
 (()=>{
-const THEME_KEY='ari-theme',CONTEXT_KEY='ari-context-system';
+const THEME_KEY='ari-theme',CONTEXT_KEY='ari-context-system',MUSIC_SEPIA_KEY='ari-music-sepia-light-v1';
 const mediaDark=matchMedia('(prefers-color-scheme: dark)');
 const root=document.documentElement;
-function stored(){return localStorage.getItem(THEME_KEY)||'auto'}
-function apply(choice=stored()){const resolved=choice==='auto'?(mediaDark.matches?'dark':'light'):choice;root.dataset.theme=resolved;document.querySelector('meta[name="theme-color"]').content=resolved==='dark'?'#161816':'#f1efe8'}
+if(localStorage.getItem(MUSIC_SEPIA_KEY)!=='1'){
+  localStorage.setItem(THEME_KEY,'light');
+  localStorage.setItem(MUSIC_SEPIA_KEY,'1');
+}
+function stored(){return localStorage.getItem(THEME_KEY)||'light'}
+function apply(choice=stored()){const resolved=choice==='auto'?(mediaDark.matches?'dark':'light'):choice;root.dataset.theme=resolved;document.querySelector('meta[name="theme-color"]').content=resolved==='dark'?'#161816':'#e8decf'}
 localStorage.setItem(CONTEXT_KEY,'music');apply();
 mediaDark.addEventListener?.('change',()=>{if(stored()==='auto')apply('auto')});
 addEventListener('storage',e=>{if(e.key===THEME_KEY)apply()});
