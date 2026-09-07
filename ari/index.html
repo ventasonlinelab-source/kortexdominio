@@ -1,101 +1,67 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" id="themeColor" content="#050505" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="A.R.I." />
-  <link rel="manifest" href="/ari/manifest.webmanifest" />
-  <link rel="icon" href="/ari/icon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/ari/icon.svg" />
-  <title>A.R.I.</title>
-  <style>
-    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark;--bg:#050505;--panel:#0c0a07;--panel2:#100c08;--line:#2d2519;--gold:#d8a84b;--text:#f4efe4;--muted:#9d927f;--muted2:#a99d86;--border:#2b241a;--header:rgba(5,5,5,.94);--bottom:rgba(5,5,5,.97);--blue:#5484ed;--lightblue:#a4bdfc}
-    html[data-theme="light"]{color-scheme:light;--bg:#f5f1e8;--panel:#fffdf8;--panel2:#f3ecdf;--line:#d7c9b0;--gold:#9a6a1d;--text:#211b13;--muted:#746956;--muted2:#665b48;--border:#d8ccb9;--header:rgba(245,241,232,.94);--bottom:rgba(245,241,232,.97);--blue:#416fc8;--lightblue:#7598d8}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);min-height:100vh;transition:background .18s ease,color .18s ease}.app{max-width:560px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 14px calc(92px + env(safe-area-inset-bottom))}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px 14px;position:sticky;top:0;background:var(--header);backdrop-filter:blur(12px);z-index:5}.brand-wrap{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:12px}.brand{font-size:24px;letter-spacing:.16em;font-weight:700}.sub{font-size:11px;color:var(--muted);margin-top:3px}.sync{font-size:10px;color:var(--muted);text-align:right}.sync strong{color:var(--gold)}
-    .view{display:none}.view.active{display:block}.panel{border:1px solid var(--border);background:var(--panel);border-radius:16px;padding:15px;margin-bottom:12px}.eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}.panel h2,.panel h1{margin:7px 0 6px}.meta{font-size:12px;color:var(--muted2);line-height:1.5}.actions{display:flex;gap:8px;margin-top:14px}.btn{flex:1;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:11px;padding:11px 8px;font-weight:650;font-size:12px}.btn.primary{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 16%,var(--panel))}
-    .days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:2px 0 14px}.day{appearance:none;border:1px solid var(--border);background:var(--panel);border-radius:12px;padding:9px 4px;text-align:center;color:var(--muted)}.day.active{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 13%,var(--panel));color:var(--text)}.day b{display:block;font-size:11px}.day span{font-size:10px}.day:active{transform:scale(.98)}
-    .section-title{font-size:12px;color:var(--muted2);text-transform:uppercase;letter-spacing:.12em;margin:18px 0 10px}.timeline{position:relative;padding-left:64px}.timeline:before{content:"";position:absolute;left:52px;top:8px;bottom:8px;width:1px;background:var(--line)}.event{position:relative;border:1px solid var(--border);background:var(--panel);border-radius:13px;padding:11px 12px;margin-bottom:10px}.event:before{content:"";position:absolute;left:-17px;top:16px;width:9px;height:9px;border:2px solid var(--gold);background:var(--bg);border-radius:50%}.event.g9{border-left:4px solid var(--blue)}.event.g1{border-left:4px solid var(--lightblue)}.time{position:absolute;left:-64px;top:14px;width:44px;text-align:right;font-size:11px;color:var(--muted)}.event.active{box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 35%,transparent);background:color-mix(in srgb,var(--gold) 10%,var(--panel))}.event.done{opacity:.7}.event-title{font-size:13px;font-weight:680}.event-meta{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4}.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.badge{font-size:9px;border:1px solid var(--line);border-radius:999px;padding:3px 7px;color:var(--muted2)}.calendar{color:var(--blue);border-color:color-mix(in srgb,var(--blue) 60%,var(--border))}.status{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 55%,var(--border))}.memory-list{display:grid;gap:10px}.memory-item{border:1px solid var(--border);border-radius:13px;padding:12px;background:var(--panel)}.memory-item strong{display:block;font-size:13px}.memory-item span{font-size:11px;color:var(--muted);line-height:1.4;display:block;margin-top:4px}.system-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.system-card{border:1px solid var(--border);border-radius:13px;padding:13px;background:var(--panel)}.system-card b{display:block;font-size:12px;color:var(--gold);margin-bottom:4px}.system-card span{font-size:10px;color:var(--muted);line-height:1.4}
-    .theme-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.theme-option{appearance:none;border:1px solid var(--border);background:var(--panel2);color:var(--muted);border-radius:12px;padding:11px 6px;font-size:11px;font-weight:700}.theme-option.active{border-color:var(--gold);color:var(--text);background:color-mix(in srgb,var(--gold) 14%,var(--panel))}
-    .bottom{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(560px,100%);padding:9px 18px calc(9px + env(safe-area-inset-bottom));background:var(--bottom);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);z-index:10}.nav{appearance:none;border:0;background:none;text-align:center;color:var(--muted);font-size:10px;padding:4px}.nav.active{color:var(--gold)}.nav b{display:block;font-size:17px;line-height:1.1;margin-bottom:2px}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" id="themeColor" content="#050505"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="A.R.I."/>
+<link rel="manifest" href="/ari/manifest.webmanifest"/>
+<link rel="icon" href="/ari/icon.svg" type="image/svg+xml"/>
+<link rel="apple-touch-icon" href="/ari/icon.svg"/>
+<title>A.R.I.</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark;--bg:#050505;--panel:#0c0a07;--panel2:#100c08;--line:#2d2519;--gold:#d8a84b;--text:#f4efe4;--muted:#9d927f;--muted2:#a99d86;--border:#2b241a;--header:rgba(5,5,5,.94);--bottom:rgba(5,5,5,.97);--blue:#5484ed;--lightblue:#a4bdfc}
+html[data-theme="light"]{color-scheme:light;--bg:#f5f1e8;--panel:#fffdf8;--panel2:#f3ecdf;--line:#d7c9b0;--gold:#9a6a1d;--text:#211b13;--muted:#746956;--muted2:#665b48;--border:#d8ccb9;--header:rgba(245,241,232,.94);--bottom:rgba(245,241,232,.97);--blue:#416fc8;--lightblue:#7598d8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);min-height:100vh}.app{max-width:560px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 14px calc(92px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px 14px;position:sticky;top:0;background:var(--header);backdrop-filter:blur(12px);z-index:5}.brand-wrap{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:12px}.brand{font-size:24px;letter-spacing:.16em;font-weight:700}.sub{font-size:11px;color:var(--muted);margin-top:3px}.sync{font-size:10px;color:var(--muted);text-align:right}.sync strong{color:var(--gold)}
+.view{display:none}.view.active{display:block}.panel{border:1px solid var(--border);background:var(--panel);border-radius:16px;padding:15px;margin-bottom:12px}.eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}.panel h1,.panel h2{margin:7px 0 6px}.meta{font-size:12px;color:var(--muted2);line-height:1.5}.section-title{font-size:12px;color:var(--muted2);text-transform:uppercase;letter-spacing:.12em;margin:18px 0 10px}
+.actions{display:flex;gap:8px;margin-top:14px}.btn{flex:1;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:11px;padding:11px 8px;font-weight:650;font-size:12px}.btn.primary{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 16%,var(--panel))}.btn:active{transform:scale(.98)}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:2px 0 14px}.day{appearance:none;border:1px solid var(--border);background:var(--panel);border-radius:12px;padding:9px 4px;text-align:center;color:var(--muted)}.day.active{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 13%,var(--panel));color:var(--text)}.day b{display:block;font-size:11px}.day span{font-size:10px}
+.timeline{position:relative;padding-left:64px}.timeline:before{content:"";position:absolute;left:52px;top:8px;bottom:8px;width:1px;background:var(--line)}.event{position:relative;border:1px solid var(--border);background:var(--panel);border-radius:13px;padding:11px 12px;margin-bottom:10px}.event:before{content:"";position:absolute;left:-17px;top:16px;width:9px;height:9px;border:2px solid var(--gold);background:var(--bg);border-radius:50%}.event.g9{border-left:4px solid var(--blue)}.event.g1{border-left:4px solid var(--lightblue)}.event.active{box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 35%,transparent);background:color-mix(in srgb,var(--gold) 10%,var(--panel))}.event.done{opacity:.7}.time{position:absolute;left:-64px;top:14px;width:44px;text-align:right;font-size:11px;color:var(--muted)}.event-title{font-size:13px;font-weight:680}.event-meta{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4}.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.badge{font-size:9px;border:1px solid var(--line);border-radius:999px;padding:3px 7px;color:var(--muted2)}
+.theme-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.theme-option{appearance:none;border:1px solid var(--border);background:var(--panel2);color:var(--muted);border-radius:12px;padding:11px 6px;font-size:11px;font-weight:700}.theme-option.active{border-color:var(--gold);color:var(--text);background:color-mix(in srgb,var(--gold) 14%,var(--panel))}
+.system-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.system-card{border:1px solid var(--border);border-radius:13px;padding:13px;background:var(--panel)}.system-card b{display:block;font-size:12px;color:var(--gold);margin-bottom:4px}.system-card span{font-size:10px;color:var(--muted);line-height:1.4}.statusline{margin-top:10px;font-size:11px;color:var(--muted)}
+.bottom{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(560px,100%);padding:9px 18px calc(9px + env(safe-area-inset-bottom));background:var(--bottom);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);z-index:10}.nav{appearance:none;border:0;background:none;text-align:center;color:var(--muted);font-size:10px;padding:4px}.nav.active{color:var(--gold)}.nav b{display:block;font-size:17px;line-height:1.1;margin-bottom:2px}
+</style>
 </head>
 <body>
-  <main class="app">
-    <header><div class="brand-wrap"><img class="logo" src="/ari/icon.svg" alt="A.R.I."/><div><div class="brand">A.R.I.</div><div class="sub">Universo personal</div></div></div><div class="sync"><strong>GOOGLE CALENDAR</strong><br><span id="syncText">cargando…</span></div></header>
-
-    <section class="view active" data-view="ahora">
-      <section class="days" id="days"></section>
-      <section class="panel"><div class="eyebrow">Ahora</div><h1 id="nowTitle">Cargando calendario…</h1><div class="meta" id="nowMeta">Google Calendar · BLOQUES</div><div class="actions"><button class="btn primary">HECHO</button><button class="btn">BLOQUEADO</button><button class="btn">NOTA</button></div></section>
-      <div class="section-title">Siguiente bloque</div>
-      <section class="panel"><div class="eyebrow" id="nextTime">—</div><h2 id="nextTitle">—</h2><div class="meta" id="nextMeta">—</div></section>
-    </section>
-
-    <section class="view" data-view="linea">
-      <div class="section-title" id="lineTitle">Línea temporal</div>
-      <section class="timeline" id="timeline"></section>
-    </section>
-
-    <section class="view" data-view="memoria">
-      <div class="section-title">Memoria</div>
-      <section class="panel"><div class="eyebrow">Notion</div><h2>Contexto e histórico narrativo</h2><div class="meta">La línea temporal viene de Google Calendar. Lo que ocurra y merezca conservarse quedará enlazado aquí como memoria canónica.</div></section>
-      <div class="memory-list"><div class="memory-item"><strong>Arquitectura</strong><span>Google Calendar = tiempo · Notion = memoria · NocoDB = datos · n8n = integración.</span></div></div>
-    </section>
-
-    <section class="view" data-view="mas">
-      <div class="section-title">Apariencia</div>
-      <section class="panel"><div class="eyebrow">Tema de A.R.I.</div><h2>Oscuro, claro o automático</h2><div class="meta">Automático sigue el modo del iPhone. La elección queda guardada en esta app.</div><div class="theme-row"><button class="theme-option" data-theme-choice="dark">🌙 Oscuro</button><button class="theme-option" data-theme-choice="light">☀️ Claro</button><button class="theme-option" data-theme-choice="auto">◐ Auto</button></div></section>
-      <div class="section-title">Sistema</div>
-      <div class="system-grid">
-        <div class="system-card"><b>Google Calendar</b><span>Línea temporal, horarios, triggers y avisos.</span></div>
-        <div class="system-card"><b>Notion</b><span>Memoria, contexto e histórico narrativo.</span></div>
-        <div class="system-card"><b>NocoDB</b><span>Hechos estructurados, estados y métricas.</span></div>
-        <div class="system-card"><b>n8n</b><span>Sincronización y automatización entre todas las capas.</span></div>
-      </div>
-    </section>
-  </main>
-
-  <nav class="bottom">
-    <button class="nav active" data-target="ahora"><b>⌂</b>Ahora</button>
-    <button class="nav" data-target="linea"><b>│</b>Línea</button>
-    <button class="nav" data-target="memoria"><b>◎</b>Memoria</button>
-    <button class="nav" data-target="mas"><b>⋯</b>Más</button>
-  </nav>
-
-  <script>
-    const THEME_KEY='ari-theme';
-    const mediaDark=window.matchMedia('(prefers-color-scheme: dark)');
-    function storedTheme(){return localStorage.getItem(THEME_KEY)||'auto'}
-    function resolvedTheme(choice=storedTheme()){return choice==='auto'?(mediaDark.matches?'dark':'light'):choice}
-    function applyTheme(choice=storedTheme()){
-      const resolved=resolvedTheme(choice);
-      document.documentElement.dataset.theme=resolved;
-      document.getElementById('themeColor')?.setAttribute('content',resolved==='dark'?'#050505':'#f5f1e8');
-      document.querySelectorAll('.theme-option').forEach(b=>b.classList.toggle('active',b.dataset.themeChoice===choice));
-    }
-    function setTheme(choice){localStorage.setItem(THEME_KEY,choice);applyTheme(choice)}
-    mediaDark.addEventListener?.('change',()=>{if(storedTheme()==='auto')applyTheme('auto')});
-    applyTheme();
-
-    let calendarData=null, selectedDate='2026-09-07';
-    const pad=n=>String(n).padStart(2,'0');
-    const toMin=t=>{const[a,b]=t.split(':').map(Number);return a*60+b};
-    function nowMadrid(){return new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/Madrid'}));}
-    function eventState(e,date){const n=nowMadrid(),today=`${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;if(date<today)return'done';if(date>today)return'future';let x=n.getHours()*60+n.getMinutes(),s=toMin(e.start),en=toMin(e.end);if(en<=s)en+=1440;if(x<s&&en>1440)x+=1440;return x>=en?'done':x>=s?'active':'future'}
-    function currentEvents(){return calendarData?.days?.[selectedDate]||[]}
-    function renderDays(){const root=document.getElementById('days');root.innerHTML='';Object.keys(calendarData.days).forEach(date=>{const d=new Date(date+'T12:00:00'),el=document.createElement('button');el.className='day'+(date===selectedDate?' active':'');el.innerHTML=`<b>${new Intl.DateTimeFormat('es-ES',{weekday:'short'}).format(d)}</b><span>${d.getDate()}</span>`;el.onclick=()=>{selectedDate=date;renderAll()};root.appendChild(el)})}
-    function renderNow(){const list=currentEvents(),active=list.find(e=>eventState(e,selectedDate)==='active'),future=list.find(e=>eventState(e,selectedDate)==='future');document.getElementById('nowTitle').textContent=active?active.title:'Sin bloque activo';document.getElementById('nowMeta').textContent=active?`${active.start}–${active.end} · ${active.description}`:`Google Calendar · BLOQUES · ${selectedDate}`;document.getElementById('nextTime').textContent=future?future.start:'—';document.getElementById('nextTitle').textContent=future?future.title:'No quedan bloques';document.getElementById('nextMeta').textContent=future?future.description:'Fin de la línea temporal del día.'}
-    function renderTimeline(){const root=document.getElementById('timeline');root.innerHTML='';document.getElementById('lineTitle').textContent=`Línea temporal · ${selectedDate}`;currentEvents().forEach(e=>{const st=eventState(e,selectedDate);root.insertAdjacentHTML('beforeend',`<article class="event g${e.color_id} ${st}"><div class="time">${e.start}</div><div class="event-title">${e.title}</div><div class="event-meta">${e.start}–${e.end}<br>${e.description}</div><div class="badges"><span class="badge calendar">GOOGLE CALENDAR</span><span class="badge status">${st==='done'?'PASADO':st==='active'?'AHORA':'PLANIFICADO'}</span></div></article>`)})}
-    function renderAll(){renderDays();renderNow();renderTimeline()}
-    function go(view){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===view));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.target===view));history.replaceState(null,'','#'+view);window.scrollTo({top:0,behavior:'instant'})}
-    async function loadCalendar(){try{const r=await fetch('/ari/calendar.json?ts='+Date.now(),{cache:'no-store'});calendarData=await r.json();const n=nowMadrid(),today=`${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;if(calendarData.days[today])selectedDate=today;document.getElementById('syncText').textContent=`${calendarData.calendar} · ${calendarData.timezone}`;renderAll()}catch(e){document.getElementById('nowTitle').textContent='Error cargando calendario';document.getElementById('nowMeta').textContent='No se pudo leer la fuente de calendario.'}}
-    document.querySelectorAll('.nav').forEach(n=>n.addEventListener('click',()=>go(n.dataset.target)));
-    document.querySelectorAll('.theme-option').forEach(b=>b.addEventListener('click',()=>setTheme(b.dataset.themeChoice)));
-    go(location.hash.slice(1)||'ahora');applyTheme();loadCalendar();
-    if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/ari/sw.js').catch(()=>{}));}
-  </script>
-</body>
-</html>
+<main class="app">
+<header><div class="brand-wrap"><img class="logo" src="/ari/icon.svg" alt="A.R.I."/><div><div class="brand">A.R.I.</div><div class="sub">Universo personal</div></div></div><div class="sync"><strong>GOOGLE CALENDAR</strong><br><span id="syncText">cargando…</span></div></header>
+<section class="view active" data-view="ahora"><section class="days" id="days"></section><section class="panel"><div class="eyebrow">Ahora</div><h1 id="nowTitle">Cargando calendario…</h1><div class="meta" id="nowMeta">Google Calendar · BLOQUES</div><div class="actions"><button class="btn primary">HECHO</button><button class="btn">BLOQUEADO</button><button class="btn">NOTA</button></div></section><div class="section-title">Siguiente bloque</div><section class="panel"><div class="eyebrow" id="nextTime">—</div><h2 id="nextTitle">—</h2><div class="meta" id="nextMeta">—</div></section></section>
+<section class="view" data-view="linea"><div class="section-title" id="lineTitle">Línea temporal</div><section class="timeline" id="timeline"></section></section>
+<section class="view" data-view="memoria"><div class="section-title">Memoria</div><section class="panel"><div class="eyebrow">Notion</div><h2>Contexto e histórico narrativo</h2><div class="meta">Google Calendar define el tiempo. Notion conserva la memoria de lo que ocurrió y lo aprendido.</div></section></section>
+<section class="view" data-view="mas">
+<div class="section-title">Notificaciones</div>
+<section class="panel"><div class="eyebrow">A.R.I. Push</div><h2>Que te avise A.R.I.</h2><div class="meta">Activa el permiso desde la app instalada. Después podrás recibir avisos de bloques y eventos desde A.R.I. sin depender visualmente de otras apps.</div><div class="actions"><button class="btn primary" id="notifyEnable">ACTIVAR</button><button class="btn" id="notifyTest">PROBAR</button></div><div class="statusline" id="notifyStatus">Comprobando estado…</div></section>
+<div class="section-title">Apariencia</div><section class="panel"><div class="eyebrow">Tema</div><h2>Oscuro, claro o automático</h2><div class="theme-row"><button class="theme-option" data-theme-choice="dark">🌙 Oscuro</button><button class="theme-option" data-theme-choice="light">☀️ Claro</button><button class="theme-option" data-theme-choice="auto">◐ Auto</button></div></section>
+<div class="section-title">Sistema</div><div class="system-grid"><div class="system-card"><b>Google Calendar</b><span>Línea temporal y triggers.</span></div><div class="system-card"><b>Notion</b><span>Memoria e histórico.</span></div><div class="system-card"><b>NocoDB</b><span>Datos y estados.</span></div><div class="system-card"><b>n8n</b><span>Automatización y envío.</span></div></div>
+</section>
+</main>
+<nav class="bottom"><button class="nav active" data-target="ahora"><b>⌂</b>Ahora</button><button class="nav" data-target="linea"><b>│</b>Línea</button><button class="nav" data-target="memoria"><b>◎</b>Memoria</button><button class="nav" data-target="mas"><b>⋯</b>Más</button></nav>
+<script>
+const THEME_KEY='ari-theme',mediaDark=matchMedia('(prefers-color-scheme: dark)');
+function storedTheme(){return localStorage.getItem(THEME_KEY)||'auto'}
+function applyTheme(choice=storedTheme()){const r=choice==='auto'?(mediaDark.matches?'dark':'light'):choice;document.documentElement.dataset.theme=r;document.getElementById('themeColor').content=r==='dark'?'#050505':'#f5f1e8';document.querySelectorAll('.theme-option').forEach(b=>b.classList.toggle('active',b.dataset.themeChoice===choice))}
+function setTheme(c){localStorage.setItem(THEME_KEY,c);applyTheme(c)}
+mediaDark.addEventListener?.('change',()=>{if(storedTheme()==='auto')applyTheme('auto')});applyTheme();
+document.querySelectorAll('.theme-option').forEach(b=>b.onclick=()=>setTheme(b.dataset.themeChoice));
+let calendarData=null,selectedDate='2026-09-07';const pad=n=>String(n).padStart(2,'0'),toMin=t=>{const[a,b]=t.split(':').map(Number);return a*60+b};
+function nowMadrid(){return new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/Madrid'}))}
+function eventState(e,date){const n=nowMadrid(),today=`${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;if(date<today)return'done';if(date>today)return'future';let x=n.getHours()*60+n.getMinutes(),s=toMin(e.start),en=toMin(e.end);if(en<=s)en+=1440;if(x<s&&en>1440)x+=1440;return x>=en?'done':x>=s?'active':'future'}
+function currentEvents(){return calendarData?.days?.[selectedDate]||[]}
+function renderDays(){const root=document.getElementById('days');root.innerHTML='';Object.keys(calendarData.days).forEach(date=>{const d=new Date(date+'T12:00:00'),el=document.createElement('button');el.className='day'+(date===selectedDate?' active':'');el.innerHTML=`<b>${new Intl.DateTimeFormat('es-ES',{weekday:'short'}).format(d)}</b><span>${d.getDate()}</span>`;el.onclick=()=>{selectedDate=date;renderAll()};root.appendChild(el)})}
+function renderNow(){const list=currentEvents(),active=list.find(e=>eventState(e,selectedDate)==='active'),future=list.find(e=>eventState(e,selectedDate)==='future');nowTitle.textContent=active?active.title:'Sin bloque activo';nowMeta.textContent=active?`${active.start}–${active.end} · ${active.description}`:`Google Calendar · BLOQUES · ${selectedDate}`;nextTime.textContent=future?future.start:'—';nextTitle.textContent=future?future.title:'No quedan bloques';nextMeta.textContent=future?future.description:'Fin del día.'}
+function renderTimeline(){timeline.innerHTML='';lineTitle.textContent=`Línea temporal · ${selectedDate}`;currentEvents().forEach(e=>{const st=eventState(e,selectedDate);timeline.insertAdjacentHTML('beforeend',`<article class="event g${e.color_id} ${st}"><div class="time">${e.start}</div><div class="event-title">${e.title}</div><div class="event-meta">${e.start}–${e.end}<br>${e.description}</div><div class="badges"><span class="badge">GOOGLE CALENDAR</span><span class="badge">${st==='done'?'PASADO':st==='active'?'AHORA':'PLANIFICADO'}</span></div></article>`)})}
+function renderAll(){renderDays();renderNow();renderTimeline()}
+function go(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.dataset.view===v));document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.target===v));history.replaceState(null,'','#'+v);scrollTo({top:0,behavior:'instant'})}
+document.querySelectorAll('.nav').forEach(n=>n.onclick=()=>go(n.dataset.target));
+async function loadCalendar(){try{const r=await fetch('/ari/calendar.json?ts='+Date.now(),{cache:'no-store'});calendarData=await r.json();const n=nowMadrid(),today=`${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;if(calendarData.days[today])selectedDate=today;syncText.textContent=`${calendarData.calendar} · ${calendarData.timezone}`;renderAll()}catch(e){nowTitle.textContent='Error cargando calendario'}}
+async function reg(){if(!('serviceWorker'in navigator))throw Error('Service Worker no disponible');return navigator.serviceWorker.ready}
+function updateNotifyStatus(){const s=document.getElementById('notifyStatus');if(!('Notification'in window)){s.textContent='Este dispositivo no expone notificaciones web aquí.';return}const p=Notification.permission;s.textContent=p==='granted'?'✅ Notificaciones permitidas':p==='denied'?'⛔ Permiso bloqueado en iPhone':'Aún no has dado permiso.'}
+notifyEnable.onclick=async()=>{try{if(!('Notification'in window))throw Error('No disponible');const p=await Notification.requestPermission();updateNotifyStatus();if(p==='granted'){const r=await reg();await r.showNotification('A.R.I. activada',{body:'Las notificaciones están listas en este dispositivo.',icon:'/ari/icon.svg',badge:'/ari/icon.svg',tag:'ari-activation',data:{url:'/ari/#ahora'}})}}catch(e){notifyStatus.textContent='No se pudo activar: '+e.message}};
+notifyTest.onclick=async()=>{try{if(Notification.permission!=='granted'){notifyStatus.textContent='Primero pulsa ACTIVAR.';return}const r=await reg();await r.showNotification('A.R.I. · prueba',{body:'Si ves esto, A.R.I. ya puede avisarte en el móvil.',icon:'/ari/icon.svg',badge:'/ari/icon.svg',tag:'ari-test',data:{url:'/ari/#ahora'}})}catch(e){notifyStatus.textContent='Prueba fallida: '+e.message}};
+if('serviceWorker'in navigator){addEventListener('load',()=>navigator.serviceWorker.register('/ari/sw.js').then(updateNotifyStatus).catch(updateNotifyStatus))}else updateNotifyStatus();
+go(location.hash.slice(1)||'ahora');loadCalendar();
+</script>
+</body></html>
