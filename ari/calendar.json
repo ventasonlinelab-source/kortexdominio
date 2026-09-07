@@ -1,0 +1,72 @@
+{
+  "source": "Google Calendar",
+  "calendar": "BLOQUES",
+  "calendar_id": "bdda40e831c7100d1b5807feb6c6b39bc88f4adb94fea8a86fe4c0563be5e4a5@group.calendar.google.com",
+  "timezone": "Europe/Madrid",
+  "synced_at": "2026-09-07T06:00:00+02:00",
+  "days": {
+    "2026-09-07": [
+      {"id":"meta-20260907","start":"05:00","end":"08:00","title":"METAANÁLISIS / DIRECCIÓN","color_id":"9","description":"Claridad, lectura del estado actual, objetivos, cuellos de botella, prioridades y dirección. Franja contextual, no tarea."},
+      {"id":"gym-20260907","start":"08:00","end":"11:00","title":"CUERPO / GIMNASIO","color_id":"1","description":"Desplazamiento, entrenamiento, vuelta, ducha y post-entreno. Franja contextual, no tarea."},
+      {"id":"exec-20260907","start":"11:00","end":"16:00","title":"EJECUCIÓN / ORQUESTACIÓN","color_id":"9","description":"Cola priorizada, dirección de sistemas, revisión, decisiones y excepciones. Franja contextual, no tarea."},
+      {"id":"ground-20260907","start":"16:00","end":"17:00","title":"GROUNDING","color_id":"1","description":"Descarga de activación, salida del modo operativo y retorno al cuerpo y al entorno."},
+      {"id":"dinner-20260907","start":"17:00","end":"18:00","title":"CENA","color_id":"9","description":"Nutrición y transición hacia menor activación antes de Música / Integración."},
+      {"id":"music-20260907","start":"18:00","end":"21:00","title":"MÚSICA / INTEGRACIÓN","color_id":"1","description":"Creación sensorial, cantar, bailar, escribir e integración antes del sueño."},
+      {"id":"sleep-20260907","start":"21:00","end":"05:00","title":"DORMIR","color_id":"9","description":"Descanso, recuperación e incubación."}
+    ],
+    "2026-09-08": [
+      {"id":"meta-20260908","start":"05:00","end":"08:00","title":"METAANÁLISIS / DIRECCIÓN","color_id":"9","description":"Claridad, lectura del estado actual, objetivos, cuellos de botella, prioridades y dirección. Franja contextual, no tarea."},
+      {"id":"gym-20260908","start":"08:00","end":"11:00","title":"CUERPO / GIMNASIO","color_id":"1","description":"Desplazamiento, entrenamiento, vuelta, ducha y post-entreno. Franja contextual, no tarea."},
+      {"id":"exec-20260908","start":"11:00","end":"16:00","title":"EJECUCIÓN / ORQUESTACIÓN","color_id":"9","description":"Cola priorizada, dirección de sistemas, revisión, decisiones y excepciones. Franja contextual, no tarea."},
+      {"id":"ground-20260908","start":"16:00","end":"17:00","title":"GROUNDING","color_id":"1","description":"Descarga de activación, salida del modo operativo y retorno al cuerpo y al entorno."},
+      {"id":"dinner-20260908","start":"17:00","end":"18:00","title":"CENA","color_id":"9","description":"Nutrición y transición hacia menor activación antes de Música / Integración."},
+      {"id":"music-20260908","start":"18:00","end":"21:00","title":"MÚSICA / INTEGRACIÓN","color_id":"1","description":"Creación sensorial, cantar, bailar, escribir e integración antes del sueño."},
+      {"id":"sleep-20260908","start":"21:00","end":"05:00","title":"DORMIR","color_id":"9","description":"Descanso, recuperación e incubación."}
+    ],
+    "2026-09-09": [
+      {"id":"meta-20260909","start":"05:00","end":"08:00","title":"METAANÁLISIS / DIRECCIÓN","color_id":"9","description":"Claridad, lectura del estado actual, objetivos, cuellos de botella, prioridades y dirección. Franja contextual, no tarea."},
+      {"id":"gym-20260909","start":"08:00","end":"11:00","title":"CUERPO / GIMNASIO","color_id":"1","description":"Desplazamiento, entrenamiento, vuelta, ducha y post-entreno. Franja contextual, no tarea."},
+      {"id":"exec-20260909","start":"11:00","end":"16:00","title":"EJECUCIÓN / ORQUESTACIÓN","color_id":"9","description":"Cola priorizada, dirección de sistemas, revisión, decisiones y excepciones. Franja contextual, no tarea."},
+      {"id":"ground-20260909","start":"16:00","end":"17:00","title":"GROUNDING","color_id":"1","description":"Descarga de activación, salida del modo operativo y retorno al cuerpo y al entorno."},
+      {"id":"dinner-20260909","start":"17:00","end":"18:00","title":"CENA","color_id":"9","description":"Nutrición y transición hacia menor activación antes de Música / Integración."},
+      {"id":"music-20260909","start":"18:00","end":"21:00","title":"MÚSICA / INTEGRACIÓN","color_id":"1","description":"Creación sensorial, cantar, bailar, escribir e integración antes del sueño."},
+      {"id":"sleep-20260909","start":"21:00","end":"05:00","title":"DORMIR","color_id":"9","description":"Descanso, recuperación e incubación."}
+    ],
+    "2026-09-10": [
+      {"id":"meta-20260910","start":"05:00","end":"08:00","title":"METAANÁLISIS / DIRECCIÓN","color_id":"9","description":"Claridad, lectura del estado actual, objetivos, cuellos de botella, prioridades y dirección. Franja contextual, no tarea."},
+      {"id":"gym-20260910","start":"08:00","end":"11:00","title":"CUERPO / GIMNASIO","color_id":"1","description":"Desplazamiento, entrenamiento, vuelta, ducha y post-entreno. Franja contextual, no tarea."},
+      {"id":"exec-20260910","start":"11:00","end":"16:00","title":"EJECUCIÓN / ORQUESTACIÓN","color_id":"9","description":"Cola priorizada, dirección de sistemas, revisión, decisiones y excepciones. Franja contextual, no tarea."},
+      {"id":"ground-20260910","start":"16:00","end":"17:00","title":"GROUNDING","color_id":"1","description":"Descarga de activación, salida del modo operativo y retorno al cuerpo y al entorno."},
+      {"id":"dinner-20260910","start":"17:00","end":"18:00","title":"CENA","color_id":"9","description":"Nutrición y transición hacia menor activación antes de Música / Integración."},
+      {"id":"music-20260910","start":"18:00","end":"21:00","title":"MÚSICA / INTEGRACIÓN","color_id":"1","description":"Creación sensorial, cantar, bailar, escribir e integración antes del sueño."},
+      {"id":"sleep-20260910","start":"21:00","end":"05:00","title":"DORMIR","color_id":"9","description":"Descanso, recuperación e incubación."}
+    ],
+    "2026-09-11": [
+      {"id":"meta-20260911","start":"05:00","end":"08:00","title":"METAANÁLISIS / DIRECCIÓN","color_id":"9","description":"Claridad, lectura del estado actual, objetivos, cuellos de botella, prioridades y dirección. Franja contextual, no tarea."},
+      {"id":"gym-20260911","start":"08:00","end":"11:00","title":"CUERPO / GIMNASIO","color_id":"1","description":"Desplazamiento, entrenamiento, vuelta, ducha y post-entreno. Franja contextual, no tarea."},
+      {"id":"exec-20260911","start":"11:00","end":"16:00","title":"EJECUCIÓN / ORQUESTACIÓN","color_id":"9","description":"Cola priorizada, dirección de sistemas, revisión, decisiones y excepciones. Franja contextual, no tarea."},
+      {"id":"ground-20260911","start":"16:00","end":"17:00","title":"GROUNDING","color_id":"1","description":"Descarga de activación, salida del modo operativo y retorno al cuerpo y al entorno."},
+      {"id":"dinner-20260911","start":"17:00","end":"18:00","title":"CENA","color_id":"9","description":"Nutrición y transición hacia menor activación antes de Música / Integración."},
+      {"id":"music-20260911","start":"18:00","end":"21:00","title":"MÚSICA / INTEGRACIÓN","color_id":"1","description":"Creación sensorial, cantar, bailar, escribir e integración antes del sueño."},
+      {"id":"sleep-20260911","start":"21:00","end":"05:00","title":"DORMIR","color_id":"9","description":"Descanso, recuperación e incubación."}
+    ],
+    "2026-09-12": [
+      {"id":"meta-20260912","start":"05:00","end":"08:00","title":"METAANÁLISIS / DIRECCIÓN","color_id":"9","description":"Claridad, lectura del estado actual, objetivos, cuellos de botella, prioridades y dirección. Franja contextual, no tarea."},
+      {"id":"gym-20260912","start":"08:00","end":"11:00","title":"CUERPO / GIMNASIO","color_id":"1","description":"Desplazamiento, entrenamiento, vuelta, ducha y post-entreno. Franja contextual, no tarea."},
+      {"id":"exec-20260912","start":"11:00","end":"16:00","title":"EJECUCIÓN / ORQUESTACIÓN","color_id":"9","description":"Cola priorizada, dirección de sistemas, revisión, decisiones y excepciones. Franja contextual, no tarea."},
+      {"id":"ground-20260912","start":"16:00","end":"17:00","title":"GROUNDING","color_id":"1","description":"Descarga de activación, salida del modo operativo y retorno al cuerpo y al entorno."},
+      {"id":"dinner-20260912","start":"17:00","end":"18:00","title":"CENA","color_id":"9","description":"Nutrición y transición hacia menor activación antes de Música / Integración."},
+      {"id":"music-20260912","start":"18:00","end":"21:00","title":"MÚSICA / INTEGRACIÓN","color_id":"1","description":"Creación sensorial, cantar, bailar, escribir e integración antes del sueño."},
+      {"id":"sleep-20260912","start":"21:00","end":"05:00","title":"DORMIR","color_id":"9","description":"Descanso, recuperación e incubación."}
+    ],
+    "2026-09-13": [
+      {"id":"meta-20260913","start":"05:00","end":"08:00","title":"METAANÁLISIS / DIRECCIÓN","color_id":"9","description":"Claridad, lectura del estado actual, objetivos, cuellos de botella, prioridades y dirección. Franja contextual, no tarea."},
+      {"id":"gym-20260913","start":"08:00","end":"11:00","title":"CUERPO / GIMNASIO","color_id":"1","description":"Desplazamiento, entrenamiento, vuelta, ducha y post-entreno. Franja contextual, no tarea."},
+      {"id":"exec-20260913","start":"11:00","end":"16:00","title":"EJECUCIÓN / ORQUESTACIÓN","color_id":"9","description":"Cola priorizada, dirección de sistemas, revisión, decisiones y excepciones. Franja contextual, no tarea."},
+      {"id":"ground-20260913","start":"16:00","end":"17:00","title":"GROUNDING","color_id":"1","description":"Descarga de activación, salida del modo operativo y retorno al cuerpo y al entorno."},
+      {"id":"dinner-20260913","start":"17:00","end":"18:00","title":"CENA","color_id":"9","description":"Nutrición y transición hacia menor activación antes de Música / Integración."},
+      {"id":"music-20260913","start":"18:00","end":"21:00","title":"MÚSICA / INTEGRACIÓN","color_id":"1","description":"Creación sensorial, cantar, bailar, escribir e integración antes del sueño."},
+      {"id":"sleep-20260913","start":"21:00","end":"05:00","title":"DORMIR","color_id":"9","description":"Descanso, recuperación e incubación."}
+    ]
+  }
+}
