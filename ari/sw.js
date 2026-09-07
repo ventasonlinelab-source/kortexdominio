@@ -1,5 +1,7 @@
-const CACHE='ari-v5';
+const CACHE='ari-v6';
 const ASSETS=['/ari/','/ari/index.html','/ari/manifest.webmanifest','/ari/icon.svg','/ari/calendar.json'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));self.skipWaiting();});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
 self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;event.respondWith(fetch(event.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(event.request,copy));return r;}).catch(()=>caches.match(event.request).then(r=>r||caches.match('/ari/'))));});
+self.addEventListener('push',event=>{let data={title:'A.R.I.',body:'Tienes un nuevo aviso.',url:'/ari/#ahora'};try{if(event.data)data={...data,...event.data.json()}}catch(e){if(event.data)data.body=event.data.text()}event.waitUntil(self.registration.showNotification(data.title,{body:data.body,icon:'/ari/icon.svg',badge:'/ari/icon.svg',tag:data.tag||'ari-push',data:{url:data.url||'/ari/#ahora'}}));});
+self.addEventListener('notificationclick',event=>{event.notification.close();const url=event.notification?.data?.url||'/ari/#ahora';event.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{for(const c of list){if('focus'in c){c.navigate(url);return c.focus()}}return clients.openWindow?clients.openWindow(url):null}));});
