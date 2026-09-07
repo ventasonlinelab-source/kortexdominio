@@ -3,6 +3,7 @@
     {"source":"/hermes-dashboard/:path*","destination":"https://n8n.kortex10x.com/hermes-dashboard/:path*"},
     {"source":"/ari/trading/data","destination":"https://n8n.kortex10x.com/trading-dashboard/data"},
     {"source":"/ari/trading/health","destination":"https://n8n.kortex10x.com/trading-dashboard/health"},
-    {"source":"/ari/music/audio/:path*","destination":"https://n8n.kortex10x.com/kortex-audio/:path*"}
+    {"source":"/ari/music/audio/:path*","destination":"https://n8n.kortex10x.com/kortex-audio/:path*"},
+    {"source":"/ari/music/api/:path*","destination":"https://n8n.kortex10x.com/ari-music-api/api/:path*"}
   ]
 }
