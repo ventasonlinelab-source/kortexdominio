@@ -4,9 +4,8 @@
     {"source":"/ari/hermes/","destination":"https://n8n.kortex10x.com/hermes-dashboard/"},
     {"source":"/ari/hermes/:path*","destination":"https://n8n.kortex10x.com/hermes-dashboard/:path*"},
     {"source":"/hermes-dashboard/:path*","destination":"https://n8n.kortex10x.com/hermes-dashboard/:path*"},
-    {"source":"/ari/trading","destination":"https://n8n.kortex10x.com/trading-dashboard/"},
-    {"source":"/ari/trading/","destination":"https://n8n.kortex10x.com/trading-dashboard/"},
-    {"source":"/ari/trading/:path*","destination":"https://n8n.kortex10x.com/trading-dashboard/:path*"},
+    {"source":"/ari/trading/data","destination":"https://n8n.kortex10x.com/trading-dashboard/data"},
+    {"source":"/ari/trading/health","destination":"https://n8n.kortex10x.com/trading-dashboard/health"},
     {"source":"/ari/music/audio/:path*","destination":"https://n8n.kortex10x.com/kortex-audio/:path*"}
   ]
 }
