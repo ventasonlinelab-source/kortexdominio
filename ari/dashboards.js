@@ -25,6 +25,7 @@
     const ctx=localStorage.getItem(CONTEXT_KEY);
     if(ctx==='music'){el.href='/ari/music/?resume=1';el.innerHTML='<b>♫</b>Música';el.hidden=false;nav.classList.add('has-context')}
     else if(ctx==='trading'){el.href='/ari/trading/?resume=1';el.innerHTML='<b>⌁</b>Trading';el.hidden=false;nav.classList.add('has-context')}
+    else if(ctx==='hermes'){el.href='/ari/hermes/';el.innerHTML='<b>◆</b>Hermes';el.hidden=false;nav.classList.add('has-context')}
     else{el.hidden=true;nav.classList.remove('has-context')}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensure,{once:true});else ensure();
