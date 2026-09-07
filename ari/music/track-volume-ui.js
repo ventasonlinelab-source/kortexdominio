@@ -6,15 +6,29 @@
   const db=v=>v<=0?'-∞ dB':((20*Math.log10(v))>=0?'+':'')+(20*Math.log10(v)).toFixed(1)+' dB';
 
   function ensureStyle(){
-    if(document.getElementById(STYLE_ID))return;
-    const s=document.createElement('style');s.id=STYLE_ID;s.textContent=`
-      .track-head .mixers{grid-template-columns:24px minmax(54px,1fr) 54px!important;gap:5px!important}
+    let s=document.getElementById(STYLE_ID);
+    if(!s){s=document.createElement('style');s.id=STYLE_ID;document.head.appendChild(s)}
+    s.textContent=`
+      .track-row{height:78px!important}
+      .track-head{height:78px!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:22px 14px 28px!important;gap:2px 5px!important;padding:5px 6px!important;overflow:visible!important}
+      .track-head .track-name{grid-column:1;grid-row:1}
+      .track-head .track-buttons{grid-column:2;grid-row:1}
+      .track-head .track-type{grid-column:1/-1;grid-row:2;align-self:center}
+      .track-head .mixers{grid-column:1/-1!important;grid-row:3!important;display:grid!important;grid-template-columns:24px minmax(54px,1fr) 54px!important;align-items:center!important;gap:5px!important;min-width:0!important}
       .track-head .vol-label{font-size:7px;font-weight:950;letter-spacing:.08em;color:var(--muted);text-align:left}
-      .track-head .vol{min-width:0;width:100%!important;height:18px!important;cursor:ew-resize}
+      .track-head .vol{display:block!important;min-width:0;width:100%!important;height:20px!important;cursor:ew-resize;accent-color:var(--accent)}
       .track-head .vol-db{font-size:7.5px!important;font-variant-numeric:tabular-nums;text-align:right!important;color:var(--text)!important;font-weight:850;white-space:nowrap}
       .track-head .vol:focus-visible{outline:1px solid var(--accent);outline-offset:1px}
-      @media(max-width:560px){.track-head .mixers{grid-template-columns:20px minmax(42px,1fr) 45px!important}.track-head .vol-db{font-size:6.5px!important}}
-    `;document.head.appendChild(s);
+      .track-row .lane{height:78px!important}
+      .track-row .lane .clip{top:16px!important}
+      @media(max-width:560px){
+        .track-row,.track-head,.track-row .lane{height:76px!important}
+        .track-head{grid-template-rows:21px 13px 27px!important}
+        .track-head .mixers{grid-template-columns:20px minmax(42px,1fr) 45px!important}
+        .track-head .vol-db{font-size:6.5px!important}
+        .track-row .lane .clip{top:15px!important}
+      }
+    `;
   }
 
   function enhanceRow(row){
