@@ -56,6 +56,11 @@
     if(status)view.insertBefore(section,status);else view.appendChild(section);
     section.querySelectorAll('[data-dashboard-route]').forEach(b=>b.addEventListener('click',()=>location.assign(b.dataset.dashboardRoute)));
   }
+  function ensureMusicTools(){
+    if(!location.pathname.startsWith('/ari/music/'))return;
+    if(document.querySelector('script[data-ari-clip-tools]')||window.ARI_DAW_SPLIT_CLIP)return;
+    const s=document.createElement('script');s.src='/ari/music/clip-tools.js?v=1';s.dataset.ariClipTools='1';s.defer=true;document.head.appendChild(s);
+  }
   function syncContext(){
     const el=document.getElementById('contextMusic'),nav=document.getElementById('bottomNav');if(!el||!nav){ensureRefresh();return}
     const ctx=localStorage.getItem(CONTEXT_KEY);
@@ -65,7 +70,7 @@
     else{el.hidden=true;nav.classList.remove('has-context')}
     ensureRefresh();layoutBottom(nav);
   }
-  function ensure(){ensureGlobalStyle();applyGlobalTheme();ensureDashboardMenu();syncContext();ensureRefresh()}
+  function ensure(){ensureGlobalStyle();applyGlobalTheme();ensureDashboardMenu();syncContext();ensureRefresh();ensureMusicTools()}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensure,{once:true});else ensure();
   addEventListener('pageshow',ensure);addEventListener('storage',e=>{if(e.key===CONTEXT_KEY)syncContext();if(e.key===THEME_KEY)applyGlobalTheme()});
   window.ARI_ENSURE_DASHBOARDS=ensure;window.ARI_HARD_REFRESH=hardRefresh;
