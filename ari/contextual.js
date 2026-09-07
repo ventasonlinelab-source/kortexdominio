@@ -1,58 +1,24 @@
 (()=>{
-  const STYLE_ID='ari-contextual-style-v17';
+  const STYLE_ID='ari-contextual-style-v18';
+  const API='/api/ari-bridge?path=';
+  let pending=[],activeChat=null,loading=false;
+  const esc=v=>{const d=document.createElement('div');d.textContent=v??'';return d.innerHTML};
+  const api=async(path,opts={})=>{const r=await fetch(API+encodeURIComponent(path),{cache:'no-store',...opts,headers:{'Content-Type':'application/json',...(opts.headers||{})}});let x={};try{x=await r.json()}catch{}if(!r.ok)throw Error(x.error||('HTTP '+r.status));return x};
   if(!document.getElementById(STYLE_ID)){
-    const style=document.createElement('style');
-    style.id=STYLE_ID;
-    style.textContent=`
-      #contextWorkspace{margin:0 0 12px}
-      .context-shell{border:1px solid var(--border);background:var(--panel);border-radius:18px;overflow:hidden}
-      .context-head{padding:15px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
-      .context-head-copy{min-width:0}.context-kicker{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}.context-title{font-size:16px;font-weight:760;line-height:1.2}.context-status{font-size:9px;color:var(--muted);white-space:nowrap}
-      .msg-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
-      .msg-stat{background:var(--panel);padding:11px 8px;text-align:center}.msg-stat b{display:block;font-size:15px}.msg-stat span{font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-      .msg-list{display:grid}.msg-row{appearance:none;border:0;border-top:1px solid var(--border);background:transparent;color:var(--text);padding:13px 15px;text-align:left;display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center}.msg-row:first-child{border-top:0}.msg-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--border);font-size:12px;font-weight:800}.msg-main{min-width:0}.msg-name{font-size:13px;font-weight:720}.msg-preview{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.msg-meta{text-align:right}.msg-time{font-size:9px;color:var(--muted)}.msg-count{display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:color-mix(in srgb,var(--gold) 24%,var(--panel));color:var(--gold);font-size:9px;font-weight:800;margin-top:4px}
-      .msg-empty{padding:18px 16px;text-align:center}.msg-empty strong{display:block;font-size:13px}.msg-empty span{display:block;font-size:10px;color:var(--muted);margin-top:5px;line-height:1.45}
-      .msg-actions{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--border)}.msg-action{appearance:none;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;padding:10px 12px;font-size:10px;font-weight:700;flex:1}.msg-action.primary{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 15%,var(--panel))}
-      .task-row.done:after,.task-row.completed:after{display:none!important}
-      .task-row.done .task-title,.task-row.completed .task-title{text-decoration-line:line-through;text-decoration-thickness:2px;text-decoration-color:var(--task-accent);opacity:.55}
-      .task-row.done .task-label,.task-row.completed .task-label{display:none}
-      .task-row.done .task-time,.task-row.completed .task-time{opacity:.45}
-    `;
-    document.head.appendChild(style);
+    const s=document.createElement('style');s.id=STYLE_ID;s.textContent=`
+    #contextWorkspace{margin:0 0 12px}.context-shell{border:1px solid var(--border);background:var(--panel);border-radius:18px;overflow:hidden}.context-head{padding:15px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}.context-kicker{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}.context-title{font-size:16px;font-weight:760}.context-status{font-size:9px;color:var(--muted)}.msg-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}.msg-stat{background:var(--panel);padding:11px 8px;text-align:center}.msg-stat b{display:block;font-size:15px}.msg-stat span{font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.msg-list{display:grid}.msg-row{appearance:none;border:0;border-top:1px solid var(--border);background:transparent;color:var(--text);padding:13px 15px;text-align:left;display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center}.msg-row:first-child{border-top:0}.msg-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--border);font-size:12px;font-weight:800}.msg-main{min-width:0}.msg-name{font-size:13px;font-weight:720}.msg-preview{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.msg-meta{text-align:right}.msg-time{font-size:9px;color:var(--muted)}.msg-count{display:grid;place-items:center;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:color-mix(in srgb,var(--gold) 24%,var(--panel));color:var(--gold);font-size:9px;font-weight:800;margin-top:4px}.msg-empty{padding:18px 16px;text-align:center}.msg-empty strong{display:block;font-size:13px}.msg-empty span{display:block;font-size:10px;color:var(--muted);margin-top:5px}.ari-chat{position:fixed;inset:0;z-index:80;background:var(--bg);color:var(--text);display:flex;flex-direction:column;padding:calc(12px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom))}.ari-chat.hidden{display:none}.ari-chat-top{display:flex;align-items:center;gap:10px;padding:4px 2px 12px;border-bottom:1px solid var(--border)}.ari-chat-back{border:0;background:var(--panel2);color:var(--gold);border-radius:11px;padding:9px 11px;font-weight:800}.ari-chat-name{font-weight:800;font-size:16px}.ari-history{flex:1;overflow:auto;padding:14px 2px;display:flex;flex-direction:column;gap:8px}.ari-bubble{max-width:84%;padding:10px 12px;border-radius:15px;font-size:14px;line-height:1.35;white-space:pre-wrap}.ari-bubble.in{align-self:flex-start;background:var(--panel);border:1px solid var(--border)}.ari-bubble.out{align-self:flex-end;background:color-mix(in srgb,var(--gold) 18%,var(--panel));border:1px solid color-mix(in srgb,var(--gold) 35%,var(--border))}.ari-bubble small{display:block;font-size:9px;color:var(--muted);margin-top:5px}.ari-compose{border-top:1px solid var(--border);padding-top:10px}.ari-compose textarea{width:100%;min-height:72px;max-height:150px;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:14px;padding:12px;font:inherit;font-size:16px;resize:none}.ari-actions{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-top:8px}.ari-actions button{border:1px solid var(--border);border-radius:13px;padding:13px;font-weight:800}.ari-ignore{background:var(--panel2);color:var(--muted2)}.ari-reply{background:color-mix(in srgb,var(--gold) 20%,var(--panel));color:var(--text);border-color:var(--gold)!important}.ari-state{font-size:10px;color:var(--muted);margin-top:7px}`;document.head.appendChild(s);
   }
-
-  function root(){return document.getElementById('contextWorkspace')}
-  function pendingMessages(){const data=window.ARI_PENDING_MESSAGES;return Array.isArray(data)?data:[]}
-  function initials(name='?'){return name.split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'?'}
-
-  function renderMessaging(){
-    const host=root(); if(!host)return;
-    const msgs=pendingMessages();
-    const unread=msgs.reduce((n,m)=>n+(Number(m.unread)||0),0);
-    const priority=msgs.filter(m=>m.priority==='high'||m.priority==='critical').length;
-    host.hidden=false;
-    host.innerHTML=`<section class="context-shell" data-mode="messaging">
-      <div class="context-head"><div class="context-head-copy"><div class="context-kicker">MENSAJERÍA</div><div class="context-title">Mensajes pendientes</div></div><div class="context-status">${msgs.length?'sincronizado':'WhatsApp pendiente'}</div></div>
-      <div class="msg-summary"><div class="msg-stat"><b>${msgs.length}</b><span>chats</span></div><div class="msg-stat"><b>${unread}</b><span>mensajes</span></div><div class="msg-stat"><b>${priority}</b><span>prioridad</span></div></div>
-      ${msgs.length?`<div class="msg-list">${msgs.map((m,i)=>`<button class="msg-row" data-msg-index="${i}"><span class="msg-avatar">${initials(m.name)}</span><span class="msg-main"><span class="msg-name">${m.name||'Contacto'}</span><span class="msg-preview">${m.preview||'Mensaje pendiente'}</span></span><span class="msg-meta"><span class="msg-time">${m.time||''}</span>${m.unread?`<span class="msg-count">${m.unread}</span>`:''}</span></button>`).join('')}</div>`:`<div class="msg-empty"><strong>Mensajería lista en Ahora.</strong><span>Aquí aparecerán directamente los mensajes pendientes reales cuando termine la conexión de WhatsApp. No se muestran datos inventados.</span></div>`}
-      <div class="msg-actions"><button class="msg-action" id="msgWho">¿Quién me ha escrito?</button><button class="msg-action primary" id="msgRead">Léeme lo importante</button></div>
-    </section>`;
-    const input=document.getElementById('noteInput');
-    host.querySelectorAll('.msg-row').forEach(btn=>btn.onclick=()=>{const m=msgs[Number(btn.dataset.msgIndex)];if(input){input.value=`Dime qué dice ${m?.name||'este contacto'}`;input.focus()}});
-    const who=host.querySelector('#msgWho'),read=host.querySelector('#msgRead');
-    if(who)who.onclick=()=>{if(input){input.value='¿Quién me ha escrito y qué prioridad tiene cada mensaje?';input.focus()}};
-    if(read)read.onclick=()=>{if(input){input.value='Léeme los mensajes importantes pendientes.';input.focus()}};
-  }
-
-  const repaint=()=>{renderMessaging()};
-  if(typeof window.renderAll==='function'){
-    const original=window.renderAll;
-    window.renderAll=function(){original();repaint()};
-  }
-  if(typeof window.renderNow==='function'){
-    const original=window.renderNow;
-    window.renderNow=function(){original();repaint()};
-  }
-  window.ARI_RENDER_CONTEXT=repaint;
-  setTimeout(repaint,0);
+  function initials(name='?'){return String(name).split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'?'}
+  function fmt(iso){try{return new Date(iso).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}catch{return''}}
+  function ensureChat(){if(document.getElementById('ariChat'))return;document.body.insertAdjacentHTML('beforeend',`<section id="ariChat" class="ari-chat hidden"><div class="ari-chat-top"><button id="ariChatBack" class="ari-chat-back">‹ VOLVER</button><div id="ariChatName" class="ari-chat-name">WhatsApp</div></div><div id="ariHistory" class="ari-history"></div><div class="ari-compose"><textarea id="ariReply" placeholder="Escribe una respuesta…"></textarea><div class="ari-actions"><button id="ariIgnore" class="ari-ignore">IGNORAR</button><button id="ariReplyBtn" class="ari-reply">RESPONDER</button></div><div id="ariState" class="ari-state"></div></div></section>`);ariChatBack.onclick=closeChat;ariIgnore.onclick=ignoreChat;ariReplyBtn.onclick=replyChat}
+  function render(){const h=document.getElementById('contextWorkspace');if(!h)return;h.hidden=false;const n=pending.reduce((a,c)=>a+(Number(c.pending_count)||0),0);h.innerHTML=`<section class="context-shell"><div class="context-head"><div><div class="context-kicker">MENSAJERÍA</div><div class="context-title">Mensajes pendientes</div></div><div class="context-status">${loading?'sincronizando…':'HOF-393 · real'}</div></div><div class="msg-summary"><div class="msg-stat"><b>${pending.length}</b><span>chats</span></div><div class="msg-stat"><b>${n}</b><span>mensajes</span></div></div>${pending.length?`<div class="msg-list">${pending.map((m,i)=>`<button class="msg-row" data-i="${i}"><span class="msg-avatar">${esc(initials(m.name))}</span><span class="msg-main"><span class="msg-name">${esc(m.name||'Contacto')}</span><span class="msg-preview">${esc(m.last_message||'Mensaje pendiente')}</span></span><span class="msg-meta"><span class="msg-time">${esc(fmt(m.last_inbound))}</span>${m.pending_count?`<span class="msg-count">${Number(m.pending_count)}</span>`:''}</span></button>`).join('')}</div>`:`<div class="msg-empty"><strong>Sin conversaciones pendientes</strong><span>Los nuevos mensajes que requieran tu decisión aparecerán aquí.</span></div>`}</section>`;h.querySelectorAll('.msg-row').forEach(b=>b.onclick=()=>openChat(pending[Number(b.dataset.i)]?.conversation_id))}
+  async function load(){if(loading)return;loading=true;render();try{const x=await api('messages/pending');pending=x.conversations||[];window.ARI_PENDING_MESSAGES=pending}catch(e){console.warn('A.R.I. WhatsApp bridge unavailable')}finally{loading=false;render()}}
+  async function openChat(id){if(!id)return;ensureChat();ariState.textContent='Cargando conversación…';ariChat.classList.remove('hidden');try{const x=await api('messages/conversation/'+id);activeChat=id;ariChatName.textContent=x.conversation?.name||'WhatsApp';ariHistory.innerHTML=(x.messages||[]).map(m=>`<div class="ari-bubble ${m.direction==='outbound'?'out':'in'}">${esc(m.text||('['+(m.kind||'mensaje')+']'))}<small>${esc(new Date(m.created_at).toLocaleString('es-ES'))}</small></div>`).join('');ariReply.value='';ariState.textContent='';setTimeout(()=>ariHistory.scrollTop=ariHistory.scrollHeight,20)}catch(e){ariState.textContent='No se pudo abrir la conversación.'}}
+  function closeChat(){ariChat?.classList.add('hidden');activeChat=null;load()}
+  async function ignoreChat(){if(!activeChat)return;ariState.textContent='Resolviendo…';try{await api('messages/conversation/'+activeChat+'/ignore',{method:'POST',body:'{}'});ariState.textContent='Ignorado';setTimeout(closeChat,180)}catch(e){ariState.textContent='No se pudo ignorar.'}}
+  async function replyChat(){if(!activeChat)return;const text=ariReply.value.trim();if(!text){ariState.textContent='Escribe una respuesta.';return}ariState.textContent='Enviando por WhatsApp…';try{await api('messages/conversation/'+activeChat+'/reply',{method:'POST',body:JSON.stringify({text})});ariState.textContent='Enviado · proveedor aceptado';setTimeout(closeChat,300)}catch(e){ariState.textContent='No se pudo enviar: '+e.message}}
+  const repaint=()=>{render();load()};
+  if(typeof window.renderAll==='function'){const f=window.renderAll;window.renderAll=function(){f();render()}}
+  if(typeof window.renderNow==='function'){const f=window.renderNow;window.renderNow=function(){f();render()}}
+  window.ARI_RENDER_CONTEXT=repaint;ensureChat();setTimeout(repaint,0);setInterval(load,15000);
 })();
