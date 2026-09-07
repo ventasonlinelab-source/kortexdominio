@@ -1,8 +1,30 @@
 {
-  "source": "Google Calendar",
+  "source": "Google Calendar snapshot",
   "calendar": "calendio operativo beta",
   "calendar_id": "3abf9e6aa8ef2f433366569c03edce8ae889536f0d1b88f4c47cc3f555002f64@group.calendar.google.com",
   "timezone": "Europe/Madrid",
-  "synced_at": "2026-09-07T07:01:00+02:00",
-  "days": {}
+  "synced_at": "2026-09-07T07:20:00+02:00",
+  "days": {
+    "2026-09-07": [
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"}
+    ],
+    "2026-09-08": [
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"}
+    ],
+    "2026-09-09": [
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"}
+    ],
+    "2026-09-10": [
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"}
+    ],
+    "2026-09-11": [
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"}
+    ],
+    "2026-09-12": [
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"}
+    ],
+    "2026-09-13": [
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"}
+    ]
+  }
 }
