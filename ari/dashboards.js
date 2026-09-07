@@ -3,7 +3,8 @@
   const ROUTES=[
     {icon:'◆',title:'HERMES',detail:'Clínicas · Pipeline · Citas',href:'/ari/hermes/'},
     {icon:'⌁',title:'TRADING',detail:'Mercado · Gráficos · Operaciones',href:'/ari/trading/'},
-    {icon:'♫',title:'MÚSICA',detail:'DAW · Creación · Producción',href:'/ari/music/'}
+    {icon:'♫',title:'MÚSICA',detail:'DAW · Creación · Producción',href:'/ari/music/'},
+    {icon:'🛒',title:'LISTA DE LA COMPRA',detail:'Pendientes del súper',href:'/ari/shopping/'}
   ];
   function ensure(){
     if(!document.getElementById(ID)){
