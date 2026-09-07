@@ -20,8 +20,8 @@ header{display:flex;align-items:center;padding:4px 2px 14px;position:sticky;top:
 .capture{display:flex;align-items:flex-end;gap:8px;border:1px solid var(--border);background:var(--panel);border-radius:18px;padding:10px}.capture textarea{flex:1;resize:none;min-height:48px;max-height:150px;border:0;outline:0;background:transparent;color:var(--text);font:inherit;font-size:14px;line-height:1.4;padding:8px}.capture textarea::placeholder{color:var(--muted)}.round{width:44px;height:44px;flex:0 0 44px;border-radius:50%;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-size:18px}.round.listening{border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 18%,transparent)}.send{border:1px solid var(--gold);background:color-mix(in srgb,var(--gold) 18%,var(--panel));color:var(--text);border-radius:13px;padding:12px 14px;font-weight:700}.capture-note,.queue-status{font-size:10px;color:var(--muted);margin:7px 4px 0}.queue-status{color:var(--gold)}
 .days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:2px 0 16px}.day{appearance:none;border:1px solid var(--border);background:var(--panel);border-radius:12px;padding:9px 4px;text-align:center;color:var(--muted)}.day.active{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 13%,var(--panel));color:var(--text)}.day b{display:block;font-size:11px}.day span{font-size:10px}
 .timeline{position:relative;padding-left:64px}.timeline:before{content:"";position:absolute;left:52px;top:8px;bottom:8px;width:1px;background:var(--line)}.event{position:relative;border:1px solid var(--border);background:var(--panel);border-radius:13px;padding:11px 12px;margin-bottom:10px}.event:before{content:"";position:absolute;left:-17px;top:16px;width:9px;height:9px;border:2px solid var(--gold);background:var(--bg);border-radius:50%}.event.g9{border-left:4px solid var(--blue)}.event.g1{border-left:4px solid var(--lightblue)}.event.active{box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 35%,transparent);background:color-mix(in srgb,var(--gold) 10%,var(--panel))}.event.done{opacity:.7}.time{position:absolute;left:-64px;top:14px;width:44px;text-align:right;font-size:11px;color:var(--muted)}.event-title{font-size:13px;font-weight:680}.event-meta{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4}
-.theme-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.theme-option{appearance:none;border:1px solid var(--border);background:var(--panel2);color:var(--muted);border-radius:12px;padding:11px 6px;font-size:11px;font-weight:700}.theme-option.active{border-color:var(--gold);color:var(--text)}
-.bottom{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(560px,100%);padding:9px 18px calc(9px + env(safe-area-inset-bottom));background:var(--bottom);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);z-index:10}.nav{appearance:none;border:0;background:none;text-align:center;color:var(--muted);font-size:10px;padding:4px}.nav.active{color:var(--gold)}.nav b{display:block;font-size:17px;line-height:1.1;margin-bottom:2px}
+.menu-list{display:grid;gap:10px}.menu-item{width:100%;appearance:none;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:16px;padding:15px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:12px}.menu-item:active{transform:scale(.99)}.menu-main{display:flex;align-items:center;gap:12px}.menu-icon{font-size:21px;width:28px;text-align:center}.menu-copy strong{display:block;font-size:14px}.menu-copy span{display:block;font-size:11px;color:var(--muted);margin-top:3px}.chev{color:var(--muted);font-size:18px}.back{appearance:none;border:0;background:none;color:var(--gold);font-size:13px;padding:4px 0 12px}.theme-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.theme-option{appearance:none;border:1px solid var(--border);background:var(--panel2);color:var(--muted);border-radius:12px;padding:11px 6px;font-size:11px;font-weight:700}.theme-option.active{border-color:var(--gold);color:var(--text)}.update-status{font-size:11px;color:var(--muted);margin-top:10px}
+.bottom{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(560px,100%);padding:9px 28px calc(9px + env(safe-area-inset-bottom));background:var(--bottom);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);z-index:10}.nav{appearance:none;border:0;background:none;text-align:center;color:var(--muted);font-size:10px;padding:4px}.nav.active{color:var(--gold)}.nav b{display:block;font-size:17px;line-height:1.1;margin-bottom:2px}
 </style>
 </head>
 <body>
@@ -30,8 +30,7 @@ header{display:flex;align-items:center;padding:4px 2px 14px;position:sticky;top:
 
 <section class="view active" data-view="ahora">
 <section class="panel"><div class="eyebrow">Ahora</div><h1 id="nowTitle">Cargando…</h1><div class="meta" id="nowMeta"></div></section>
-<div class="capture"><button class="round" id="micBtn" aria-label="Hablar">🎙️</button><textarea id="noteInput" rows="1" placeholder="Habla o escribe una anotación…"></textarea><button class="send" id="sendNote">Enviar</button></div>
-<div class="capture-note">Se asocia automáticamente al bloque activo y al día actual.</div>
+<div class="capture"><button class="round" id="micBtn" aria-label="Hablar">🎙️</button><textarea id="noteInput" rows="1" placeholder="Habla o escribe…"></textarea><button class="send" id="sendNote">Enviar</button></div>
 <div class="queue-status" id="queueStatus"></div>
 </section>
 
@@ -41,21 +40,35 @@ header{display:flex;align-items:center;padding:4px 2px 14px;position:sticky;top:
 <section class="timeline" id="timeline"></section>
 </section>
 
-<section class="view" data-view="memoria">
-<div class="section-title">Memoria</div>
-<section class="panel"><div class="eyebrow">Notion</div><h2>Memoria del día</h2><div class="meta">Aquí aparecerán las anotaciones y resultados vinculados a cada bloque cuando cerremos la escritura automática a Notion.</div></section>
+<section class="view" data-view="menu">
+<div class="section-title">Menú</div>
+<div class="menu-list">
+<button class="menu-item" id="openMessaging"><span class="menu-main"><span class="menu-icon">💬</span><span class="menu-copy"><strong>Mensajería</strong><span>Mensajes generales de A.R.I.</span></span></span><span class="chev">›</span></button>
+<button class="menu-item" id="updateApp"><span class="menu-main"><span class="menu-icon">↻</span><span class="menu-copy"><strong>Actualizar app</strong><span>Cargar la última versión sin cerrar A.R.I.</span></span></span><span class="chev">›</span></button>
+<button class="menu-item" id="openAppearance"><span class="menu-main"><span class="menu-icon">◐</span><span class="menu-copy"><strong>Apariencia</strong><span>Oscuro, claro o automático</span></span></span><span class="chev">›</span></button>
+</div>
+<div class="update-status" id="updateStatus"></div>
 </section>
 
-<section class="view" data-view="mas">
+<section class="view" data-view="mensajeria">
+<button class="back" data-back-menu>‹ Menú</button>
+<div class="section-title">Mensajería</div>
+<section class="panel"><div class="eyebrow">A.R.I.</div><h2>Mensaje general</h2><div class="meta">No depende del bloque actual. Quedará listo para enrutar por n8n cuando conectemos el backend.</div></section>
+<div class="capture"><button class="round" id="msgMicBtn" aria-label="Hablar">🎙️</button><textarea id="msgInput" rows="1" placeholder="Escribe un mensaje…"></textarea><button class="send" id="sendMessage">Enviar</button></div>
+<div class="queue-status" id="msgStatus"></div>
+</section>
+
+<section class="view" data-view="apariencia">
+<button class="back" data-back-menu>‹ Menú</button>
 <div class="section-title">Apariencia</div>
 <section class="panel"><div class="theme-row"><button class="theme-option" data-theme-choice="dark">🌙 Oscuro</button><button class="theme-option" data-theme-choice="light">☀️ Claro</button><button class="theme-option" data-theme-choice="auto">◐ Auto</button></div></section>
 </section>
 </main>
 
-<nav class="bottom"><button class="nav active" data-target="ahora"><b>⌂</b>Ahora</button><button class="nav" data-target="linea"><b>│</b>Línea</button><button class="nav" data-target="memoria"><b>◎</b>Memoria</button><button class="nav" data-target="mas"><b>⋯</b>Más</button></nav>
+<nav class="bottom"><button class="nav active" data-target="ahora"><b>⌂</b>Ahora</button><button class="nav" data-target="linea"><b>│</b>Línea</button><button class="nav" data-target="menu"><b>☰</b>Menú</button></nav>
 
 <script>
-const THEME_KEY='ari-theme',QUEUE_KEY='ari-note-queue',mediaDark=matchMedia('(prefers-color-scheme: dark)');
+const THEME_KEY='ari-theme',QUEUE_KEY='ari-note-queue',MSG_QUEUE_KEY='ari-message-queue',mediaDark=matchMedia('(prefers-color-scheme: dark)');
 function storedTheme(){return localStorage.getItem(THEME_KEY)||'auto'}
 function applyTheme(choice=storedTheme()){const r=choice==='auto'?(mediaDark.matches?'dark':'light'):choice;document.documentElement.dataset.theme=r;document.getElementById('themeColor').content=r==='dark'?'#050505':'#f5f1e8';document.querySelectorAll('.theme-option').forEach(b=>b.classList.toggle('active',b.dataset.themeChoice===choice))}
 function setTheme(c){localStorage.setItem(THEME_KEY,c);applyTheme(c)}
@@ -75,24 +88,26 @@ function renderTimeline(){timeline.innerHTML='';lineTitle.textContent=`Línea te
 function renderAll(){renderDays();renderNow();renderTimeline()}
 function go(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.dataset.view===v));document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.target===v));history.replaceState(null,'','#'+v);scrollTo({top:0,behavior:'instant'})}
 document.querySelectorAll('.nav').forEach(n=>n.onclick=()=>go(n.dataset.target));
+document.querySelectorAll('[data-back-menu]').forEach(b=>b.onclick=()=>go('menu'));
+openMessaging.onclick=()=>go('mensajeria');openAppearance.onclick=()=>go('apariencia');
 async function loadCalendar(){try{const r=await fetch('/ari/calendar.json?ts='+Date.now(),{cache:'no-store'});calendarData=await r.json();const today=todayMadrid();if(calendarData.days[today])selectedDate=today;renderAll()}catch(e){nowTitle.textContent='Error cargando calendario';nowMeta.textContent='No se pudo leer la línea temporal.'}}
 
 async function registration(){if(!('serviceWorker'in navigator))throw Error('Service Worker no disponible');return navigator.serviceWorker.ready}
-async function notify(title,body,tag='ari-note'){try{if(!('Notification'in window)||Notification.permission!=='granted')return false;const r=await registration();await r.showNotification(title,{body,icon:'/ari/icon.svg',badge:'/ari/icon.svg',tag,data:{url:'/ari/#ahora'}});return true}catch(e){return false}}
-function queue(){try{return JSON.parse(localStorage.getItem(QUEUE_KEY)||'[]')}catch(e){return[]}}
-function saveQueue(items){localStorage.setItem(QUEUE_KEY,JSON.stringify(items));queueStatus.textContent=items.length?`${items.length} anotación${items.length===1?'':'es'} pendiente${items.length===1?'':'s'} de sincronizar.`:''}
-function initQueue(){saveQueue(queue())}
-async function sendCapture(){const text=noteInput.value.trim(),evt=activeEvent(),date=todayMadrid();if(!text){queueStatus.textContent='No hay texto para enviar.';await notify('A.R.I. · error','No se envió nada porque la anotación está vacía.','ari-note-error');return}
-try{const items=queue();items.push({id:crypto.randomUUID?.()||String(Date.now()),created_at:new Date().toISOString(),date,block:evt?.title||'SIN BLOQUE',calendar_start:evt?.start||null,calendar_end:evt?.end||null,text,status:'queued'});saveQueue(items);noteInput.value='';await notify('A.R.I. · guardada en cola',`${evt?.title||'SIN BLOQUE'} · anotación pendiente de sincronizar con Notion.`,'ari-note-queued')}
-catch(e){queueStatus.textContent='Error guardando la anotación.';await notify('A.R.I. · error','La anotación no pudo guardarse.','ari-note-error')}}
-sendNote.onclick=sendCapture;noteInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendCapture()}});
+async function notify(title,body,tag='ari-feedback'){try{if(!('Notification'in window)||Notification.permission!=='granted')return false;const r=await registration();await r.showNotification(title,{body,icon:'/ari/icon.svg',badge:'/ari/icon.svg',tag,data:{url:'/ari/#ahora'}});return true}catch(e){return false}}
+function readQueue(key){try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return[]}}
+function writeQueue(key,items){localStorage.setItem(key,JSON.stringify(items))}
+function refreshStatuses(){const q=readQueue(QUEUE_KEY),m=readQueue(MSG_QUEUE_KEY);queueStatus.textContent=q.length?`${q.length} pendiente${q.length===1?'':'s'} de sincronizar.`:'';msgStatus.textContent=m.length?`${m.length} mensaje${m.length===1?'':'s'} pendiente${m.length===1?'':'s'} de sincronizar.`:''}
+async function sendCapture(){const text=noteInput.value.trim(),evt=activeEvent(),date=todayMadrid();if(!text){queueStatus.textContent='No hay texto para enviar.';await notify('A.R.I. · error','No se envió nada porque está vacío.','ari-note-error');return}try{const items=readQueue(QUEUE_KEY);items.push({id:crypto.randomUUID?.()||String(Date.now()),created_at:new Date().toISOString(),date,block:evt?.title||'SIN BLOQUE',calendar_start:evt?.start||null,calendar_end:evt?.end||null,text,status:'queued'});writeQueue(QUEUE_KEY,items);noteInput.value='';refreshStatuses();await notify('A.R.I. · guardada en cola',`${evt?.title||'SIN BLOQUE'} · pendiente de sincronizar con Notion.`,'ari-note-queued')}catch(e){queueStatus.textContent='Error guardando.';await notify('A.R.I. · error','La anotación no pudo guardarse.','ari-note-error')}}
+async function sendGeneralMessage(){const text=msgInput.value.trim();if(!text){msgStatus.textContent='No hay mensaje para enviar.';await notify('A.R.I. · error','No se envió nada porque está vacío.','ari-msg-error');return}try{const items=readQueue(MSG_QUEUE_KEY);items.push({id:crypto.randomUUID?.()||String(Date.now()),created_at:new Date().toISOString(),text,status:'queued'});writeQueue(MSG_QUEUE_KEY,items);msgInput.value='';refreshStatuses();await notify('A.R.I. · mensaje guardado','Mensaje general pendiente de sincronizar.','ari-msg-queued')}catch(e){msgStatus.textContent='Error guardando.';await notify('A.R.I. · error','El mensaje no pudo guardarse.','ari-msg-error')}}
+sendNote.onclick=sendCapture;noteInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendCapture()}});sendMessage.onclick=sendGeneralMessage;msgInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendGeneralMessage()}});
 
-const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-if(SpeechRecognition){const recog=new SpeechRecognition();recog.lang='es-ES';recog.interimResults=false;recog.continuous=false;micBtn.onclick=()=>{try{micBtn.classList.add('listening');recog.start()}catch(e){}};recog.onresult=e=>{const t=e.results?.[0]?.[0]?.transcript||'';noteInput.value=(noteInput.value?noteInput.value+' ':'')+t;micBtn.classList.remove('listening');noteInput.focus()};recog.onerror=async()=>{micBtn.classList.remove('listening');queueStatus.textContent='No pude escuchar el audio.';await notify('A.R.I. · error de audio','No se pudo convertir el audio en texto.','ari-audio-error')};recog.onend=()=>micBtn.classList.remove('listening')}
-else{micBtn.onclick=async()=>{queueStatus.textContent='Dictado no disponible en este navegador.';await notify('A.R.I. · audio no disponible','Este iPhone no expone dictado web en esta sesión.','ari-audio-unavailable')}}
+function setupSpeech(btn,input,status){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){btn.onclick=async()=>{status.textContent='Dictado no disponible.';await notify('A.R.I. · audio','Dictado no disponible en este dispositivo.','ari-audio-unavailable')};return}const recog=new SR();recog.lang='es-ES';recog.interimResults=false;recog.continuous=false;btn.onclick=()=>{try{btn.classList.add('listening');recog.start()}catch(e){}};recog.onresult=e=>{const t=e.results?.[0]?.[0]?.transcript||'';input.value=(input.value?input.value+' ':'')+t;btn.classList.remove('listening');input.focus()};recog.onerror=async()=>{btn.classList.remove('listening');status.textContent='No pude escuchar el audio.';await notify('A.R.I. · error de audio','No se pudo convertir el audio en texto.','ari-audio-error')};recog.onend=()=>btn.classList.remove('listening')}
+setupSpeech(micBtn,noteInput,queueStatus);setupSpeech(msgMicBtn,msgInput,msgStatus);
 
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/ari/sw.js').catch(()=>{}));
-initQueue();go(location.hash.slice(1)||'ahora');loadCalendar();
+updateApp.onclick=async()=>{updateStatus.textContent='Actualizando A.R.I.…';try{if('serviceWorker'in navigator){const regs=await navigator.serviceWorker.getRegistrations();for(const r of regs){await r.update()}}if('caches'in window){const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('ari-')).map(k=>caches.delete(k)))}updateStatus.textContent='Nueva versión cargada.';const u=new URL(location.href);u.searchParams.set('refresh',Date.now());location.replace(u.toString())}catch(e){updateStatus.textContent='No pude actualizar. Inténtalo de nuevo.';await notify('A.R.I. · error','No se pudo actualizar la app.','ari-update-error')}};
+
+if('serviceWorker'in navigator){addEventListener('load',()=>navigator.serviceWorker.register('/ari/sw.js').catch(()=>{}))}
+refreshStatuses();go(location.hash.slice(1)||'ahora');loadCalendar();
 </script>
 </body>
 </html>
