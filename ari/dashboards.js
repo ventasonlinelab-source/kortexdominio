@@ -56,10 +56,14 @@
     if(status)view.insertBefore(section,status);else view.appendChild(section);
     section.querySelectorAll('[data-dashboard-route]').forEach(b=>b.addEventListener('click',()=>location.assign(b.dataset.dashboardRoute)));
   }
+  function loadScript(src,key){
+    if(document.querySelector(`script[data-ari-${key}]`))return;
+    const s=document.createElement('script');s.src=src;s.dataset['ari'+key.replace(/(^|-)([a-z])/g,(_,a,b)=>b.toUpperCase())]='1';s.defer=true;document.head.appendChild(s);
+  }
   function ensureMusicTools(){
     if(!location.pathname.startsWith('/ari/music/'))return;
-    if(document.querySelector('script[data-ari-clip-tools]')||window.ARI_DAW_SPLIT_CLIP)return;
-    const s=document.createElement('script');s.src='/ari/music/clip-tools.js?v=1';s.dataset.ariClipTools='1';s.defer=true;document.head.appendChild(s);
+    if(!window.ARI_DAW_SPLIT_CLIP)loadScript('/ari/music/clip-tools.js?v=1','clip-tools');
+    if(localStorage.getItem('ari-daw-demo-base-voice-v1')!=='1')loadScript('/ari/music/demo-seed.js?v=1','demo-seed');
   }
   function syncContext(){
     const el=document.getElementById('contextMusic'),nav=document.getElementById('bottomNav');if(!el||!nav){ensureRefresh();return}
