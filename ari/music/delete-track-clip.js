@@ -1,3 +1,4 @@
+// HOF-404 · DELETE DE PISTAS Y CLIPS · V1
 (()=>{
   const PROJECT_KEY='ari-daw-project-v0';
   const STYLE_ID='ari-delete-track-clip-style';
