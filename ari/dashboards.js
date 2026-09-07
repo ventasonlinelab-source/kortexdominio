@@ -64,7 +64,7 @@
     if(!location.pathname.startsWith('/ari/music/'))return;
     if(!window.ARI_DAW_SPLIT_CLIP)loadScript('/ari/music/clip-tools.js?v=1','clip-tools');
     if(localStorage.getItem('ari-daw-demo-base-voice-v1')!=='1')loadScript('/ari/music/demo-seed.js?v=1','demo-seed');
-    if(localStorage.getItem('ari-song-ganador-sin-victoria-v1')!=='1')loadScript('/ari/music/ganador-song.js?v=1','ganador-song');
+    if(localStorage.getItem('ari-song-ganador-sin-victoria-v2')!=='1')loadScript('/ari/music/ganador-song.js?v=2','ganador-song');
   }
   function syncContext(){
     const el=document.getElementById('contextMusic'),nav=document.getElementById('bottomNav');if(!el||!nav){ensureRefresh();return}
