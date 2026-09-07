@@ -1,5 +1,5 @@
-const CACHE='ari-v26';
-const ASSETS=['/ari/','/ari/index.html','/ari/manifest.webmanifest','/ari/icon.svg','/ari/calendar.json','/ari/contextual.js','/ari/dashboards.js','/ari/music/'];
+const CACHE='ari-v27';
+const ASSETS=['/ari/','/ari/index.html','/ari/manifest.webmanifest','/ari/icon.svg','/ari/calendar.json','/ari/contextual.js','/ari/dashboards.js','/ari/music/','/ari/trading/'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));self.skipWaiting();});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
-self.addEventListener('fetch',event=>{const u=new URL(event.request.url);if(u.origin!==location.origin)return;if(event.request.method!=='GET')return;if(u.pathname.startsWith('/ari/api/')||u.pathname.startsWith('/ari/music/audio/'))return;event.respondWith((async()=>{try{const r=await fetch(event.request);if(r&&r.ok){const c=await caches.open(CACHE);c.put(event.request,r.clone())}return r}catch(e){return (await caches.match(event.request))||(await caches.match('/ari/'))}})())});
+self.addEventListener('fetch',event=>{const u=new URL(event.request.url);if(u.origin!==location.origin)return;if(event.request.method!=='GET')return;if(u.pathname.startsWith('/ari/api/')||u.pathname.startsWith('/ari/music/audio/')||u.pathname.startsWith('/ari/trading/data')||u.pathname.startsWith('/ari/trading/health'))return;event.respondWith((async()=>{try{const r=await fetch(event.request);if(r&&r.ok){const c=await caches.open(CACHE);c.put(event.request,r.clone())}return r}catch(e){return (await caches.match(event.request))||(await caches.match('/ari/'))}})())});
