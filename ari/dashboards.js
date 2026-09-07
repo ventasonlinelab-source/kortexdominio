@@ -69,6 +69,7 @@
     if(!window.ARI_IMPORT_AUDIO_FILES)loadScript('/ari/music/drag-drop-import.js?v=1','drag-drop-import');
     if(!window.ARI_TRACK_VOLUME_UI)loadScript('/ari/music/track-volume-ui.js?v=2','track-volume-ui');
     if(!window.ARI_DUPLICATE_TRACK)loadScript('/ari/music/duplicate-track.js?v=1','duplicate-track');
+    if(!window.ARI_VOCAL_MIX_LIGHT)loadScript('/ari/music/vocal-mix-light.js?v=1','vocal-mix-light');
     if(localStorage.getItem('ari-ganador-reference-session-v1')!=='1')loadScript('/ari/music/reference-session.js?v=1','reference-session');
   }
   function syncContext(){
