@@ -1,5 +1,5 @@
 (()=>{
-  const PROJECT_KEY='ari-daw-project-v0',MARKER='ari-song-ganador-sin-victoria-v2';
+  const PROJECT_KEY='ari-daw-project-v0',MARKER='ari-song-ganador-sin-victoria-v3';
   if(!location.pathname.startsWith('/ari/music/')||localStorage.getItem(MARKER)==='1')return;
   const uid=()=>crypto.randomUUID?.()||('id_'+Date.now()+'_'+Math.random().toString(36).slice(2));
   function readProject(){try{return JSON.parse(localStorage.getItem(PROJECT_KEY)||'null')}catch{return null}}
@@ -75,6 +75,25 @@
     }
   }
 
+  function ensureVoiceMix(p){
+    let voice=p.tracks.find(t=>t.demoRole==='voice'||t.name==='VOZ · GRABAR'||t.name==='VOZ · GANADOR'||(t.type==='audio'&&/VOZ/i.test(t.name||'')));
+    if(!voice)return;
+    voice.name='VOZ · GANADOR';
+    voice.armed=true;
+    voice.volume=1;
+    voice.pan=0;
+    p.tracks.filter(t=>t.type==='audio'&&t.id!==voice.id).forEach(t=>t.armed=false);
+    const keep=(Array.isArray(voice.devices)?voice.devices:[]).filter(d=>d.mixRole!=='ganador-voice');
+    voice.devices=[
+      ...keep,
+      {id:'ari-voice-eq-v1',mixRole:'ganador-voice',type:'EQ',enabled:true,low:-3,high:1.5},
+      {id:'ari-voice-comp-v1',mixRole:'ganador-voice',type:'COMP',enabled:true,threshold:-20,ratio:2.2},
+      {id:'ari-voice-gain-v1',mixRole:'ganador-voice',type:'GAIN',enabled:true,value:1.35},
+      {id:'ari-voice-reverb-v1',mixRole:'ganador-voice',type:'REVERB',enabled:true,mix:.07},
+      {id:'ari-voice-delay-v1',mixRole:'ganador-voice',type:'DELAY',enabled:true,time:.14,mix:.04}
+    ];
+  }
+
   function apply(){
     const p=readProject();
     if(!p||!Array.isArray(p.tracks)){setTimeout(apply,450);return}
@@ -96,13 +115,6 @@
       ]
     };
 
-    let voice=p.tracks.find(t=>t.demoRole==='voice'||t.name==='VOZ · GRABAR'||t.name==='VOZ · GANADOR'||(t.type==='audio'&&/VOZ/i.test(t.name||'')));
-    if(voice){
-      voice.name='VOZ · GANADOR';
-      voice.armed=true;
-      p.tracks.filter(t=>t.type==='audio'&&t.id!==voice.id).forEach(t=>t.armed=false);
-    }
-
     let motif=p.tracks.find(t=>t.songRole==='ganador-pim-pum'||t.id==='ari-ganador-piano-v1');
     if(!motif){
       motif={id:'ari-ganador-piano-v1',songRole:'ganador-pim-pum',type:'instrument',name:'PIANO · PIM/PUM',muted:false,solo:false,armed:false,volume:.66,pan:0,instrument:'PIANO',devices:[{id:uid(),type:'FILTER',enabled:true,freq:13200},{id:uid(),type:'REVERB',enabled:true,mix:.09}],clips:[]};
@@ -115,9 +127,10 @@
 
     ensureBaseVerse(p);
     ensureBass(p);
+    ensureVoiceMix(p);
     saveProject(p);
     localStorage.setItem(MARKER,'1');
-    sessionStorage.setItem('ari-song-ganador-layered-v2','1');
+    sessionStorage.setItem('ari-song-ganador-vocal-mix-v3','1');
     location.reload();
   }
   apply();
