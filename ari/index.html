@@ -3,24 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#0b1118" />
+  <meta name="theme-color" content="#050505" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="A.R.I." />
   <link rel="manifest" href="/ari/manifest.webmanifest" />
+  <link rel="icon" href="/ari/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/ari/icon.svg" />
   <title>A.R.I. · Línea del día</title>
   <style>
     :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark}
-    *{box-sizing:border-box} body{margin:0;background:#071019;color:#eef4f7;min-height:100vh}.app{max-width:520px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 18px calc(32px + env(safe-area-inset-bottom))}
-    header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px}.brand{font-size:28px;letter-spacing:.18em;font-weight:650}.sub{font-size:12px;color:#91a1ad;margin-top:5px}.date{font-size:13px;color:#b7c4cc}
-    .now{border:1px solid #29506a;background:linear-gradient(180deg,#0d1924,#0a141d);border-radius:18px;padding:18px;margin-bottom:24px;box-shadow:0 12px 40px rgba(0,0,0,.22)}
-    .label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#75bfff}.now h1{font-size:20px;margin:8px 0 6px}.meta{font-size:13px;color:#98a9b5;line-height:1.45}.actions{display:flex;gap:9px;margin-top:16px}.btn{flex:1;border:1px solid #203444;background:#0b151e;color:#dce7ed;border-radius:12px;padding:11px 10px;font-weight:600}.btn.primary{border-color:#246a91;background:#12314a}
-    .section-title{font-size:13px;color:#8ea1ad;text-transform:uppercase;letter-spacing:.11em;margin:0 0 12px}.timeline{position:relative;margin-left:12px}.timeline:before{content:"";position:absolute;left:40px;top:6px;bottom:8px;width:1px;background:#203442}.event{display:grid;grid-template-columns:56px 1fr;gap:12px;position:relative;margin-bottom:12px}.time{font-size:12px;color:#8fa0ab;padding-top:14px}.dot{position:absolute;left:35px;top:17px;width:11px;height:11px;border:2px solid #4388ac;background:#071019;border-radius:50%}.card{margin-left:0;border:1px solid #1a2c39;background:#0b151f;border-radius:14px;padding:13px 14px}.card.done{opacity:.72}.card.active{border-color:#2d79a0;background:#0d1c28}.title{font-size:14px;font-weight:650}.desc{font-size:12px;color:#91a2ad;margin-top:5px;line-height:1.4}.tag{display:inline-block;margin-top:9px;border:1px solid #314756;border-radius:999px;padding:4px 8px;font-size:10px;color:#aec0ca}.done .tag{border-color:#31584b;color:#89c7ad}.footer-note{margin-top:25px;border-top:1px solid #162733;padding-top:16px;color:#71838e;font-size:12px;line-height:1.5}
+    *{box-sizing:border-box} body{margin:0;background:#050505;color:#f5f0e6;min-height:100vh}.app{max-width:520px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 18px calc(32px + env(safe-area-inset-bottom))}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.brand-wrap{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:12px}.brand{font-size:26px;letter-spacing:.18em;font-weight:650}.sub{font-size:12px;color:#9d937f;margin-top:5px}.date{font-size:13px;color:#c2b79f}
+    .now{border:1px solid #6f4d18;background:linear-gradient(180deg,#17120b,#0c0a07);border-radius:18px;padding:18px;margin-bottom:24px;box-shadow:0 12px 40px rgba(0,0,0,.28)}
+    .label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#e5b95f}.now h1{font-size:20px;margin:8px 0 6px}.meta{font-size:13px;color:#a99d86;line-height:1.45}.actions{display:flex;gap:9px;margin-top:16px}.btn{flex:1;border:1px solid #332919;background:#0c0a07;color:#eee6d8;border-radius:12px;padding:11px 10px;font-weight:600}.btn.primary{border-color:#8b6225;background:#24180a}
+    .section-title{font-size:13px;color:#a99d86;text-transform:uppercase;letter-spacing:.11em;margin:0 0 12px}.timeline{position:relative;margin-left:12px}.timeline:before{content:"";position:absolute;left:40px;top:6px;bottom:8px;width:1px;background:#332a1d}.event{display:grid;grid-template-columns:56px 1fr;gap:12px;position:relative;margin-bottom:12px}.time{font-size:12px;color:#9d927f;padding-top:14px}.dot{position:absolute;left:35px;top:17px;width:11px;height:11px;border:2px solid #b58539;background:#050505;border-radius:50%}.card{margin-left:0;border:1px solid #292218;background:#0c0a07;border-radius:14px;padding:13px 14px}.card.done{opacity:.72}.card.active{border-color:#9b6e29;background:#17110a}.title{font-size:14px;font-weight:650}.desc{font-size:12px;color:#9d927f;margin-top:5px;line-height:1.4}.tag{display:inline-block;margin-top:9px;border:1px solid #4a3b25;border-radius:999px;padding:4px 8px;font-size:10px;color:#d6c3a0}.done .tag{border-color:#355343;color:#9fc4aa}.footer-note{margin-top:25px;border-top:1px solid #241d13;padding-top:16px;color:#766d5f;font-size:12px;line-height:1.5}
   </style>
 </head>
 <body>
   <main class="app">
-    <header><div><div class="brand">A.R.I.</div><div class="sub">Universo personal · una tarea cada vez</div></div><div class="date">Lun · 7 Sep 2026</div></header>
+    <header><div class="brand-wrap"><img class="logo" src="/ari/icon.svg" alt="A.R.I."/><div><div class="brand">A.R.I.</div><div class="sub">Universo personal · una tarea cada vez</div></div></div><div class="date">Lun · 7 Sep 2026</div></header>
 
     <section class="now">
       <div class="label">Ahora</div>
@@ -40,5 +42,8 @@
 
     <div class="footer-note">V0 · Esta interfaz representa el estado integrado. Notion conserva memoria/histórico. Google Calendar aporta planificación y avisos. n8n sincroniza y automatiza.</div>
   </main>
+  <script>
+    if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/ari/sw.js').catch(()=>{}));}
+  </script>
 </body>
 </html>
