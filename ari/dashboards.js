@@ -62,12 +62,11 @@
   }
   function ensureMusicTools(){
     if(!location.pathname.startsWith('/ari/music/'))return;
+    if(!window.ARI_HISTORY_READY)loadScript('/ari/music/undo-redo.js?v=1','undo-redo');
     if(!window.ARI_DAW_SPLIT_CLIP)loadScript('/ari/music/clip-tools.js?v=1','clip-tools');
     if(!window.ARI_SYNC_RECORDINGS)loadScript('/ari/music/recording-sync.js?v=2','recording-sync');
-    if(!window.ARI_EXPORT_MP3)loadScript('/ari/music/project-actions.js?v=1','project-actions');
-    if(localStorage.getItem('ari-daw-demo-base-voice-v1')!=='1')loadScript('/ari/music/demo-seed.js?v=1','demo-seed');
-    if(localStorage.getItem('ari-song-ganador-sin-victoria-v3')!=='1')loadScript('/ari/music/ganador-song.js?v=3','ganador-song');
-    if(localStorage.getItem('ari-song-ganador-rollo-v1')!=='1')loadScript('/ari/music/ganador-rollo-v1.js?v=1','ganador-rollo');
+    if(!window.ARI_EXPORT_MP3)loadScript('/ari/music/project-actions.js?v=2','project-actions');
+    if(localStorage.getItem('ari-ganador-reference-session-v1')!=='1')loadScript('/ari/music/reference-session.js?v=1','reference-session');
   }
   function syncContext(){
     const el=document.getElementById('contextMusic'),nav=document.getElementById('bottomNav');if(!el||!nav){ensureRefresh();return}
