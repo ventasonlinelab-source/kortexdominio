@@ -13,7 +13,7 @@
       .msg-list{display:grid}.msg-row{appearance:none;border:0;border-top:1px solid var(--border);background:transparent;color:var(--text);padding:13px 15px;text-align:left;display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center}.msg-row:first-child{border-top:0}.msg-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--border);font-size:12px;font-weight:800}.msg-main{min-width:0}.msg-name{font-size:13px;font-weight:720}.msg-preview{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.msg-meta{text-align:right}.msg-time{font-size:9px;color:var(--muted)}.msg-count{display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:color-mix(in srgb,var(--gold) 24%,var(--panel));color:var(--gold);font-size:9px;font-weight:800;margin-top:4px}
       .msg-empty{padding:22px 16px;text-align:center}.msg-empty strong{display:block;font-size:13px}.msg-empty span{display:block;font-size:10px;color:var(--muted);margin-top:5px;line-height:1.45}
       .msg-actions{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--border)}.msg-action{appearance:none;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;padding:10px 12px;font-size:10px;font-weight:700;flex:1}.msg-action.primary{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 15%,var(--panel))}
-      .task-row.completed .task-title{text-decoration-line:line-through;text-decoration-thickness:2px;text-decoration-color:var(--task-accent);opacity:.55}.task-row.completed .task-label,.task-row.completed .task-time{opacity:.45}
+      .task-row.completed{opacity:.55}.task-row.completed:after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--task-accent);opacity:.8}.task-row.completed .task-label,.task-row.completed .task-time{opacity:.45}
     `;
     document.head.appendChild(style);
   }
@@ -22,7 +22,7 @@
     const now=document.querySelector('[data-view="ahora"]');
     if(!now)return null;
     let root=document.getElementById('contextWorkspace');
-    if(!root){root=document.createElement('div');root.id='contextWorkspace';root.className='context-workspace';now.appendChild(root)}
+    if(!root){root=document.createElement('div');root.id='contextWorkspace';root.className='context-workspace';const panel=now.querySelector('.panel');panel?.insertAdjacentElement('afterend',root)}
     return root;
   }
 
@@ -41,7 +41,7 @@
       <section class="context-shell" data-mode="messaging">
         <div class="context-head"><div class="context-head-copy"><div class="context-kicker">AHORA · MENSAJERÍA</div><div class="context-title">Mensajes pendientes</div></div><div class="context-status">${msgs.length?'sincronizado':'WhatsApp pendiente'}</div></div>
         <div class="msg-summary"><div class="msg-stat"><b>${msgs.length}</b><span>chats</span></div><div class="msg-stat"><b>${unread}</b><span>mensajes</span></div><div class="msg-stat"><b>${priority}</b><span>prioridad</span></div></div>
-        ${msgs.length?`<div class="msg-list">${msgs.map((m,i)=>`<button class="msg-row" data-msg-index="${i}"><span class="msg-avatar">${initials(m.name)}</span><span class="msg-main"><span class="msg-name">${m.name||'Contacto'}</span><span class="msg-preview">${m.preview||'Mensaje pendiente'}</span></span><span class="msg-meta"><span class="msg-time">${m.time||''}</span>${m.unread?`<span class="msg-count">${m.unread}</span>`:''}</span></button>`).join('')}</div>`:`<div class="msg-empty"><strong>A.R.I. ya tiene el workspace.</strong><span>En cuanto conectemos WhatsApp aquí aparecerán solo los mensajes pendientes reales, agrupados por persona y prioridad. No se inventan mensajes.</span></div>`}
+        ${msgs.length?`<div class="msg-list">${msgs.map((m,i)=>`<button class="msg-row" data-msg-index="${i}"><span class="msg-avatar">${initials(m.name)}</span><span class="msg-main"><span class="msg-name">${m.name||'Contacto'}</span><span class="msg-preview">${m.preview||'Mensaje pendiente'}</span></span><span class="msg-meta"><span class="msg-time">${m.time||''}</span>${m.unread?`<span class="msg-count">${m.unread}</span>`:''}</span></button>`).join('')}</div>`:`<div class="msg-empty"><strong>Workspace preparado.</strong><span>En cuanto conectemos WhatsApp aquí aparecerán solo los mensajes pendientes reales, agrupados por persona y prioridad. A.R.I. no inventa conversaciones.</span></div>`}
         <div class="msg-actions"><button class="msg-action" id="msgWho">¿Quién me ha escrito?</button><button class="msg-action primary" id="msgRead">Léeme lo importante</button></div>
       </section>`;
     root.querySelectorAll('.msg-row').forEach(btn=>btn.onclick=()=>{
@@ -54,10 +54,19 @@
     if(read)read.onclick=()=>{if(input){input.value='Léeme los mensajes importantes pendientes.';input.focus()}};
   }
 
+  function contextEvent(){
+    try{
+      const current=typeof activeEvent==='function'?activeEvent():null;
+      if(current&&String(current.title||'').includes('VER MENSAJES PENDIENTES'))return current;
+      const next=typeof nextTask==='function'?nextTask():null;
+      if(next&&String(next.title||'').includes('VER MENSAJES PENDIENTES'))return next;
+      return current;
+    }catch(_){return null}
+  }
+
   function renderContext(){
     const root=ensureWorkspace(); if(!root)return;
-    let e=null; try{e=typeof activeEvent==='function'?activeEvent():null}catch(_){e=null}
-    const title=String(e?.title||'');
+    const e=contextEvent(),title=String(e?.title||'');
     if(title.includes('VER MENSAJES PENDIENTES')){renderMessaging(root);root.hidden=false}
     else{root.innerHTML='';root.hidden=true}
   }
@@ -66,9 +75,9 @@
     const originalTaskRow=window.taskRow;
     window.taskRow=function(e){
       let completed=false;
-      try{completed=e?.completed===true||(typeof hasFeedback==='function'&&hasFeedback(e,selectedDate))}catch(_){completed=e?.completed===true}
+      try{completed=typeof isTaskDone==='function'?isTaskDone(e,selectedDate):e?.completed===true}catch(_){completed=e?.completed===true}
       const html=originalTaskRow(e);
-      return completed?html.replace('task-row ','task-row completed '):html.replace('task-row done','task-row future');
+      return completed?html.replace('task-row ','task-row completed '):html;
     };
   }
 
