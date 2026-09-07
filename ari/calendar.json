@@ -3,7 +3,7 @@
   "calendar": "calendio operativo beta",
   "calendar_id": "3abf9e6aa8ef2f433366569c03edce8ae889536f0d1b88f4c47cc3f555002f64@group.calendar.google.com",
   "timezone": "Europe/Madrid",
-  "synced_at": "2026-09-07T09:12:00+02:00",
+  "synced_at": "2026-09-07T11:20:00+02:00",
   "days": {
     "2026-09-07": [
       {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","kind":"task","requires_response":true,"blocking":true,"completion_mode":"response_confirmed","parent_block":"COGNICIÓN PROFUNDA"},
@@ -22,10 +22,12 @@
       {"id":"ari-trading-open-20260908","start":"05:05","end":"05:30","title":"APERTURA DE TRADING","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA","sequence":1},
       {"id":"ari-hof403-unblock-20260908","start":"05:30","end":"06:00","title":"PRIORIDAD · DESBLOQUEAR HOF-403 · PERMISO NOTION","kind":"task","priority":"critical","bottleneck":true,"parent_block":"COGNICIÓN PROFUNDA","after_task":"APERTURA DE TRADING","sequence":2,"completion_mode":"manual_confirmed"},
       {"id":"fvofim52c9s3rtib7e71br173c","start":"06:00","end":"07:00","title":"TERMINAR · WHATSAPP EN A.R.I. · PUENTE FINAL","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA","sequence":3,"completion_mode":"manual_confirmed"},
-      {"id":"ari-trading-workspace-v0-20260908","start":"07:00","end":"08:30","title":"MONTAR · TRADING WORKSPACE V0 EN A.R.I.","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA","sequence":4,"completion_mode":"manual_confirmed"},
-      {"id":"6u2fqb16t4928t0bi2p81fta1o","start":"08:45","end":"09:00","title":"VER MENSAJES PENDIENTES","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA","sequence":5},
+      {"id":"ari-barber-reminder-20260908","start":"07:00","end":"07:05","title":"AVISO · PELUQUERO HOY A LAS 12:00","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA","sequence":4},
+      {"id":"ari-trading-workspace-v0-20260908","start":"07:05","end":"08:30","title":"MONTAR · TRADING WORKSPACE V0 EN A.R.I.","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA","sequence":5,"completion_mode":"manual_confirmed"},
+      {"id":"6u2fqb16t4928t0bi2p81fta1o","start":"08:45","end":"09:00","title":"VER MENSAJES PENDIENTES","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA","sequence":6},
       {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA"},
       {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO"},
+      {"id":"5i51ld1goscgjr7c4u7j02n290","start":"12:00","end":"13:00","title":"PELUQUERO","kind":"task","priority":"high","parent_block":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO","completion_mode":"manual_confirmed"},
       {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA"},
       {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA"},
       {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR"}
