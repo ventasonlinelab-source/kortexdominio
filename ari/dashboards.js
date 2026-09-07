@@ -66,6 +66,7 @@
     if(!window.ARI_SYNC_RECORDINGS)loadScript('/ari/music/recording-sync.js?v=2','recording-sync');
     if(localStorage.getItem('ari-daw-demo-base-voice-v1')!=='1')loadScript('/ari/music/demo-seed.js?v=1','demo-seed');
     if(localStorage.getItem('ari-song-ganador-sin-victoria-v3')!=='1')loadScript('/ari/music/ganador-song.js?v=3','ganador-song');
+    if(localStorage.getItem('ari-song-ganador-rollo-v1')!=='1')loadScript('/ari/music/ganador-rollo-v1.js?v=1','ganador-rollo');
   }
   function syncContext(){
     const el=document.getElementById('contextMusic'),nav=document.getElementById('bottomNav');if(!el||!nav){ensureRefresh();return}
