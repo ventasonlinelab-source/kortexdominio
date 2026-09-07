@@ -17,33 +17,32 @@
     header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px 14px;position:sticky;top:0;background:rgba(5,5,5,.94);backdrop-filter:blur(12px);z-index:5}.brand-wrap{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:12px}.brand{font-size:24px;letter-spacing:.16em;font-weight:700}.sub{font-size:11px;color:var(--muted);margin-top:3px}.sync{font-size:10px;color:#b9ac94;text-align:right}.sync strong{color:#e3c27c}
     .view{display:none}.view.active{display:block}.panel{border:1px solid #2b241a;background:var(--panel);border-radius:16px;padding:15px;margin-bottom:12px}.eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#e1b45c}.panel h2,.panel h1{margin:7px 0 6px}.meta{font-size:12px;color:#a99d86;line-height:1.5}.actions{display:flex;gap:8px;margin-top:14px}.btn{flex:1;border:1px solid #3a2d1b;background:#100c08;color:#eee6d8;border-radius:11px;padding:11px 8px;font-weight:650;font-size:12px}.btn.primary{border-color:#8b6225;background:#24180a}.btn:active{transform:scale(.98)}
     .days{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:2px 0 14px}.day{border:1px solid #292218;background:#0b0907;border-radius:12px;padding:9px 5px;text-align:center;color:#9f9584}.day.active{border-color:#8b6225;background:#1a1208;color:#f2debb}.day b{display:block;font-size:12px}.day span{font-size:10px}
-    .section-title{font-size:12px;color:#a99d86;text-transform:uppercase;letter-spacing:.12em;margin:18px 0 10px}.timeline{position:relative;padding-left:64px}.timeline:before{content:"";position:absolute;left:52px;top:8px;bottom:8px;width:1px;background:var(--line)}.event{position:relative;border:1px solid #2b241a;background:#0c0a07;border-radius:13px;padding:11px 12px;margin-bottom:10px}.event:before{content:"";position:absolute;left:-17px;top:16px;width:9px;height:9px;border:2px solid #a47631;background:#050505;border-radius:50%}.time{position:absolute;left:-64px;top:14px;width:44px;text-align:right;font-size:11px;color:#807768}.event.active{border-color:#a97830;background:#181108}.event.done{opacity:.72}.event.future{border-style:dashed}.event-title{font-size:13px;font-weight:680}.event-meta{font-size:11px;color:#928878;margin-top:5px}.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.badge{font-size:9px;border:1px solid #433722;border-radius:999px;padding:3px 7px;color:#cbb691}.memory-list{display:grid;gap:10px}.memory-item{border:1px solid #2b241a;border-radius:13px;padding:12px;background:#0c0a07}.memory-item strong{display:block;font-size:13px}.memory-item span{font-size:11px;color:#948978;line-height:1.4;display:block;margin-top:4px}.system-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.system-card{border:1px solid #2b241a;border-radius:13px;padding:13px;background:#0c0a07}.system-card b{display:block;font-size:12px;color:#dbc28f;margin-bottom:4px}.system-card span{font-size:10px;color:#8f8576;line-height:1.4}
+    .section-title{font-size:12px;color:#a99d86;text-transform:uppercase;letter-spacing:.12em;margin:18px 0 10px}.timeline{position:relative;padding-left:64px}.timeline:before{content:"";position:absolute;left:52px;top:8px;bottom:8px;width:1px;background:var(--line)}.event{position:relative;border:1px solid #2b241a;background:#0c0a07;border-radius:13px;padding:11px 12px;margin-bottom:10px}.event:before{content:"";position:absolute;left:-17px;top:16px;width:9px;height:9px;border:2px solid #a47631;background:#050505;border-radius:50%}.time{position:absolute;left:-64px;top:14px;width:44px;text-align:right;font-size:11px;color:#807768}.event.active{border-color:#a97830;background:#181108}.event.done{opacity:.72}.event.future{border-style:dashed}.event-title{font-size:13px;font-weight:680}.event-meta{font-size:11px;color:#928878;margin-top:5px;line-height:1.4}.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.badge{font-size:9px;border:1px solid #433722;border-radius:999px;padding:3px 7px;color:#cbb691}.badge.live{border-color:#775522;color:#efc979}.badge.done{border-color:#355343;color:#9ec1a8}.memory-list{display:grid;gap:10px}.memory-item{border:1px solid #2b241a;border-radius:13px;padding:12px;background:#0c0a07}.memory-item strong{display:block;font-size:13px}.memory-item span{font-size:11px;color:#948978;line-height:1.4;display:block;margin-top:4px}.system-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.system-card{border:1px solid #2b241a;border-radius:13px;padding:13px;background:#0c0a07}.system-card b{display:block;font-size:12px;color:#dbc28f;margin-bottom:4px}.system-card span{font-size:10px;color:#8f8576;line-height:1.4}
     .bottom{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(560px,100%);padding:9px 18px calc(9px + env(safe-area-inset-bottom));background:rgba(5,5,5,.97);backdrop-filter:blur(12px);border-top:1px solid #201a12;display:grid;grid-template-columns:repeat(4,1fr);z-index:10}.nav{appearance:none;border:0;background:none;text-align:center;color:#7e7567;font-size:10px;padding:4px}.nav.active{color:#e4bc6b}.nav b{display:block;font-size:17px;line-height:1.1;margin-bottom:2px}
   </style>
 </head>
 <body>
   <main class="app">
-    <header><div class="brand-wrap"><img class="logo" src="/ari/icon.svg" alt="A.R.I."/><div><div class="brand">A.R.I.</div><div class="sub">Universo personal</div></div></div><div class="sync"><strong>V0.2</strong><br>navegación real</div></header>
+    <header><div class="brand-wrap"><img class="logo" src="/ari/icon.svg" alt="A.R.I."/><div><div class="brand">A.R.I.</div><div class="sub">Universo personal</div></div></div><div class="sync"><strong>CALENDAR</strong><br>BLOQUES · 7 Sep</div></header>
 
     <section class="view active" data-view="ahora">
       <section class="days" id="days"></section>
-      <section class="panel"><div class="eyebrow">Ahora</div><h1 id="nowTitle">Apertura intradía · XAUUSD</h1><div class="meta" id="nowMeta">06:00–06:35 · H4 → H1 → zona → M5/M1 solo como gatillo.</div><div class="actions"><button class="btn primary">HECHO</button><button class="btn">BLOQUEADO</button><button class="btn">NOTA</button></div></section>
-      <div class="section-title">Siguiente</div>
-      <section class="panel"><div class="eyebrow">15:00</div><h2>Revisar repaso del día</h2><div class="meta">ROI · ineficiencias · mejoras · aprendizaje.</div></section>
+      <section class="panel"><div class="eyebrow">Ahora · Google Calendar</div><h1 id="nowTitle">METAANÁLISIS / DIRECCIÓN</h1><div class="meta" id="nowMeta">05:00–08:00 · Claridad, lectura del estado actual, objetivos, cuellos de botella, prioridades y dirección.</div><div class="actions"><button class="btn primary">HECHO</button><button class="btn">BLOQUEADO</button><button class="btn">NOTA</button></div></section>
+      <div class="section-title">Siguiente bloque</div>
+      <section class="panel"><div class="eyebrow">08:00</div><h2>CUERPO / GIMNASIO</h2><div class="meta">08:00–11:00 · Desplazamiento, entrenamiento, vuelta, ducha y post-entreno.</div></section>
     </section>
 
     <section class="view" data-view="linea">
-      <div class="section-title">Línea temporal · hoy</div>
+      <div class="section-title">Línea temporal · Google Calendar</div>
       <section class="timeline" id="timeline"></section>
     </section>
 
     <section class="view" data-view="memoria">
       <div class="section-title">Memoria</div>
-      <section class="panel"><div class="eyebrow">Notion</div><h2>Contexto e histórico narrativo</h2><div class="meta">Aquí A.R.I. mostrará resúmenes y referencias de lo que ya quedó guardado en Notion.</div></section>
+      <section class="panel"><div class="eyebrow">Notion</div><h2>Contexto e histórico narrativo</h2><div class="meta">La memoria de cada bloque vivirá aquí como referencia a Notion. El calendario responde cuándo; Notion recuerda qué ocurrió y qué aprendimos.</div></section>
       <div class="memory-list">
-        <div class="memory-item"><strong>Apertura del día · Sueños</strong><span>Registro onírico, estado al despertar y claridad post-descanso.</span></div>
-        <div class="memory-item"><strong>Apertura semanal · XAUUSD</strong><span>Mapa macro semanal y restricciones operativas.</span></div>
-        <div class="memory-item"><strong>Apertura intradía · XAUUSD</strong><span>Contexto H4/H1 y plan operativo del día.</span></div>
+        <div class="memory-item"><strong>Bloques del día</strong><span>Se enlazarán a sus registros reales e históricos en Notion.</span></div>
+        <div class="memory-item"><strong>Resultados</strong><span>Cada HECHO / BLOQUEADO / NOTA generará memoria y dato estructurado.</span></div>
       </div>
     </section>
 
@@ -67,13 +66,17 @@
 
   <script>
     const events=[
-      {start:'05:30',end:'05:40',title:'Apertura del día · Sueños',status:'done',detail:'Registro onírico · estado inicial'},
-      {start:'05:40',end:'06:00',title:'Apertura semanal · XAUUSD',status:'done',detail:'Noticias + mensual + semanal + diario'},
-      {start:'06:00',end:'06:35',title:'Apertura intradía · XAUUSD',status:'active',detail:'H4 → H1 → zona → M5/M1'},
-      {start:'15:00',end:'15:15',title:'Revisar repaso del día',status:'future',detail:'ROI · ineficiencias · mejoras'}
+      {start:'21:00',end:'05:00',title:'DORMIR',status:'done',detail:'Descanso, recuperación e incubación. Bloque primario diario.'},
+      {start:'05:00',end:'08:00',title:'METAANÁLISIS / DIRECCIÓN',status:'active',detail:'Claridad · estado actual · objetivos · cuellos de botella · prioridades · dirección.'},
+      {start:'08:00',end:'11:00',title:'CUERPO / GIMNASIO',status:'future',detail:'Desplazamiento · entrenamiento · vuelta · ducha · post-entreno.'},
+      {start:'11:00',end:'16:00',title:'EJECUCIÓN / ORQUESTACIÓN',status:'future',detail:'Cola priorizada · dirección de sistemas · revisión · decisiones · excepciones.'},
+      {start:'16:00',end:'17:00',title:'GROUNDING',status:'future',detail:'Descarga de activación · salida del modo operativo · retorno al cuerpo y entorno.'},
+      {start:'17:00',end:'18:00',title:'CENA',status:'future',detail:'Nutrición · transición hacia menor activación.'},
+      {start:'18:00',end:'21:00',title:'MÚSICA / INTEGRACIÓN',status:'future',detail:'Creación sensorial · cantar · bailar · escribir · integración antes del sueño.'},
+      {start:'21:00',end:'05:00',title:'DORMIR',status:'future',detail:'Descanso, recuperación e incubación. Bloque primario diario.'}
     ];
-    function renderDays(){const root=document.getElementById('days'),base=new Date('2026-09-07T12:00:00');for(let i=-2;i<=2;i++){const d=new Date(base);d.setDate(base.getDate()+i);root.insertAdjacentHTML('beforeend',`<div class="day${i===0?' active':''}"><b>${new Intl.DateTimeFormat('es-ES',{weekday:'short'}).format(d)}</b><span>${d.getDate()}</span></div>`)}}
-    function renderTimeline(){const root=document.getElementById('timeline');events.forEach(e=>root.insertAdjacentHTML('beforeend',`<article class="event ${e.status}"><div class="time">${e.start}</div><div class="event-title">${e.title}</div><div class="event-meta">${e.end} · ${e.detail}</div><div class="badges"><span class="badge">CALENDAR</span><span class="badge">${e.status==='done'?'HECHO':e.status==='active'?'EN CURSO':'PLANIFICADO'}</span></div></article>`))}
+    function renderDays(){const root=document.getElementById('days'),base=new Date('2026-09-07T12:00:00');root.innerHTML='';for(let i=-2;i<=2;i++){const d=new Date(base);d.setDate(base.getDate()+i);root.insertAdjacentHTML('beforeend',`<div class="day${i===0?' active':''}"><b>${new Intl.DateTimeFormat('es-ES',{weekday:'short'}).format(d)}</b><span>${d.getDate()}</span></div>`)}}
+    function renderTimeline(){const root=document.getElementById('timeline');root.innerHTML='';events.forEach(e=>root.insertAdjacentHTML('beforeend',`<article class="event ${e.status}"><div class="time">${e.start}</div><div class="event-title">${e.title}</div><div class="event-meta">${e.end} · ${e.detail}</div><div class="badges"><span class="badge">CALENDAR</span><span class="badge ${e.status==='active'?'live':e.status==='done'?'done':''}">${e.status==='done'?'HECHO':e.status==='active'?'EN CURSO':'PLANIFICADO'}</span></div></article>`))}
     function go(view){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===view));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.target===view));history.replaceState(null,'','#'+view);window.scrollTo({top:0,behavior:'instant'});}
     document.querySelectorAll('.nav').forEach(n=>n.addEventListener('click',()=>go(n.dataset.target)));
     renderDays();renderTimeline();go(location.hash.slice(1)||'ahora');
