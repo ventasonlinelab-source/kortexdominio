@@ -1,5 +1,5 @@
-const CACHE='ari-v24';
-const ASSETS=['/ari/','/ari/index.html','/ari/manifest.webmanifest','/ari/icon.svg','/ari/calendar.json','/ari/contextual.js','/ari/dashboards.js'];
+const CACHE='ari-v25';
+const ASSETS=['/ari/','/ari/index.html','/ari/manifest.webmanifest','/ari/icon.svg','/ari/calendar.json','/ari/contextual.js','/ari/dashboards.js','/ari/music/'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));self.skipWaiting();});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 async function networkFirst(request){try{const r=await fetch(request);const copy=r.clone();caches.open(CACHE).then(c=>c.put(request,copy));return r}catch(e){return (await caches.match(request))||(await caches.match('/ari/'))}}
