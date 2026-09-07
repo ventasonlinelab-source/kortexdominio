@@ -3,72 +3,78 @@
   "calendar": "calendio operativo beta",
   "calendar_id": "3abf9e6aa8ef2f433366569c03edce8ae889536f0d1b88f4c47cc3f555002f64@group.calendar.google.com",
   "timezone": "Europe/Madrid",
-  "synced_at": "2026-09-07T08:05:00+02:00",
+  "synced_at": "2026-09-07T08:50:00+02:00",
   "days": {
     "2026-09-07": [
-      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"},
-      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA","description":"Franja de máxima claridad y precisión. Ingeniería, creación de sistemas, metaanálisis, decisiones finas y trabajo de máxima exigencia cognitiva."},
-      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA","description":"Entrenamiento y descarga cognitiva: fuerza, boxeo, playa, movilidad, estiramientos, recuperación y vaciado mental."},
-      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO","description":"Filosofía, metafilosofía, creación conceptual de sistemas, estudio, reuniones, social y ejecución flexible."},
-      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA","description":"Comida principal de cierre metabólico y transición hacia la fase de integración."},
-      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA","description":"Música, creatividad, relaciones, reflexión y cierre. Menos exigencia analítica; más síntesis, expresión e integración."},
-      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR","description":"Sueño nocturno. Horario base actual 20:00–05:00, sujeto a ajuste estacional según ciclo solar."}
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","kind":"task","requires_response":true,"blocking":true,"completion_mode":"response_confirmed","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA"},
+      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA"},
+      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO"},
+      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA"},
+      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA"},
+      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR"}
     ],
     "2026-09-08": [
-      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"},
-      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA","description":"Franja de máxima claridad y precisión. Ingeniería, creación de sistemas, metaanálisis, decisiones finas y trabajo de máxima exigencia cognitiva."},
-      {"id":"ari-trading-open-20260908","start":"05:05","end":"05:05","title":"APERTURA DE TRADING","description":"Encender el cerebro con la apertura del mercado y realizar la lectura inicial antes de entrar en trabajo cognitivo prioritario.","task":true,"priority":"high","parent_block":"COGNICIÓN PROFUNDA","sequence":1},
-      {"id":"ari-hof403-unblock-20260908","start":"05:05","end":"05:05","title":"PRIORIDAD · DESBLOQUEAR HOF-403 · PERMISO NOTION","description":"Cuello de botella prioritario. Después de la apertura de trading: abrir Notion en ordenador y compartir DIARIO · EXPRESIONES DEL SUBCONSCIENTE con la conexión n8n Connector. Después, retomar HOF-403 hasta QA final y PASS.","task":true,"priority":"critical","bottleneck":true,"parent_block":"COGNICIÓN PROFUNDA","after_task":"APERTURA DE TRADING","sequence":2,"completion_mode":"manual_confirmed"},
-      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA","description":"Entrenamiento y descarga cognitiva: fuerza, boxeo, playa, movilidad, estiramientos, recuperación y vaciado mental."},
-      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO","description":"Filosofía, metafilosofía, creación conceptual de sistemas, estudio, reuniones, social y ejecución flexible."},
-      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA","description":"Comida principal de cierre metabólico y transición hacia la fase de integración."},
-      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA","description":"Música, creatividad, relaciones, reflexión y cierre. Menos exigencia analítica; más síntesis, expresión e integración."},
-      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR","description":"Sueño nocturno. Horario base actual 20:00–05:00, sujeto a ajuste estacional según ciclo solar."}
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","kind":"task","requires_response":true,"blocking":true,"completion_mode":"response_confirmed","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA"},
+      {"id":"ari-trading-open-20260908","start":"05:05","end":"05:30","title":"APERTURA DE TRADING","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA","sequence":1},
+      {"id":"ari-hof403-unblock-20260908","start":"05:30","end":"06:00","title":"PRIORIDAD · DESBLOQUEAR HOF-403 · PERMISO NOTION","kind":"task","priority":"critical","bottleneck":true,"parent_block":"COGNICIÓN PROFUNDA","after_task":"APERTURA DE TRADING","sequence":2,"completion_mode":"manual_confirmed"},
+      {"id":"6u2fqb16t4928t0bi2p81fta1o","start":"08:45","end":"09:00","title":"VER MENSAJES PENDIENTES","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA","sequence":3},
+      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA"},
+      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO"},
+      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA"},
+      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA"},
+      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR"}
     ],
     "2026-09-09": [
-      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"},
-      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA","description":"Franja de máxima claridad y precisión. Ingeniería, creación de sistemas, metaanálisis, decisiones finas y trabajo de máxima exigencia cognitiva."},
-      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA","description":"Entrenamiento y descarga cognitiva: fuerza, boxeo, playa, movilidad, estiramientos, recuperación y vaciado mental."},
-      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO","description":"Filosofía, metafilosofía, creación conceptual de sistemas, estudio, reuniones, social y ejecución flexible."},
-      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA","description":"Comida principal de cierre metabólico y transición hacia la fase de integración."},
-      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA","description":"Música, creatividad, relaciones, reflexión y cierre. Menos exigencia analítica; más síntesis, expresión e integración."},
-      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR","description":"Sueño nocturno. Horario base actual 20:00–05:00, sujeto a ajuste estacional según ciclo solar."}
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","kind":"task","requires_response":true,"blocking":true,"completion_mode":"response_confirmed","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA"},
+      {"id":"6u2fqb16t4928t0bi2p81fta1o","start":"08:45","end":"09:00","title":"VER MENSAJES PENDIENTES","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA"},
+      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO"},
+      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA"},
+      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA"},
+      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR"}
     ],
     "2026-09-10": [
-      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"},
-      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA","description":"Franja de máxima claridad y precisión. Ingeniería, creación de sistemas, metaanálisis, decisiones finas y trabajo de máxima exigencia cognitiva."},
-      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA","description":"Entrenamiento y descarga cognitiva: fuerza, boxeo, playa, movilidad, estiramientos, recuperación y vaciado mental."},
-      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO","description":"Filosofía, metafilosofía, creación conceptual de sistemas, estudio, reuniones, social y ejecución flexible."},
-      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA","description":"Comida principal de cierre metabólico y transición hacia la fase de integración."},
-      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA","description":"Música, creatividad, relaciones, reflexión y cierre. Menos exigencia analítica; más síntesis, expresión e integración."},
-      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR","description":"Sueño nocturno. Horario base actual 20:00–05:00, sujeto a ajuste estacional según ciclo solar."}
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","kind":"task","requires_response":true,"blocking":true,"completion_mode":"response_confirmed","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA"},
+      {"id":"6u2fqb16t4928t0bi2p81fta1o","start":"08:45","end":"09:00","title":"VER MENSAJES PENDIENTES","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA"},
+      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO"},
+      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA"},
+      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA"},
+      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR"}
     ],
     "2026-09-11": [
-      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"},
-      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA","description":"Franja de máxima claridad y precisión. Ingeniería, creación de sistemas, metaanálisis, decisiones finas y trabajo de máxima exigencia cognitiva."},
-      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA","description":"Entrenamiento y descarga cognitiva: fuerza, boxeo, playa, movilidad, estiramientos, recuperación y vaciado mental."},
-      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO","description":"Filosofía, metafilosofía, creación conceptual de sistemas, estudio, reuniones, social y ejecución flexible."},
-      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA","description":"Comida principal de cierre metabólico y transición hacia la fase de integración."},
-      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA","description":"Música, creatividad, relaciones, reflexión y cierre. Menos exigencia analítica; más síntesis, expresión e integración."},
-      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR","description":"Sueño nocturno. Horario base actual 20:00–05:00, sujeto a ajuste estacional según ciclo solar."}
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","kind":"task","requires_response":true,"blocking":true,"completion_mode":"response_confirmed","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA"},
+      {"id":"6u2fqb16t4928t0bi2p81fta1o","start":"08:45","end":"09:00","title":"VER MENSAJES PENDIENTES","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA"},
+      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO"},
+      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA"},
+      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA"},
+      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR"}
     ],
     "2026-09-12": [
-      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"},
-      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA","description":"Franja de máxima claridad y precisión. Ingeniería, creación de sistemas, metaanálisis, decisiones finas y trabajo de máxima exigencia cognitiva."},
-      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA","description":"Entrenamiento y descarga cognitiva: fuerza, boxeo, playa, movilidad, estiramientos, recuperación y vaciado mental."},
-      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO","description":"Filosofía, metafilosofía, creación conceptual de sistemas, estudio, reuniones, social y ejecución flexible."},
-      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA","description":"Comida principal de cierre metabólico y transición hacia la fase de integración."},
-      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA","description":"Música, creatividad, relaciones, reflexión y cierre. Menos exigencia analítica; más síntesis, expresión e integración."},
-      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR","description":"Sueño nocturno. Horario base actual 20:00–05:00, sujeto a ajuste estacional según ciclo solar."}
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","kind":"task","requires_response":true,"blocking":true,"completion_mode":"response_confirmed","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA"},
+      {"id":"6u2fqb16t4928t0bi2p81fta1o","start":"08:45","end":"09:00","title":"VER MENSAJES PENDIENTES","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA"},
+      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO"},
+      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA"},
+      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA"},
+      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR"}
     ],
     "2026-09-13": [
-      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","description":"Nada más despertar, antes del café, contar a A.R.I. con detalle lo soñado. Capturar, no interpretar. Solo se completa tras respuesta real y persistencia confirmada.","requires_response":true,"blocking":true,"completion_mode":"response_confirmed"},
-      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA","description":"Franja de máxima claridad y precisión. Ingeniería, creación de sistemas, metaanálisis, decisiones finas y trabajo de máxima exigencia cognitiva."},
-      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA","description":"Entrenamiento y descarga cognitiva: fuerza, boxeo, playa, movilidad, estiramientos, recuperación y vaciado mental."},
-      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO","description":"Filosofía, metafilosofía, creación conceptual de sistemas, estudio, reuniones, social y ejecución flexible."},
-      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA","description":"Comida principal de cierre metabólico y transición hacia la fase de integración."},
-      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA","description":"Música, creatividad, relaciones, reflexión y cierre. Menos exigencia analítica; más síntesis, expresión e integración."},
-      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR","description":"Sueño nocturno. Horario base actual 20:00–05:00, sujeto a ajuste estacional según ciclo solar."}
+      {"id":"luf7dc8gmro6e08o8aod4k6vuk","start":"05:00","end":"05:05","title":"DESPERTAR · REGISTRO DE SUEÑOS","kind":"task","requires_response":true,"blocking":true,"completion_mode":"response_confirmed","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"c44h6v3u8kvlc3t1lo2ehkarqc","start":"05:00","end":"09:30","title":"COGNICIÓN PROFUNDA"},
+      {"id":"6u2fqb16t4928t0bi2p81fta1o","start":"08:45","end":"09:00","title":"VER MENSAJES PENDIENTES","kind":"task","priority":"high","parent_block":"COGNICIÓN PROFUNDA"},
+      {"id":"f1and2am2mgfcqotjbgcu4hq44","start":"09:30","end":"11:30","title":"OPTIMIZACIÓN BIOLÓGICA"},
+      {"id":"06dnmo7a7i2qd2matop67mpvgg","start":"11:30","end":"16:00","title":"COGNICIÓN MEDIA · METAFILOSOFÍA · SOCIAL · ESTUDIO"},
+      {"id":"ajuaqmf9orm7e7sj5kg05u40e8","start":"16:00","end":"17:00","title":"CENA"},
+      {"id":"5ams5aeuggr1voj93a1dg45hek","start":"17:00","end":"20:00","title":"INTEGRACIÓN · MÚSICA"},
+      {"id":"s35svmhij2ovolm37qefvlfg24","start":"20:00","end":"05:00","title":"DORMIR"}
     ]
   }
 }
