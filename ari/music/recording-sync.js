@@ -1,7 +1,9 @@
 (()=>{
   const PROJECT_KEY='ari-daw-project-v0';
   const SYNC_MAP_KEY='ari-daw-server-audio-map-v1';
+  const REPORT_MAP_KEY='ari-daw-server-audio-report-v1';
   const API='/ari/music/api/recording';
+  const REPORT='/api/ari-music-sync-log';
   let busy=false;
 
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -41,6 +43,20 @@
     const el=document.getElementById('saveStatus');
     if(el)el.textContent=text;
   }
+  async function reportPointer(project,track,clip,meta){
+    const reports=readJSON(REPORT_MAP_KEY,{});
+    if(reports[clip.blobId])return true;
+    try{
+      const r=await fetch(REPORT,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({project:project?.name||null,track:track?.name||null,clip:clip?.name||null,blobId:clip.blobId,upload:meta})});
+      if(!r.ok)throw new Error('report_'+r.status);
+      reports[clip.blobId]=new Date().toISOString();
+      writeJSON(REPORT_MAP_KEY,reports);
+      return true;
+    }catch(err){
+      console.error('[A.R.I. recording pointer]',err);
+      return false;
+    }
+  }
   async function uploadBlob(blob,project,track,clip){
     const audio_base64=await blobToBase64(blob);
     if(!audio_base64)throw new Error('empty_audio');
@@ -64,11 +80,15 @@
       if(!project||!Array.isArray(project.tracks))return;
       const syncMap=readJSON(SYNC_MAP_KEY,{});
       const pending=[];
+      const existing=[];
       for(const track of project.tracks){
         for(const clip of (track.clips||[])){
-          if(isVoiceTake(track,clip)&&!syncMap[clip.blobId])pending.push({track,clip});
+          if(!isVoiceTake(track,clip))continue;
+          if(syncMap[clip.blobId])existing.push({track,clip,meta:syncMap[clip.blobId]});
+          else pending.push({track,clip});
         }
       }
+      for(const item of existing)await reportPointer(project,item.track,item.clip,item.meta);
       if(!pending.length){
         if(Object.keys(syncMap).length)setUi('LOCAL + SERVIDOR');
         return;
@@ -81,6 +101,7 @@
           const meta=await uploadBlob(blob,project,track,clip);
           syncMap[clip.blobId]=meta;
           writeJSON(SYNC_MAP_KEY,syncMap);
+          await reportPointer(project,track,clip,meta);
           sessionStorage.setItem('ari-last-server-recording-v1',JSON.stringify({blobId:clip.blobId,...meta}));
           window.dispatchEvent(new CustomEvent('ari:recording-synced',{detail:{blobId:clip.blobId,trackId:track.id,clipId:clip.id,meta}}));
           setUi('LOCAL + SERVIDOR');
