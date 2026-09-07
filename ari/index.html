@@ -10,40 +10,72 @@
   <link rel="manifest" href="/ari/manifest.webmanifest" />
   <link rel="icon" href="/ari/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/ari/icon.svg" />
-  <title>A.R.I. · Línea del día</title>
+  <title>A.R.I. · Línea temporal</title>
   <style>
-    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark}
-    *{box-sizing:border-box} body{margin:0;background:#050505;color:#f5f0e6;min-height:100vh}.app{max-width:520px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 18px calc(32px + env(safe-area-inset-bottom))}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.brand-wrap{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:12px}.brand{font-size:26px;letter-spacing:.18em;font-weight:650}.sub{font-size:12px;color:#9d937f;margin-top:5px}.date{font-size:13px;color:#c2b79f}
-    .now{border:1px solid #6f4d18;background:linear-gradient(180deg,#17120b,#0c0a07);border-radius:18px;padding:18px;margin-bottom:24px;box-shadow:0 12px 40px rgba(0,0,0,.28)}
-    .label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#e5b95f}.now h1{font-size:20px;margin:8px 0 6px}.meta{font-size:13px;color:#a99d86;line-height:1.45}.actions{display:flex;gap:9px;margin-top:16px}.btn{flex:1;border:1px solid #332919;background:#0c0a07;color:#eee6d8;border-radius:12px;padding:11px 10px;font-weight:600}.btn.primary{border-color:#8b6225;background:#24180a}
-    .section-title{font-size:13px;color:#a99d86;text-transform:uppercase;letter-spacing:.11em;margin:0 0 12px}.timeline{position:relative;margin-left:12px}.timeline:before{content:"";position:absolute;left:40px;top:6px;bottom:8px;width:1px;background:#332a1d}.event{display:grid;grid-template-columns:56px 1fr;gap:12px;position:relative;margin-bottom:12px}.time{font-size:12px;color:#9d927f;padding-top:14px}.dot{position:absolute;left:35px;top:17px;width:11px;height:11px;border:2px solid #b58539;background:#050505;border-radius:50%}.card{margin-left:0;border:1px solid #292218;background:#0c0a07;border-radius:14px;padding:13px 14px}.card.done{opacity:.72}.card.active{border-color:#9b6e29;background:#17110a}.title{font-size:14px;font-weight:650}.desc{font-size:12px;color:#9d927f;margin-top:5px;line-height:1.4}.tag{display:inline-block;margin-top:9px;border:1px solid #4a3b25;border-radius:999px;padding:4px 8px;font-size:10px;color:#d6c3a0}.done .tag{border-color:#355343;color:#9fc4aa}.footer-note{margin-top:25px;border-top:1px solid #241d13;padding-top:16px;color:#766d5f;font-size:12px;line-height:1.5}
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark;--bg:#050505;--panel:#0c0a07;--panel2:#14100a;--line:#2d2519;--gold:#d8a84b;--text:#f4efe4;--muted:#9d927f;--green:#6fb58d;--blue:#6fa7d6;--red:#cb756f}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);min-height:100vh}.app{max-width:560px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 14px calc(84px + env(safe-area-inset-bottom))}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px 14px}.brand-wrap{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:12px}.brand{font-size:24px;letter-spacing:.16em;font-weight:700}.sub{font-size:11px;color:var(--muted);margin-top:3px}.sync{font-size:11px;color:#b9ac94;text-align:right}.sync strong{color:#e3c27c;font-weight:600}
+    .days{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:2px 0 14px}.day{border:1px solid #292218;background:#0b0907;border-radius:12px;padding:9px 5px;text-align:center;color:#9f9584}.day b{display:block;font-size:12px}.day span{font-size:10px}.day.active{border-color:#8b6225;background:#1a1208;color:#f2debb}
+    .now{border:1px solid #7b5723;background:linear-gradient(180deg,#17120b,#0c0a07);border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:0 12px 38px rgba(0,0,0,.28)}.eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#e1b45c}.now h1{font-size:19px;margin:7px 0 5px}.meta{font-size:12px;color:#a99d86;line-height:1.45}.actions{display:flex;gap:8px;margin-top:14px}.btn{flex:1;border:1px solid #332919;background:#0c0a07;color:#eee6d8;border-radius:11px;padding:10px 8px;font-weight:650;font-size:12px}.btn.primary{border-color:#8b6225;background:#24180a}.btn:active{transform:scale(.99)}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin:20px 1px 10px}.section-title{font-size:12px;color:#a99d86;text-transform:uppercase;letter-spacing:.12em}.small{font-size:11px;color:#756d61}
+    .timeline{position:relative;padding-left:66px}.timeline:before{content:"";position:absolute;left:54px;top:8px;bottom:8px;width:1px;background:var(--line)}.hour{position:relative;min-height:72px;border-top:1px solid rgba(70,58,40,.38);padding:8px 0}.hour-label{position:absolute;left:-66px;top:-8px;width:50px;text-align:right;font-size:11px;color:#807768}.event{position:relative;border:1px solid #2b241a;background:var(--panel);border-radius:13px;padding:11px 12px;margin-bottom:7px}.event:before{content:"";position:absolute;left:-17px;top:16px;width:9px;height:9px;border:2px solid #a47631;background:var(--bg);border-radius:50%}.event.done{opacity:.72}.event.active{border-color:#a97830;background:#181108}.event.future{border-style:dashed}.event-title{font-size:13px;font-weight:680;line-height:1.25}.event-meta{font-size:11px;color:#928878;margin-top:5px;line-height:1.35}.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.badge{font-size:9px;border:1px solid #433722;border-radius:999px;padding:3px 7px;color:#cbb691}.badge.calendar{color:#a8c9e8;border-color:#34506a}.badge.memory{color:#c4b1e2;border-color:#4e3f69}.badge.db{color:#9fc9ae;border-color:#375744}.badge.done{color:#9ec1a8;border-color:#355343}.badge.active{color:#f1c875;border-color:#835f24}
+    .now-line{position:absolute;left:47px;right:0;height:1px;background:#c58f34;z-index:3}.now-line:before{content:"";position:absolute;left:2px;top:-4px;width:8px;height:8px;border-radius:50%;background:#e0b154}.now-tag{position:absolute;left:6px;top:-9px;background:#20160a;color:#efcc84;font-size:9px;padding:2px 5px;border-radius:5px;border:1px solid #634716}
+    .empty{border:1px dashed #2a241a;border-radius:12px;padding:13px;color:#70685c;font-size:11px;text-align:center}.legend{margin-top:18px;border-top:1px solid #211b13;padding-top:13px;display:grid;grid-template-columns:1fr 1fr;gap:8px}.legend div{font-size:10px;color:#81786b}.legend strong{display:block;color:#cfc1a8;margin-bottom:2px;font-size:10px}.bottom{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(560px,100%);padding:9px 18px calc(9px + env(safe-area-inset-bottom));background:rgba(5,5,5,.96);backdrop-filter:blur(12px);border-top:1px solid #201a12;display:grid;grid-template-columns:repeat(4,1fr);z-index:10}.nav{text-align:center;color:#7e7567;font-size:10px}.nav.active{color:#e4bc6b}.nav b{display:block;font-size:17px;line-height:1.1;margin-bottom:2px}
   </style>
 </head>
 <body>
   <main class="app">
-    <header><div class="brand-wrap"><img class="logo" src="/ari/icon.svg" alt="A.R.I."/><div><div class="brand">A.R.I.</div><div class="sub">Universo personal · una tarea cada vez</div></div></div><div class="date">Lun · 7 Sep 2026</div></header>
+    <header>
+      <div class="brand-wrap"><img class="logo" src="/ari/icon.svg" alt="A.R.I."/><div><div class="brand">A.R.I.</div><div class="sub">Universo personal · línea temporal viva</div></div></div>
+      <div class="sync"><strong>V0 ESQUELETO</strong><br>Calendar → ARI</div>
+    </header>
 
-    <section class="now">
-      <div class="label">Ahora</div>
-      <h1>Apertura intradía · XAUUSD</h1>
-      <div class="meta">Heredar mapa semanal → H4 → H1 → esperar zona operable → M5/M1 solo como gatillo.</div>
+    <section class="days" id="days"></section>
+
+    <section class="now" id="nowCard">
+      <div class="eyebrow">Ahora</div>
+      <h1 id="nowTitle">Sin bloque activo</h1>
+      <div class="meta" id="nowMeta">La línea temporal se alimentará desde Google Calendar mediante n8n.</div>
       <div class="actions"><button class="btn primary">HECHO</button><button class="btn">BLOQUEADO</button><button class="btn">NOTA</button></div>
     </section>
 
-    <h2 class="section-title">Línea del día</h2>
-    <section class="timeline">
-      <article class="event"><div class="time">05:30</div><span class="dot"></span><div class="card done"><div class="title">Apertura del día · Sueños</div><div class="desc">Despertar, registro onírico y estado inicial.</div><span class="tag">HECHO</span></div></article>
-      <article class="event"><div class="time">05:40</div><span class="dot"></span><div class="card done"><div class="title">Café</div><div class="desc">Canela · cacao puro · hielo.</div><span class="tag">HÁBITO</span></div></article>
-      <article class="event"><div class="time">05:45</div><span class="dot"></span><div class="card done"><div class="title">Apertura semanal · XAUUSD</div><div class="desc">Noticias + macro mensual, semanal y diario.</div><span class="tag">HECHO</span></div></article>
-      <article class="event"><div class="time">06:00</div><span class="dot"></span><div class="card active"><div class="title">Apertura intradía · XAUUSD</div><div class="desc">Contexto del movimiento del día. Bloque activo.</div><span class="tag">EN CURSO</span></div></article>
-      <article class="event"><div class="time">15:00</div><span class="dot"></span><div class="card"><div class="title">Revisar repaso del día</div><div class="desc">ROI · ineficiencias · mejoras · aprendizaje.</div><span class="tag">PLANIFICADO</span></div></article>
-    </section>
+    <div class="toolbar"><div class="section-title">Línea temporal</div><div class="small">Google Calendar = tiempo</div></div>
+    <section class="timeline" id="timeline"></section>
 
-    <div class="footer-note">V0 · Esta interfaz representa el estado integrado. Notion conserva memoria/histórico. Google Calendar aporta planificación y avisos. n8n sincroniza y automatiza.</div>
+    <div class="legend">
+      <div><strong>Notion</strong>Memoria, contexto e histórico narrativo.</div>
+      <div><strong>NocoDB</strong>Hechos estructurados, estados y métricas.</div>
+      <div><strong>Google Calendar</strong>Planificación, horarios, triggers y avisos.</div>
+      <div><strong>n8n</strong>Sincroniza, transforma y automatiza todo.</div>
+    </div>
   </main>
+
+  <nav class="bottom"><div class="nav active"><b>⌂</b>Ahora</div><div class="nav"><b>│</b>Línea</div><div class="nav"><b>◎</b>Memoria</div><div class="nav"><b>⋯</b>Más</div></nav>
+
   <script>
+    const ARI = {
+      source: 'demo',
+      n8nTodayEndpoint: null,
+      date: '2026-09-07',
+      events: [
+        {id:'wake',start:'05:30',end:'05:40',title:'Apertura del día · Sueños',status:'done',source:'calendar',memory:true,db:true,detail:'Despertar · registro onírico · estado inicial'},
+        {id:'weekly',start:'05:40',end:'06:00',title:'Apertura semanal · XAUUSD',status:'done',source:'calendar',memory:true,db:true,detail:'Noticias + mensual + semanal + diario'},
+        {id:'intraday',start:'06:00',end:'06:35',title:'Apertura intradía · XAUUSD',status:'active',source:'calendar',memory:true,db:true,detail:'H4 → H1 → zona → M5/M1 solo como gatillo'},
+        {id:'review',start:'15:00',end:'15:15',title:'Revisar repaso del día',status:'future',source:'calendar',memory:true,db:true,detail:'ROI · ineficiencias · mejoras · aprendizaje'}
+      ]
+    };
+
+    function mins(t){const [h,m]=t.split(':').map(Number);return h*60+m}
+    function dateLabel(){return new Intl.DateTimeFormat('es-ES',{weekday:'short',day:'numeric',month:'short'}).format(new Date(ARI.date+'T12:00:00'))}
+    function renderDays(){const root=document.getElementById('days');const base=new Date(ARI.date+'T12:00:00');root.innerHTML='';for(let i=-2;i<=2;i++){const d=new Date(base);d.setDate(base.getDate()+i);const el=document.createElement('div');el.className='day'+(i===0?' active':'');el.innerHTML=`<b>${new Intl.DateTimeFormat('es-ES',{weekday:'short'}).format(d)}</b><span>${d.getDate()}</span>`;root.appendChild(el)}}
+    function badges(e){let html=`<span class="badge calendar">CALENDAR</span>`;if(e.memory)html+=`<span class="badge memory">NOTION</span>`;if(e.db)html+=`<span class="badge db">NOCODB</span>`;html+=`<span class="badge ${e.status}">${e.status==='done'?'HECHO':e.status==='active'?'EN CURSO':'PLANIFICADO'}</span>`;return html}
+    function renderNow(){const active=ARI.events.find(e=>e.status==='active');document.getElementById('nowTitle').textContent=active?active.title:'Sin bloque activo';document.getElementById('nowMeta').textContent=active?`${active.start}–${active.end} · ${active.detail}`:'La línea temporal se alimentará desde Google Calendar mediante n8n.'}
+    function renderTimeline(){const root=document.getElementById('timeline');root.innerHTML='';const start=5,end=18;for(let h=start;h<=end;h++){const hour=document.createElement('div');hour.className='hour';hour.innerHTML=`<div class="hour-label">${String(h).padStart(2,'0')}:00</div>`;const list=ARI.events.filter(e=>Math.floor(mins(e.start)/60)===h);if(list.length){list.forEach(e=>{const card=document.createElement('div');card.className='event '+e.status;card.innerHTML=`<div class="event-title">${e.start} · ${e.title}</div><div class="event-meta">${e.end} · ${e.detail}</div><div class="badges">${badges(e)}</div>`;hour.appendChild(card)})}root.appendChild(hour)}
+      const now=new Date();if(now.toISOString().slice(0,10)===ARI.date){const total=now.getHours()*60+now.getMinutes(),min=start*60,max=(end+1)*60;if(total>=min&&total<=max){const top=((total-min)/(max-min))*root.scrollHeight;const line=document.createElement('div');line.className='now-line';line.style.top=top+'px';line.innerHTML='<span class="now-tag">AHORA</span>';root.appendChild(line)}}}
+    async function load(){if(ARI.n8nTodayEndpoint){try{const r=await fetch(ARI.n8nTodayEndpoint,{cache:'no-store'});if(r.ok){const data=await r.json();if(Array.isArray(data.events)){ARI.events=data.events;ARI.source='n8n'}}}catch(e){}}
+      renderDays();renderNow();renderTimeline();}
     if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/ari/sw.js').catch(()=>{}));}
+    load();
   </script>
 </body>
 </html>
