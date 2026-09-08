@@ -1,0 +1,1 @@
+(()=>{const a=document.getElementById('asset');if(!a)return;a.innerHTML='<option value="OANDA:XAUUSD">XAUUSD</option>';a.value='OANDA:XAUUSD';a.hidden=true;document.body.appendChild(a);})();
