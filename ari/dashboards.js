@@ -72,6 +72,10 @@
     if(!window.ARI_VOCAL_MIX_LIGHT)loadScript('/ari/music/vocal-mix-light.js?v=1','vocal-mix-light');
     if(localStorage.getItem('ari-ganador-reference-session-v1')!=='1')loadScript('/ari/music/reference-session.js?v=1','reference-session');
   }
+  function ensureTradingTools(){
+    if(!location.pathname.startsWith('/ari/trading/'))return;
+    loadScript('/ari/trading/candle-countdown.js?v=1','trading-candle-countdown');
+  }
   function syncContext(){
     const el=document.getElementById('contextMusic'),nav=document.getElementById('bottomNav');if(!el||!nav){ensureRefresh();return}
     const ctx=localStorage.getItem(CONTEXT_KEY);
@@ -81,7 +85,7 @@
     else{el.hidden=true;nav.classList.remove('has-context')}
     ensureRefresh();layoutBottom(nav);
   }
-  function ensure(){ensureGlobalStyle();applyGlobalTheme();ensureDashboardMenu();syncContext();ensureRefresh();ensureMusicTools()}
+  function ensure(){ensureGlobalStyle();applyGlobalTheme();ensureDashboardMenu();syncContext();ensureRefresh();ensureMusicTools();ensureTradingTools()}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensure,{once:true});else ensure();
   addEventListener('pageshow',ensure);addEventListener('storage',e=>{if(e.key===CONTEXT_KEY)syncContext();if(e.key===THEME_KEY)applyGlobalTheme()});
   window.ARI_ENSURE_DASHBOARDS=ensure;window.ARI_HARD_REFRESH=hardRefresh;
