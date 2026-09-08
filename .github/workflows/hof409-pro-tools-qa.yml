@@ -1,0 +1,99 @@
+name: HOF409 pro tools QA
+on:
+  push:
+    branches: [main]
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify production bytes
+        run: |
+          set -e
+          curl -fsSL 'https://corp.kortex10x.com/ari/sw.js?qa=hof409-pro-tools' | grep -q "ari-v66"
+          curl -fsSL 'https://corp.kortex10x.com/ari/trading/live.html?qa=hof409-pro-tools' | grep -q 'ari-chart-pro-tools-v2.js?v=2'
+          curl -fsSL 'https://corp.kortex10x.com/ari/trading/ari-chart-pro-tools-v2.js?v=2&qa=hof409-pro-tools' | grep -q "version:'1.4.0'"
+      - name: Exercise real PWA interactions
+        run: |
+          mkdir -p "$RUNNER_TEMP/hof409pro" "$GITHUB_WORKSPACE/hof409-pro-tools"
+          cd "$RUNNER_TEMP/hof409pro"
+          npm init -y >/dev/null 2>&1
+          npm install puppeteer@24.16.0 --no-audit --no-fund >/dev/null 2>&1
+          cat > qa.mjs <<'JS'
+          import puppeteer from 'puppeteer';
+          import fs from 'node:fs';
+          const A=(v,m)=>{if(!v)throw new Error(m)};const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          const out=process.env.GITHUB_WORKSPACE+'/hof409-pro-tools';fs.mkdirSync(out,{recursive:true});
+          const browser=await puppeteer.launch({headless:true,args:['--no-sandbox']});
+          const page=await browser.newPage();await page.setViewport({width:1280,height:900,deviceScaleFactor:1});
+          const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+          await page.goto('https://corp.kortex10x.com/ari/?source=pwa',{waitUntil:'networkidle2',timeout:60000});
+          await page.evaluate(()=>{for(const k of ['ari-chart-tool-favorites-v1:XAUUSD','ari-chart-price-alerts-v1:XAUUSD:default','ari-chart-history-v1:XAUUSD:default','ari-chart-drawings-v1:XAUUSD:default'])localStorage.removeItem(k);localStorage.setItem('ari-theme','dark')});
+          await page.evaluate(async()=>{const r=await navigator.serviceWorker.ready;await r.update();await new Promise(x=>setTimeout(x,900))});
+          await page.reload({waitUntil:'networkidle2',timeout:60000});
+          await page.waitForFunction(()=>navigator.serviceWorker.controller&&document.documentElement.dataset.theme==='dark',{timeout:30000});
+          const cache=await page.evaluate(async()=>await caches.keys());A(cache.includes('ari-v66'),'PWA cache != v66 '+cache.join(','));
+          const menu=await page.evaluate(()=>{const x=[...document.querySelectorAll('.nav')].find(e=>e.textContent.includes('Menú'));if(!x)return false;x.click();return true});A(menu,'Menú missing');
+          await page.waitForSelector('[data-dashboard-route="/ari/trading/"]',{timeout:15000});await page.click('[data-dashboard-route="/ari/trading/"]');
+          await page.waitForFunction(()=>location.pathname==='/ari/trading/',{timeout:30000});await page.click('[data-go="live"]');
+          await page.waitForFunction(()=>location.pathname==='/ari/trading/live.html'&&window.__ariEngine?.candles?.length>20&&window.ARI_CHART_API?.version==='1.4.0',{timeout:60000});await sleep(700);
+          const base=await page.evaluate(()=>({api:ARI_CHART_API.version,feed:ARI_CHART_API.getFeedState(),iframe:document.querySelectorAll('iframe').length,modes:document.querySelectorAll('[data-doc-mode]').length,alertTool:document.querySelectorAll('[data-tool="alert"]').length,stars:document.querySelectorAll('.ari-fav-toggle').length,dock:!!document.querySelector('.ari-real-favorites-dock'),float:document.querySelectorAll('.ari-favorites-bar').length,undo:!!document.querySelector('[data-pro-action="undo"]'),redo:!!document.querySelector('[data-pro-action="redo"]'),canvasFilter:getComputedStyle(document.querySelector('.ari-canvas-wrap canvas')).filter}));
+          A(base.api==='1.4.0','API '+base.api);A(base.feed?.source?.includes('BIQUOTE'),'feed '+JSON.stringify(base.feed));A(base.iframe===0,'iframe regression');A(base.modes===3,'doc modes '+base.modes);A(base.alertTool===1,'alert tool missing');A(base.stars===6,'stars '+base.stars);A(base.dock&&base.undo&&base.redo,'pro toolbar controls missing');A(base.float===0,'legacy floating favorites still in DOM');A(base.canvasFilter==='none','canvas filter '+base.canvasFilter);
+
+          // Real favorite star: one click must add exactly once and stay cursor.
+          await page.click('[data-tool="rect"] .ari-fav-toggle');await sleep(80);
+          let fav=await page.evaluate(()=>({api:ARI_CHART_API.getFavoriteTools(),dock:[...document.querySelectorAll('.ari-real-favorites-dock [data-favorite-tool]')].map(x=>x.dataset.favoriteTool),tool:__ariEngine.tool,stored:JSON.parse(localStorage.getItem('ari-chart-tool-favorites-v1:XAUUSD')||'[]')}));
+          A(JSON.stringify(fav.api)===JSON.stringify(['rect']),'rect star toggled incorrectly '+JSON.stringify(fav));A(fav.dock[0]==='rect'&&fav.tool==='cursor'&&fav.stored[0]==='rect','real dock/star leak '+JSON.stringify(fav));
+          await page.click('[data-tool="alert"] .ari-fav-toggle');await page.click('[data-tool="horizontal"] .ari-fav-toggle');
+          fav=await page.evaluate(()=>({api:ARI_CHART_API.getFavoriteTools(),dock:[...document.querySelectorAll('.ari-real-favorites-dock [data-favorite-tool]')].map(x=>x.dataset.favoriteTool)}));
+          A(JSON.stringify(fav.api)===JSON.stringify(['rect','alert','horizontal']),'favorite order '+JSON.stringify(fav));A(JSON.stringify(fav.dock)===JSON.stringify(fav.api),'dock is not true toolbar favorites '+JSON.stringify(fav));
+          await page.click('.ari-real-favorites-dock [data-favorite-tool="horizontal"]');A(await page.evaluate(()=>__ariEngine.tool==='horizontal'),'pinned favorite not usable');await page.evaluate(()=>__ariEngine.setTool('cursor'));
+
+          // Undo/redo over a drawing and API alert.
+          const hist0=await page.evaluate(()=>ARI_CHART_API.getHistoryState());
+          const created=await page.evaluate(()=>{const e=__ariEngine,last=e.candles[e.candles.length-1],d=ARI_CHART_API.createDrawing({type:'horizontal',p1:{t:last.t,p:last.c+4}}),a=ARI_CHART_API.createPriceAlert(last.c+7,{label:'QA API'});return{d,a,draw:ARI_CHART_API.getDrawings().length,alerts:ARI_CHART_API.getPriceAlerts().length,h:ARI_CHART_API.getHistoryState()}});
+          A(created.draw===1&&created.alerts===1&&created.h.undo>=hist0.undo+2,'history creation failed '+JSON.stringify(created));
+          A(await page.evaluate(()=>ARI_CHART_API.undo()),'undo alert returned false');A((await page.evaluate(()=>ARI_CHART_API.getPriceAlerts().length))===0,'undo did not remove alert');A((await page.evaluate(()=>ARI_CHART_API.getDrawings().length))===1,'undo polluted drawing');
+          A(await page.evaluate(()=>ARI_CHART_API.redo()),'redo returned false');A((await page.evaluate(()=>ARI_CHART_API.getPriceAlerts().length))===1,'redo did not restore alert');
+          const beforePrice=await page.evaluate(()=>ARI_CHART_API.getPriceAlerts()[0].price);await page.evaluate(()=>{const a=ARI_CHART_API.getPriceAlerts()[0];ARI_CHART_API.updatePriceAlert(a.id,{price:a.price+9})});const movedPrice=await page.evaluate(()=>ARI_CHART_API.getPriceAlerts()[0].price);A(movedPrice>beforePrice+8,'update alert price failed');await page.keyboard.down('Control');await page.keyboard.press('z');await page.keyboard.up('Control');A(Math.abs((await page.evaluate(()=>ARI_CHART_API.getPriceAlerts()[0].price))-beforePrice)<.001,'Ctrl+Z did not restore alert price');await page.keyboard.down('Control');await page.keyboard.press('y');await page.keyboard.up('Control');A(Math.abs((await page.evaluate(()=>ARI_CHART_API.getPriceAlerts()[0].price))-movedPrice)<.001,'Ctrl+Y did not redo alert price');
+
+          // Physically create an alert using the alert tool on the chart.
+          await page.click('[data-tool="alert"]');
+          const plot=await page.evaluate(()=>{const e=__ariEngine,L=e._layout(),r=e.canvas.getBoundingClientRect();return{x:r.x,y:r.y,cw:L.cw,ch:L.ch}});const clickX=plot.x+plot.cw*.58,clickY=plot.y+plot.ch*.38;
+          const countBefore=await page.evaluate(()=>ARI_CHART_API.getPriceAlerts().length);await page.mouse.click(clickX,clickY);await sleep(120);
+          const toolAlert=await page.evaluate(()=>({count:ARI_CHART_API.getPriceAlerts().length,tool:__ariEngine.tool,a:ARI_CHART_API.getPriceAlerts().at(-1)}));A(toolAlert.count===countBefore+1&&toolAlert.tool==='cursor','physical alert create failed '+JSON.stringify(toolAlert));
+          await page.screenshot({path:out+'/01-pro-toolbar-alert.png',fullPage:true});
+
+          // Physically drag that alert level and verify price changes.
+          const geom=await page.evaluate(()=>{const e=__ariEngine,a=ARI_CHART_API.getPriceAlerts().at(-1),q=e._alertMaps(),r=e.canvas.getBoundingClientRect();return{id:a.id,price:a.price,x:r.x+q.L.cw*.55,y:r.y+q.M.y(a.price)}});await page.mouse.move(geom.x,geom.y);await page.mouse.down();await page.mouse.move(geom.x,geom.y+52,{steps:10});await page.mouse.up();await sleep(100);const afterDrag=await page.evaluate(id=>ARI_CHART_API.getPriceAlerts().find(a=>a.id===id),geom.id);A(afterDrag&&Math.abs(afterDrag.price-geom.price)>1,'physical alert drag did not change level '+JSON.stringify({geom,afterDrag}));
+
+          // Trigger a controlled crossing in browser memory only; verify event + state + in-chart toast.
+          const trig=await page.evaluate(()=>{const e=__ariEngine,orig=e.candles[e.candles.length-1].c,p=orig+20,id=ARI_CHART_API.createPriceAlert(p,{label:'CRUCE QA'});window.__qaTriggered=null;e.root.addEventListener('ari-chart:price-alert-triggered',ev=>window.__qaTriggered=ev.detail,{once:true});e._alertLastPrice=p-1;e.candles[e.candles.length-1].c=p+1;e._checkPriceAlerts();e.candles[e.candles.length-1].c=orig;const a=ARI_CHART_API.getPriceAlerts().find(x=>x.id===id);return{a,event:window.__qaTriggered,toast:document.querySelector('.ari-price-alert-toast')?.classList.contains('show'),text:document.querySelector('.ari-price-alert-toast')?.textContent||''}});A(trig.a&&!trig.a.active&&trig.a.triggeredAt&&trig.event&&trig.toast&&trig.text.includes('CRUCE QA'),'controlled trigger failed '+JSON.stringify(trig));
+          await page.screenshot({path:out+'/02-alert-triggered.png',fullPage:true});
+
+          // Delete selected alert physically and undo it.
+          await page.evaluate(id=>ARI_CHART_API.selectPriceAlert(id),geom.id);const n0=await page.evaluate(()=>ARI_CHART_API.getPriceAlerts().length);await page.keyboard.press('Delete');A((await page.evaluate(()=>ARI_CHART_API.getPriceAlerts().length))===n0-1,'Delete did not remove selected alert');A(await page.evaluate(()=>ARI_CHART_API.undo()),'undo delete false');A((await page.evaluate(id=>ARI_CHART_API.getPriceAlerts().some(a=>a.id===id),geom.id)),'undo delete did not restore alert');
+
+          // Persistence after reload: favorites, alerts and history remain usable.
+          const persistBefore=await page.evaluate(()=>({fav:ARI_CHART_API.getFavoriteTools(),alerts:ARI_CHART_API.getPriceAlerts(),hist:ARI_CHART_API.getHistoryState(),draw:ARI_CHART_API.getDrawings()}));await page.reload({waitUntil:'networkidle2',timeout:60000});await page.waitForFunction(()=>window.__ariEngine?.candles?.length>20&&window.ARI_CHART_API?.version==='1.4.0',{timeout:60000});await sleep(500);
+          const persistAfter=await page.evaluate(()=>({fav:ARI_CHART_API.getFavoriteTools(),alerts:ARI_CHART_API.getPriceAlerts(),hist:ARI_CHART_API.getHistoryState(),draw:ARI_CHART_API.getDrawings(),dock:[...document.querySelectorAll('.ari-real-favorites-dock [data-favorite-tool]')].map(x=>x.dataset.favoriteTool),float:document.querySelectorAll('.ari-favorites-bar').length}));A(JSON.stringify(persistAfter.fav)===JSON.stringify(persistBefore.fav),'favorites lost reload');A(persistAfter.alerts.length===persistBefore.alerts.length,'alerts lost reload');A(persistAfter.draw.length===persistBefore.draw.length,'drawings lost reload');A(persistAfter.hist.undo>0,'undo history lost reload');A(JSON.stringify(persistAfter.dock)===JSON.stringify(persistAfter.fav)&&persistAfter.float===0,'real dock lost reload');
+
+          // Existing free-pan contract still works and AUTO resets.
+          await page.evaluate(()=>ARI_CHART_API.resetView());const m0=await page.evaluate(()=>{const e=__ariEngine,L=e._layout(),r=e.canvas.getBoundingClientRect();return{s:ARI_CHART_API.getFreePanState(),x:r.x+L.cw*.3,y:r.y+L.ch*.72}});await page.mouse.move(m0.x,m0.y);await page.mouse.down();await page.mouse.move(m0.x,m0.y+70,{steps:10});await page.mouse.up();const m1=await page.evaluate(()=>ARI_CHART_API.getFreePanState());A(Math.abs(m1.panOffset-m0.s.panOffset)<.1&&m1.pricePanRatio>.08,'free vertical pan regression '+JSON.stringify({m0,m1}));await page.click('#ariAutoscale');const auto=await page.evaluate(()=>ARI_CHART_API.getFreePanState());A(Math.abs(auto.panOffset)<1e-6&&Math.abs(auto.pricePanRatio)<1e-6,'AUTO regression '+JSON.stringify(auto));
+
+          // Mobile: no overflow; favorites remain in toolbar, not overlay.
+          await page.setViewport({width:390,height:844,deviceScaleFactor:1});await sleep(500);const mobile=await page.evaluate(()=>{const bar=document.querySelector('.ari-drawbar').getBoundingClientRect(),dock=document.querySelector('.ari-real-favorites-dock').getBoundingClientRect();return{body:document.body.scrollWidth,inner:innerWidth,bar:{l:bar.left,r:bar.right,t:bar.top,b:bar.bottom},dock:{l:dock.left,r:dock.right,t:dock.top,b:dock.bottom},float:document.querySelectorAll('.ari-favorites-bar').length,feed:ARI_CHART_API.getFeedState(),modes:document.querySelectorAll('[data-doc-mode]').length,api:ARI_CHART_API.version}});A(mobile.body<=mobile.inner+1,'mobile overflow '+JSON.stringify(mobile));A(mobile.dock.l>=mobile.bar.l-1&&mobile.dock.r<=mobile.bar.r+1,'favorite dock escaped toolbar '+JSON.stringify(mobile));A(mobile.float===0&&mobile.feed?.source?.includes('BIQUOTE')&&mobile.modes===3&&mobile.api==='1.4.0','mobile regression '+JSON.stringify(mobile));A(errors.length===0,'page errors '+errors.join('|'));
+          await page.screenshot({path:out+'/03-mobile.png',fullPage:true});
+          const result={ok:true,cache,base,favorites:fav,created,toolAlert,alertDrag:{before:geom.price,after:afterDrag.price},trigger:trig,persist:{before:persistBefore,after:persistAfter},mobile,errors};fs.writeFileSync(out+'/qa.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));await browser.close();
+          JS
+          node qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hof409-pro-tools-qa
+          path: hof409-pro-tools/
+          if-no-files-found: error
