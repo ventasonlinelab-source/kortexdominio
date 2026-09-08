@@ -1,0 +1,36 @@
+name: HOF410 production security QA
+on:
+  push:
+    branches: [hof410-qa-e2e-20260908]
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate production inbox transport without credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARI='https://corp.kortex10x.com/ari/'
+          OLD='https://corp.kortex10x.com/api/ari-messages?path=messages/unread'
+          API='https://n8n.kortex10x.com/meta-ahora/api/messages/unread'
+
+          html="$(curl -fsS "$ARI")"
+          grep -Fq "Mensajes sin leer" <<<"$html"
+          grep -Fq "No hay mensajes pendientes." <<<"$html"
+          grep -Fq "const MSG_API='https://n8n.kortex10x.com/meta-ahora/api/';" <<<"$html"
+
+          old_code="$(curl -sS -o /dev/null -w '%{http_code}' "$OLD")"
+          test "$old_code" = "404"
+
+          headers="$(mktemp)"
+          code="$(curl -sS -D "$headers" -o /dev/null -w '%{http_code}' -H 'Origin: https://corp.kortex10x.com' "$API")"
+          test "$code" != "200"
+          grep -Eiq '^access-control-allow-origin:[[:space:]]*https://corp\.kortex10x\.com[[:space:]]*$' "$headers"
+          grep -Eiq '^access-control-allow-credentials:[[:space:]]*true[[:space:]]*$' "$headers"
+
+          echo 'HOF410_PROD_INBOX_UI=PASS'
+          echo 'HOF410_OLD_PUBLIC_PROXY_CLOSED=PASS'
+          echo 'HOF410_N8N_UNAUTH_REJECTED=PASS'
+          echo 'HOF410_CORS_CREDENTIALS=PASS'
