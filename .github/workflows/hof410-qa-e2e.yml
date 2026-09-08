@@ -1,0 +1,38 @@
+name: HOF410 read-cycle QA
+
+on:
+  push:
+    branches:
+      - hof410-qa-e2e-20260908
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate unread to read to zero and idempotent replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://corp.kortex10x.com'
+          TARGET='HOF410_E2E_20260908T064245Z'
+          before="$(curl -fsS "$BASE/api/ari-messages?path=messages/unread")"
+          count_before="$(jq -r '.count' <<<"$before")"
+          cid="$(jq -r --arg t "$TARGET" '.conversations[] | select(.last_message==$t) | .conversation_id' <<<"$before" | head -1)"
+          test -n "$cid"
+          test "$count_before" -ge 1
+          detail="$(curl -fsS "$BASE/api/ari-messages?path=messages/conversation/$cid")"
+          jq -e '.ok == true' <<<"$detail" >/dev/null
+          read1="$(curl -fsS -X POST "$BASE/api/ari-messages?path=messages/conversation/$cid/read" -H 'Content-Type: application/json' --data '{}')"
+          jq -e '.ok == true' <<<"$read1" >/dev/null
+          after="$(curl -fsS "$BASE/api/ari-messages?path=messages/unread")"
+          remaining_target="$(jq -r --arg cid "$cid" '[.conversations[]? | select(.conversation_id==$cid)] | length' <<<"$after")"
+          test "$remaining_target" -eq 0
+          read2="$(curl -fsS -X POST "$BASE/api/ari-messages?path=messages/conversation/$cid/read" -H 'Content-Type: application/json' --data '{}')"
+          jq -e '.ok == true and ((.idempotent == true) or (.marked == 0))' <<<"$read2" >/dev/null
+          echo "HOF410_READ_CYCLE=PASS"
+          echo "COUNT_BEFORE=$count_before"
+          echo "COUNT_AFTER=$(jq -r '.count' <<<"$after")"
+          echo "SECOND_READ_IDEMPOTENT=PASS"
