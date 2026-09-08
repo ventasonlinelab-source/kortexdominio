@@ -15,6 +15,7 @@ P._bind=function(){baseBind.call(this);if(!document.getElementById('ari-chart-mo
 html[data-theme="sepia"] .ari-chart-engine .ari-price-clock{background:#f7efe3!important;color:#2d261f!important;border-color:#d3c2aa!important}
 html[data-theme="dark"] .ari-chart-engine{--panel:#101010;--border:#2b2b2b;--text:#f2f2f2;--muted:#9b9b9b;--muted2:#a8a8a8;--chart-sepia:#090909;--chart-grid:rgba(255,255,255,.08)}
 html[data-theme="dark"] .ari-chart-engine .ari-price-clock{background:#151515!important;color:#f2f2f2!important;border-color:#333!important}
+html[data-theme="dark"] .ari-chart-engine .ari-tf.active,html[data-theme="dark"] .ari-chart-engine .ari-tool.active{background:#242424!important;color:var(--gold)!important;box-shadow:inset 0 0 0 1px #3a3a3a!important}
 html[data-theme="red-night"] .ari-chart-engine .ari-price-clock{background:#160202!important;color:#efb1a8!important;border-color:#461010!important}
 .ari-chart-engine .ari-price-clock{box-shadow:none!important;border:1px solid var(--border)!important;border-right:0!important}
 .ari-chart-engine .ari-price-clock b{color:var(--gold)!important}
