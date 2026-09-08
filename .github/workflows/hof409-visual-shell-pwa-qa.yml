@@ -1,0 +1,62 @@
+name: HOF409 visual shell PWA QA
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  visual-pwa-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Wait for production shell
+        run: |
+          ok=0
+          for i in $(seq 1 60); do
+            if curl -fsSL https://corp.kortex10x.com/ari/sw.js | grep -q "ari-v58" && curl -fsSL https://corp.kortex10x.com/ari/dashboards.js | grep -q -- "--panel:#101010"; then ok=1; break; fi
+            sleep 5
+          done
+          test "$ok" = 1
+      - name: Render exact PWA route and inspect pixels
+        run: |
+          mkdir -p "$RUNNER_TEMP/hof409visual" && cd "$RUNNER_TEMP/hof409visual"
+          npm init -y >/dev/null 2>&1
+          npm install puppeteer@24.16.0 sharp@0.34.3 --no-audit --no-fund >/dev/null 2>&1
+          cat > qa.mjs <<'JS'
+          import puppeteer from 'puppeteer';import sharp from 'sharp';import fs from 'node:fs';
+          const A=(v,m)=>{if(!v)throw new Error(m)},sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          const base='https://corp.kortex10x.com',out=process.env.GITHUB_WORKSPACE+'/hof409-visual';fs.mkdirSync(out,{recursive:true});
+          const browser=await puppeteer.launch({headless:true,args:['--no-sandbox']});const page=await browser.newPage();await page.setViewport({width:1280,height:900,deviceScaleFactor:1});
+          const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+          await page.goto(base+'/ari/?source=pwa',{waitUntil:'networkidle2',timeout:60000});
+          await page.evaluate(()=>localStorage.setItem('ari-theme','dark'));
+          await page.evaluate(async()=>{if('serviceWorker'in navigator){const r=await navigator.serviceWorker.ready;await r.update()}});
+          await page.reload({waitUntil:'networkidle2',timeout:60000});await page.waitForFunction(()=>navigator.serviceWorker.controller&&document.documentElement.dataset.theme==='dark',{timeout:30000});await sleep(500);
+          A(await page.evaluate(()=>location.pathname==='/ari/'&&new URL(location.href).searchParams.get('source')==='pwa'),'not PWA start_url');
+          await page.screenshot({path:out+'/01-pwa-home-dark.png',fullPage:true});
+          // Physical PWA navigation: click Menú, then real TRADING dashboard card.
+          const menuClicked=await page.evaluate(()=>{const b=[...document.querySelectorAll('.nav')].find(x=>x.textContent.trim().includes('Menú'));if(!b)return false;b.click();return true});A(menuClicked,'Menú nav missing');await sleep(300);
+          await page.waitForSelector('[data-dashboard-route="/ari/trading/"]',{timeout:15000});await page.click('[data-dashboard-route="/ari/trading/"]');await page.waitForFunction(()=>location.pathname==='/ari/trading/',{timeout:30000});await sleep(700);
+          A(await page.evaluate(()=>document.documentElement.dataset.theme==='dark'),'theme lost entering trading');await page.screenshot({path:out+'/02-trading-home-dark.png',fullPage:true});
+          await page.click('[data-go="live"]');await page.waitForFunction(()=>location.pathname==='/ari/trading/live.html'&&window.__ariEngine?.candles?.length>20,{timeout:60000});await sleep(800);
+          A(await page.evaluate(()=>document.documentElement.dataset.theme==='dark'),'theme lost in live');A(await page.evaluate(()=>!!navigator.serviceWorker.controller),'PWA control lost');
+          await page.screenshot({path:out+'/03-live-dark.png',fullPage:true});
+          await page.setViewport({width:390,height:844,deviceScaleFactor:1});await sleep(500);await page.screenshot({path:out+'/04-live-mobile-dark.png',fullPage:true});
+          async function visualStats(file){const {data,info}=await sharp(file).removeAlpha().raw().toBuffer({resolveWithObject:true});let darkBrown=0,darkPixels=0,total=info.width*info.height;for(let i=0;i<data.length;i+=3){const r=data[i],g=data[i+1],b=data[i+2],lum=.2126*r+.7152*g+.0722*b;if(lum<105){darkPixels++;if(r>=g+4&&g>=b+4&&(r-b)>=10)darkBrown++}}return{width:info.width,height:info.height,total,darkPixels,darkBrown,darkBrownPct:+(darkBrown/total*100).toFixed(4),darkBrownOfDarkPct:+(darkBrown/Math.max(1,darkPixels)*100).toFixed(4)}}
+          const shots={};for(const f of ['01-pwa-home-dark.png','02-trading-home-dark.png','03-live-dark.png','04-live-mobile-dark.png'])shots[f]=await visualStats(out+'/'+f);
+          // Rendered-pixel criterion: old brown shell occupied large low-luma areas; only tiny warm antialias/accent residue is tolerated.
+          for(const [f,s] of Object.entries(shots))A(s.darkBrownPct<0.35,`brown rendered in ${f}: ${s.darkBrownPct}%`);
+          const state=await page.evaluate(()=>({path:location.pathname,theme:document.documentElement.dataset.theme,sw:!!navigator.serviceWorker.controller,api:ARI_CHART_API?.version,feed:ARI_CHART_API?.getFeedState(),modes:document.querySelectorAll('[data-doc-mode]').length,iframe:document.querySelectorAll('iframe').length,body:document.body.scrollWidth,inner:innerWidth}));
+          A(state.path==='/ari/trading/live.html'&&state.theme==='dark'&&state.sw&&state.feed?.source?.includes('BIQUOTE')&&state.modes===3&&state.iframe===0,'live regression '+JSON.stringify(state));A(state.body<=state.inner+1,'mobile overflow');A(errors.length===0,'page errors '+errors.join('|'));
+          const result={ok:true,route:['/ari/?source=pwa','Menú click','TRADING dashboard click','LIVE click','/ari/trading/live.html'],shots,state,errors};fs.writeFileSync(out+'/qa.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));await browser.close();
+          JS
+          node qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hof409-visual-shell-pwa
+          path: hof409-visual/
+          if-no-files-found: error
