@@ -1,6 +1,0 @@
-{
-  "private": true,
-  "dependencies": {
-    "@vercel/oidc": "3.8.5"
-  }
-}
