@@ -9,6 +9,7 @@ P._ensureExactFavoriteToolbar=function(){
  let bar=this.wrap?.querySelector('.ari-favorites-bar');
  if(!bar&&this.wrap){bar=document.createElement('div');bar.className='ari-favorites-bar';bar.setAttribute('aria-label','Herramientas favoritas');bar.innerHTML='<span class="ari-favorites-grip" title="Mover favoritos" aria-hidden="true">⠿</span><div class="ari-favorites-tools"></div>';this.wrap.appendChild(bar);this.favoriteBar=bar;this.favoriteToolsBox=bar.querySelector('.ari-favorites-tools');this._bindFavoriteBarDrag?.();requestAnimationFrame(()=>this._positionFavoriteBar?.())}
  else if(bar){this.favoriteBar=bar;this.favoriteToolsBox=bar.querySelector('.ari-favorites-tools')}
+ if(bar){bar.style.setProperty('display','flex','important');bar.style.setProperty('z-index','15','important')}
  this._renderFavoriteTools?.();
 };
 P._armAlertAudio=function(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;if(!this._alertAudioCtx)this._alertAudioCtx=new AC();if(this._alertAudioCtx.state==='suspended')this._alertAudioCtx.resume().catch(()=>{});return true}catch{return false}};
