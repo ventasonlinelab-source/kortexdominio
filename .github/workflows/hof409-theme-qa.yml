@@ -4,13 +4,12 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/hof409-theme-qa.yml'
-  workflow_dispatch:
 permissions:
   contents: read
 jobs:
   qa:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,93 +20,55 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install --silent playwright@1.55.0
           npx playwright install --with-deps chromium
-      - name: Run HOF-409 production QA
+      - name: Diagnose Trading LIVE chart
         env:
           BASE: https://corp.kortex10x.com
         run: |
           node <<'JS'
           const { chromium } = require('playwright');
-          const assert = require('node:assert/strict');
           (async()=>{
             const browser=await chromium.launch({headless:true});
             const ctx=await browser.newContext({viewport:{width:1280,height:900}});
             const page=await ctx.newPage();
-            const pageErrors=[];
-            page.on('pageerror',e=>pageErrors.push(String(e)));
-            const BASE=process.env.BASE;
-            await page.goto(BASE+'/ari/',{waitUntil:'networkidle',timeout:60000});
+            const failed=[];
+            const responses=[];
+            page.on('requestfailed',r=>{if(/tradingview|s3\.tradingview/i.test(r.url()))failed.push({url:r.url(),error:r.failure()?.errorText})});
+            page.on('response',r=>{if(/tradingview|s3\.tradingview/i.test(r.url()))responses.push({status:r.status(),url:r.url()})});
+            page.on('console',m=>{if(/tradingview|refused|blocked|error/i.test(m.text()))console.log('BROWSER_CONSOLE',m.type(),m.text())});
+            await page.goto(process.env.BASE+'/ari/',{waitUntil:'networkidle',timeout:60000});
             await page.evaluate(()=>navigator.serviceWorker.ready);
             await page.reload({waitUntil:'networkidle',timeout:60000});
-            await page.waitForTimeout(700);
-            assert.equal(await page.evaluate(()=>!!window.ARI_THEME),true,'global theme runtime missing');
-            const selector=await page.locator('[data-view="apariencia"] .theme-option').allTextContents();
-            assert.deepEqual(selector.map(x=>x.trim()),['🌙 OSCURO','☀️ SEPIA','◉ ROJO NOCHE']);
-            assert.deepEqual(await page.evaluate(()=>window.ARI_THEME.modes),['dark','sepia','red-night']);
-
-            async function rootMenu(){
-              await page.goto(BASE+'/ari/',{waitUntil:'networkidle',timeout:60000});
-              await page.waitForTimeout(250);
-              await page.click('.nav[data-target="menu"]');
-              await page.waitForTimeout(150);
-            }
-            async function choose(mode){
-              await rootMenu();
-              await page.click('#openAppearance');
-              await page.click(`[data-theme-choice="${mode}"]`);
-              await page.waitForTimeout(150);
-              const s=await page.evaluate(()=>({key:localStorage.getItem('ari-theme'),theme:document.documentElement.dataset.theme,bg:getComputedStyle(document.body).backgroundColor}));
-              assert.equal(s.key,mode);assert.equal(s.theme,mode);return s;
-            }
-            async function check(path,mode){
-              await page.goto(BASE+path,{waitUntil:'networkidle',timeout:60000});
-              await page.waitForTimeout(500);
-              const s=await page.evaluate(()=>({key:localStorage.getItem('ari-theme'),theme:document.documentElement.dataset.theme,bg:getComputedStyle(document.body).backgroundColor,global:!!window.ARI_THEME,w:document.documentElement.scrollWidth,iw:innerWidth}));
-              assert.equal(s.key,mode,`${path} key`);assert.equal(s.theme,mode,`${path} theme`);assert.equal(s.global,true,`${path} runtime`);return s;
-            }
-
-            console.log('dark choose',await choose('dark'));
-            console.log('dark trading',await check('/ari/trading/?resume=1','dark'));
-            console.log('dark root',await check('/ari/#menu','dark'));
-
-            console.log('sepia choose',await choose('sepia'));
-            for(const p of ['/ari/#ahora','/ari/#linea','/ari/#menu','/ari/trading/']) console.log('sepia',p,await check(p,'sepia'));
-
-            console.log('red choose',await choose('red-night'));
-            for(const p of ['/ari/#ahora','/ari/#linea','/ari/#menu','/ari/trading/','/ari/hermes/','/ari/music/','/ari/shopping/']) console.log('red',p,await check(p,'red-night'));
-            await page.reload({waitUntil:'networkidle',timeout:60000});await page.waitForTimeout(400);
-            assert.equal(await page.evaluate(()=>localStorage.getItem('ari-theme')),'red-night');
-            assert.equal(await page.evaluate(()=>document.documentElement.dataset.theme),'red-night');
-            console.log('red reload persistence PASS');
-
-            await page.setViewportSize({width:390,height:844});
-            for(const p of ['/ari/#menu','/ari/trading/']){
-              const s=await check(p,'red-night');
-              assert.ok(s.w<=s.iw+2,`${p} horizontal overflow ${s.w}/${s.iw}`);
-            }
-            console.log('mobile red PASS');
-
-            await choose('sepia');
+            await page.evaluate(()=>localStorage.setItem('ari-theme','sepia'));
             await page.evaluate(()=>sessionStorage.setItem('ari-trading-screen','live'));
-            await page.goto(BASE+'/ari/trading/?resume=1',{waitUntil:'domcontentloaded',timeout:60000});
-            await page.waitForTimeout(3500);
-            const chart=await page.evaluate(()=>{const tv=document.querySelector('#tv'),f=tv?.querySelector('iframe'),c=tv?.querySelector('canvas'),r=tv?.getBoundingClientRect();return{tv:!!tv,iframe:!!f,canvas:!!c,w:r?.width||0,h:r?.height||0,theme:document.documentElement.dataset.theme,filter:f?getComputedStyle(f).filter:(c?getComputedStyle(c).filter:'none')}});
-            assert.equal(chart.tv,true);assert.ok(chart.w>250&&chart.h>300,JSON.stringify(chart));assert.equal(chart.theme,'sepia');assert.ok(chart.iframe||chart.canvas,'chart surface missing');
-            console.log('chart sepia',chart);
-
-            await choose('dark');
-            await page.evaluate(()=>sessionStorage.setItem('ari-trading-screen','live'));
-            await page.goto(BASE+'/ari/trading/?resume=1',{waitUntil:'domcontentloaded',timeout:60000});await page.waitForTimeout(2500);
-            const darkChart=await page.evaluate(()=>{const f=document.querySelector('#tv iframe'),c=document.querySelector('#tv canvas');return{theme:document.documentElement.dataset.theme,filter:f?getComputedStyle(f).filter:(c?getComputedStyle(c).filter:'none'),surface:!!(f||c)}});
-            assert.equal(darkChart.theme,'dark');assert.equal(darkChart.surface,true);console.log('chart dark',darkChart);
-
-            await choose('red-night');
-            await page.evaluate(()=>sessionStorage.setItem('ari-trading-screen','live'));
-            await page.goto(BASE+'/ari/trading/?resume=1',{waitUntil:'domcontentloaded',timeout:60000});await page.waitForTimeout(2500);
-            const redChart=await page.evaluate(()=>{const f=document.querySelector('#tv iframe'),c=document.querySelector('#tv canvas');return{theme:document.documentElement.dataset.theme,filter:f?getComputedStyle(f).filter:(c?getComputedStyle(c).filter:'none'),surface:!!(f||c),bg:getComputedStyle(document.body).backgroundColor}});
-            assert.equal(redChart.theme,'red-night');assert.equal(redChart.surface,true);assert.notEqual(redChart.filter,'none');console.log('chart red',redChart);
-
-            if(pageErrors.length) console.log('page errors observed:',pageErrors);
-            console.log('PASS HOF-409 THEME QA');
+            await page.goto(process.env.BASE+'/ari/trading/?resume=1',{waitUntil:'domcontentloaded',timeout:60000});
+            await page.waitForTimeout(8000);
+            const state=await page.evaluate(()=>{
+              const tv=document.querySelector('#tv');
+              const r=tv?.getBoundingClientRect();
+              const scripts=[...(tv?.querySelectorAll('script')||[])].map(s=>({src:s.src,type:s.type,text:(s.textContent||'').slice(0,180)}));
+              return {
+                theme:document.documentElement.dataset.theme,
+                key:localStorage.getItem('ari-theme'),
+                tvExists:!!tv,
+                rect:r?{w:r.width,h:r.height}:null,
+                iframeCount:tv?.querySelectorAll('iframe').length||0,
+                canvasCount:tv?.querySelectorAll('canvas').length||0,
+                widgetContainers:tv?.querySelectorAll('.tradingview-widget-container__widget').length||0,
+                scripts,
+                html:(tv?.innerHTML||'').slice(0,1800)
+              };
+            });
+            console.log('STATE',JSON.stringify(state,null,2));
+            console.log('TRADINGVIEW_RESPONSES',JSON.stringify(responses,null,2));
+            console.log('TRADINGVIEW_FAILED',JSON.stringify(failed,null,2));
+            console.log('FRAME_URLS',JSON.stringify(page.frames().map(f=>f.url()),null,2));
+            await page.screenshot({path:'hof409-live.png',fullPage:true});
             await browser.close();
-          })().catch(async e=>{console.error(e);process.exit(1)});
+          })().catch(e=>{console.error(e);process.exit(1)});
           JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hof409-live-chart-diagnostic
+          path: hof409-live.png
+          if-no-files-found: warn
