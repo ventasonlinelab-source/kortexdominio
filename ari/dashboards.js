@@ -74,7 +74,7 @@
   }
   function ensureTradingTools(){
     if(!location.pathname.startsWith('/ari/trading/'))return;
-    loadScript('/ari/trading/candle-countdown.js?v=1','trading-candle-countdown');
+    loadScript('/ari/trading/candle-countdown-v2.js?v=2','trading-candle-countdown');
   }
   function syncContext(){
     const el=document.getElementById('contextMusic'),nav=document.getElementById('bottomNav');if(!el||!nav){ensureRefresh();return}
