@@ -1,0 +1,138 @@
+name: HOF409 usability QA
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  browser-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Wait for production usability layer
+        run: |
+          ok=0
+          for i in $(seq 1 60); do
+            if curl -fsSL "https://corp.kortex10x.com/ari/trading/live.html?qa=$GITHUB_SHA" | grep -q 'ari-chart-usability-v2.js'; then ok=1; break; fi
+            sleep 5
+          done
+          test "$ok" = 1
+      - name: Run physical browser QA
+        run: |
+          mkdir -p "$RUNNER_TEMP/hof409qa"
+          cd "$RUNNER_TEMP/hof409qa"
+          npm init -y >/dev/null 2>&1
+          npm install puppeteer@24.16.0 --no-audit --no-fund >/dev/null 2>&1
+          cat > qa.mjs <<'JS'
+          import puppeteer from 'puppeteer';
+          import fs from 'node:fs';
+          const assert=(ok,msg)=>{if(!ok)throw new Error(msg)};
+          const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          const browser=await puppeteer.launch({headless:true,args:['--no-sandbox','--disable-setuid-sandbox']});
+          const page=await browser.newPage();
+          await page.setViewport({width:1280,height:900,deviceScaleFactor:1});
+          const pageErrors=[];page.on('pageerror',e=>pageErrors.push(String(e)));page.on('console',m=>{if(m.type()==='error')pageErrors.push('console:'+m.text())});
+          const base='https://corp.kortex10x.com';
+          await page.goto(base+'/ari/?qa=hof409',{waitUntil:'networkidle2',timeout:60000});
+          await page.evaluate(async()=>{if('serviceWorker'in navigator)await navigator.serviceWorker.ready});
+          await page.reload({waitUntil:'networkidle2',timeout:60000});
+          const swControlled=await page.evaluate(()=>!!navigator.serviceWorker.controller);
+          assert(swControlled,'PWA service worker no controla A.R.I.');
+          await page.goto(base+'/ari/trading/?qa=hof409',{waitUntil:'networkidle2',timeout:60000});
+          await page.waitForFunction(()=>!!window.ARI_TRADING_ENGINE_ROUTER,{timeout:30000});
+          await page.click('[data-go="live"]');
+          await page.waitForFunction(()=>location.pathname==='/ari/trading/live.html'&&window.__ariEngine?.candles?.length>20,{timeout:60000});
+          await sleep(900);
+          const initial=await page.evaluate(()=>({
+            path:location.pathname,api:window.ARI_CHART_API?.version,feed:window.ARI_CHART_API?.getFeedState(),iframes:document.querySelectorAll('iframe').length,
+            modes:[...document.querySelectorAll('[data-doc-mode]')].map(x=>x.textContent.trim()),cta:document.getElementById('docSave')?.textContent.trim(),
+            toolbar:[...document.querySelectorAll('.ari-drawbar button')].map(x=>x.title),deleteSelected:!!document.querySelector('[data-action="delete-selected"]'),
+            shell:document.querySelector('.brand')?.textContent.trim(),tf:window.__ariEngine.tf,clockTF:document.querySelector('#ariPriceClock b')?.textContent
+          }));
+          assert(initial.api==='1.1.0','API usabilidad no activa');
+          assert(initial.feed?.source?.includes('BIQUOTE')&&initial.feed.candles>20,'feed real no disponible');
+          assert(initial.iframes===0,'TradingView iframe reapareció');
+          assert(initial.modes.length===3&&initial.cta==='GUARDAR EN NOTION','panel Notion regresó');
+          assert(initial.deleteSelected&&initial.toolbar.length>=8,'toolbar incompleta');
+          assert(initial.shell==='A.R.I. · TRADING','shell A.R.I. regresó');
+          const canvas=await page.$('#ariChartCanvas');
+          const box=await canvas.boundingBox();assert(box&&box.width>500&&box.height>400,'canvas no visible');
+          const layout=await page.evaluate(()=>window.__ariEngine._layout());
+          const plotX=box.x+layout.cw*.55,plotY=box.y+layout.top+layout.ch*.45;
+          // Escala de precio interactiva: arrastrar escala derecha hacia arriba = ampliar escala.
+          const priceBefore=await page.evaluate(()=>window.__ariEngine.priceScaleFactor||1);
+          const priceX=box.x+layout.cw+30,priceY=box.y+layout.top+layout.ch*.55;
+          await page.mouse.move(priceX,priceY);await page.mouse.down();await page.mouse.move(priceX,priceY-85,{steps:8});await page.mouse.up();
+          const priceAfter=await page.evaluate(()=>window.__ariEngine.priceScaleFactor||1);
+          assert(priceAfter>priceBefore*1.25,'escala de precio no responde al drag');
+          // Escala temporal interactiva: arrastrar eje inferior a la derecha = zoom-in horizontal.
+          await page.click('#ariAutoscale');
+          const timeBefore=await page.evaluate(()=>window.__ariEngine.visibleCount);
+          const timeX=box.x+layout.cw*.55,timeY=box.y+layout.top+layout.ch+18;
+          await page.mouse.move(timeX,timeY);await page.mouse.down();await page.mouse.move(timeX+130,timeY,{steps:8});await page.mouse.up();
+          const timeAfter=await page.evaluate(()=>window.__ariEngine.visibleCount);
+          assert(timeAfter<timeBefore,'escala temporal no responde al drag');
+          // Pan natural completo: izquierda desde presente crea espacio futuro; derecha vuelve y entra en histórico.
+          await page.click('#ariAutoscale');
+          await page.mouse.move(plotX,plotY);await page.mouse.down();await page.mouse.move(plotX-150,plotY,{steps:8});await page.mouse.up();
+          const panFuture=await page.evaluate(()=>window.__ariEngine.panOffset);
+          assert(panFuture<0,'pan a la izquierda no crea espacio futuro');
+          await page.mouse.move(plotX-150,plotY);await page.mouse.down();await page.mouse.move(plotX+220,plotY,{steps:12});await page.mouse.up();
+          const panHistory=await page.evaluate(()=>window.__ariEngine.panOffset);
+          assert(panHistory>0,'pan a la derecha no entra en histórico');
+          // Herramientas one-shot: horizontal termina y vuelve automáticamente al cursor.
+          await page.click('#ariAutoscale');
+          await page.evaluate(()=>{localStorage.removeItem('ari-chart-drawings-v1:XAUUSD:default');window.__ariEngine.drawings=[];window.__ariEngine.render()});
+          await page.click('[data-tool="horizontal"]');
+          await page.mouse.click(plotX,plotY);
+          let drawState=await page.evaluate(()=>({count:window.__ariEngine.drawings.length,tool:window.__ariEngine.tool,selected:window.__ariEngine.selectedDrawingId,type:window.__ariEngine.drawings[0]?.type}));
+          assert(drawState.count===1&&drawState.type==='horizontal'&&drawState.tool==='cursor'&&!drawState.selected,'horizontal no es one-shot');
+          // Seleccionar y mover el dibujo con cursor.
+          const line=await page.evaluate(()=>{const e=window.__ariEngine,a=e._visible(),L=e._layout(),S=e._scale(a),M=e._maps(a,L,S),d=e.drawings[0];return{id:d.id,y:M.y(d.p1.p),price:d.p1.p,cw:L.cw}});
+          const selX=box.x+Math.min(line.cw*.45,line.cw-80),selY=box.y+line.y;
+          await page.mouse.move(selX,selY);await page.mouse.down();await page.mouse.move(selX,selY+55,{steps:8});await page.mouse.up();
+          const moved=await page.evaluate(()=>({selected:window.__ariEngine.selectedDrawingId,price:window.__ariEngine.drawings[0]?.p1.p,deleteDisabled:document.querySelector('[data-action="delete-selected"]')?.disabled}));
+          assert(moved.selected===line.id&&Math.abs(moved.price-line.price)>0.01&&!moved.deleteDisabled,'selección/movimiento de dibujo falla');
+          await page.click('[data-action="delete-selected"]');
+          assert(await page.evaluate(()=>window.__ariEngine.drawings.length===0),'borrado de dibujo seleccionado falla');
+          // ESC cancela un dibujo en curso y devuelve cursor sin crear objeto.
+          await page.click('[data-tool="trend"]');
+          await page.mouse.move(plotX-100,plotY-60);await page.mouse.down();await page.mouse.move(plotX+80,plotY+40,{steps:6});await page.keyboard.press('Escape');await page.mouse.up();
+          const esc=await page.evaluate(()=>({count:window.__ariEngine.drawings.length,tool:window.__ariEngine.tool,drag:window.__ariEngine.drag,preview:window.__ariEngine.preview}));
+          assert(esc.count===0&&esc.tool==='cursor'&&!esc.drag&&!esc.preview,'ESC no cancela herramienta');
+          // Trendline real termina one-shot y persiste tras reload.
+          await page.click('[data-tool="trend"]');
+          await page.mouse.move(plotX-100,plotY-50);await page.mouse.down();await page.mouse.move(plotX+100,plotY+45,{steps:8});await page.mouse.up();
+          assert(await page.evaluate(()=>window.__ariEngine.drawings.length===1&&window.__ariEngine.tool==='cursor'),'trendline one-shot falla');
+          await page.reload({waitUntil:'networkidle2',timeout:60000});await page.waitForFunction(()=>window.__ariEngine?.candles?.length>20,{timeout:60000});
+          const persisted=await page.evaluate(()=>window.__ariEngine.drawings.map(x=>x.type));
+          assert(persisted.length===1&&persisted[0]==='trend','persistencia de dibujos regresó');
+          await page.evaluate(()=>window.__ariEngine.clearDrawings());
+          // Timeframes y contador siguen unidos al motor propio.
+          for(const tf of ['M1','M5','M15','H1','H4']){await page.evaluate(t=>window.ARI_CHART_API.setTimeframe(t),tf);await page.waitForFunction(t=>window.__ariEngine.tf===t&&window.__ariEngine.candles.length>20,{timeout:60000},tf);await sleep(350);const s=await page.evaluate(()=>({tf:window.__ariEngine.tf,clock:document.querySelector('#ariPriceClock b')?.textContent,source:window.__ariEngine.source}));assert(s.tf===tf&&s.clock===tf&&s.source.includes('BIQUOTE'),'regresión TF/contador '+tf)}
+          // Fullscreen y responsive.
+          await page.click('#ariFullscreen');await sleep(300);assert(await page.evaluate(()=>!!document.fullscreenElement),'fullscreen no entra');await page.evaluate(()=>document.exitFullscreen());await sleep(200);
+          await page.setViewport({width:390,height:844,deviceScaleFactor:1});await sleep(500);
+          const mobile=await page.evaluate(()=>({bodyW:document.body.scrollWidth,innerW:innerWidth,chartW:document.getElementById('ariChartCanvas').getBoundingClientRect().width,toolbar:document.querySelectorAll('.ari-drawbar button').length}));
+          assert(mobile.bodyW<=mobile.innerW+1&&mobile.chartW>250&&mobile.toolbar>=8,'responsive móvil roto');
+          assert(pageErrors.length===0,'errores JS: '+pageErrors.join(' | '));
+          await page.screenshot({path:process.env.GITHUB_WORKSPACE+'/hof409-usability-mobile.png',fullPage:true});
+          await page.setViewport({width:1280,height:900,deviceScaleFactor:1});await sleep(350);await page.screenshot({path:process.env.GITHUB_WORKSPACE+'/hof409-usability-desktop.png',fullPage:true});
+          const result={ok:true,swControlled,initial,priceScale:{before:priceBefore,after:priceAfter},timeScale:{before:timeBefore,after:timeAfter},pan:{future:panFuture,history:panHistory},oneShot:drawState,moved,esc,persisted,mobile,pageErrors};
+          fs.writeFileSync(process.env.GITHUB_WORKSPACE+'/hof409-usability-qa.json',JSON.stringify(result,null,2));
+          console.log(JSON.stringify(result,null,2));
+          await browser.close();
+          JS
+          node qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hof409-usability-qa
+          path: |
+            hof409-usability-qa.json
+            hof409-usability-mobile.png
+            hof409-usability-desktop.png
+          if-no-files-found: ignore
