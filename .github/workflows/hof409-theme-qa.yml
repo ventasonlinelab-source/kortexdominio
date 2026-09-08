@@ -20,7 +20,7 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install --silent playwright@1.55.0
           npx playwright install --with-deps chromium
-      - name: Verify real LIVE navigation and chart
+      - name: Verify LIVE chart in 3 themes
         env:
           BASE: https://corp.kortex10x.com
         run: |
@@ -31,45 +31,29 @@ jobs:
             const browser=await chromium.launch({headless:true});
             const ctx=await browser.newContext({viewport:{width:1280,height:900}});
             const page=await ctx.newPage();
-            await page.addInitScript(()=>{
-              window.__ariScriptAppends=[];
-              const orig=Element.prototype.appendChild;
-              Element.prototype.appendChild=function(node){
-                if(node&&node.tagName==='SCRIPT')window.__ariScriptAppends.push({src:node.src||'',parent:this.id||this.className||this.tagName});
-                return orig.call(this,node);
-              };
-            });
-            const requests=[],responses=[],failed=[];
-            page.on('request',r=>{if(/tradingview/i.test(r.url()))requests.push(r.url())});
-            page.on('response',r=>{if(/tradingview/i.test(r.url()))responses.push({status:r.status(),url:r.url()})});
-            page.on('requestfailed',r=>{if(/tradingview/i.test(r.url()))failed.push({url:r.url(),error:r.failure()?.errorText})});
             await page.goto(process.env.BASE+'/ari/',{waitUntil:'networkidle',timeout:60000});
             await page.evaluate(()=>navigator.serviceWorker.ready);
             await page.reload({waitUntil:'networkidle',timeout:60000});
-            await page.evaluate(()=>localStorage.setItem('ari-theme','sepia'));
-            await page.goto(process.env.BASE+'/ari/trading/',{waitUntil:'networkidle',timeout:60000});
-            await page.waitForTimeout(300);
-            assert.equal(await page.locator('[data-go="live"]').isVisible(),true,'LIVE button not visible');
-            await page.click('[data-go="live"]');
-            await page.waitForTimeout(9000);
-            const state=await page.evaluate(()=>{
-              const tv=document.querySelector('#tv'),r=tv?.getBoundingClientRect(),f=tv?.querySelector('iframe'),c=tv?.querySelector('canvas');
-              return {theme:document.documentElement.dataset.theme,key:localStorage.getItem('ari-theme'),liveActive:document.querySelector('#live')?.classList.contains('active'),rect:r?{w:r.width,h:r.height}:null,iframe:!!f,canvas:!!c,iframeSrc:f?.src||'',filter:f?getComputedStyle(f).filter:(c?getComputedStyle(c).filter:'none'),appends:window.__ariScriptAppends,html:(tv?.innerHTML||'').slice(0,1200)};
-            });
-            console.log('STATE',JSON.stringify(state,null,2));
-            console.log('REQUESTS',JSON.stringify(requests,null,2));
-            console.log('RESPONSES',JSON.stringify(responses,null,2));
-            console.log('FAILED',JSON.stringify(failed,null,2));
-            console.log('FRAMES',JSON.stringify(page.frames().map(f=>f.url()),null,2));
-            await page.screenshot({path:'hof409-live-real.png',fullPage:true});
-            assert.equal(state.theme,'sepia');assert.equal(state.key,'sepia');assert.equal(state.liveActive,true);assert.ok(state.rect.w>250&&state.rect.h>300);assert.ok(state.iframe||state.canvas,'real LIVE chart surface missing');
-            console.log('PASS REAL LIVE CHART SEPIA');
+            async function verify(mode){
+              await page.evaluate(m=>localStorage.setItem('ari-theme',m),mode);
+              await page.goto(process.env.BASE+'/ari/trading/',{waitUntil:'networkidle',timeout:60000});
+              await page.click('[data-go="live"]');
+              await page.waitForSelector('#tv iframe',{state:'attached',timeout:30000});
+              await page.waitForTimeout(3500);
+              const s=await page.evaluate(()=>{const f=document.querySelector('#tv iframe'),r=document.querySelector('#tv')?.getBoundingClientRect();return{theme:document.documentElement.dataset.theme,key:localStorage.getItem('ari-theme'),iframe:!!f,w:r?.width||0,h:r?.height||0,filter:f?getComputedStyle(f).filter:'none',src:f?.src||''}});
+              console.log(mode.toUpperCase(),JSON.stringify(s));
+              assert.equal(s.theme,mode);assert.equal(s.key,mode);assert.equal(s.iframe,true);assert.ok(s.w>250&&s.h>300);assert.ok(s.src.includes('tradingview-widget.com'));
+              if(mode==='sepia')assert.equal(s.filter,'none');else assert.notEqual(s.filter,'none');
+              await page.screenshot({path:`hof409-${mode}.png`,fullPage:true});
+            }
+            for(const m of ['dark','sepia','red-night'])await verify(m);
+            console.log('PASS LIVE CHART 3 THEMES');
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           JS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: hof409-live-real
-          path: hof409-live-real.png
+          name: hof409-chart-3-themes
+          path: hof409-*.png
           if-no-files-found: warn
