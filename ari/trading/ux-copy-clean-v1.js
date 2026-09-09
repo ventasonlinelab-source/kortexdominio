@@ -7,7 +7,7 @@
     if(topMeta)topMeta.remove();
 
     const liveEyebrow=document.querySelector('#live .headrow .eyebrow');
-    if(liveEyebrow)liveEyebrow.textContent='LIVE';
+    if(liveEyebrow&&liveEyebrow.textContent!=='LIVE')liveEyebrow.textContent='LIVE';
     document.querySelectorAll('#live .headrow .meta').forEach(el=>el.remove());
 
     const tfHeadEyebrow=document.querySelector('#tfDocRoot .tfdoc-head .eyebrow');
@@ -15,10 +15,10 @@
     const tfId=document.querySelector('#tfDocRoot .tfdoc-id');
     if(tfId)tfId.remove();
 
-    document.querySelectorAll('#tfDocRoot [data-tf-text]').forEach(el=>el.removeAttribute('placeholder'));
-    document.querySelectorAll('#tfDocRoot .tfdoc-upload-label').forEach(el=>{el.textContent='IMÁGENES';});
+    document.querySelectorAll('#tfDocRoot [data-tf-text][placeholder]').forEach(el=>el.removeAttribute('placeholder'));
+    document.querySelectorAll('#tfDocRoot .tfdoc-upload-label').forEach(el=>{if(el.textContent!=='IMÁGENES')el.textContent='IMÁGENES';});
     const synthesis=document.getElementById('tfDocSynthesis');
-    if(synthesis)synthesis.removeAttribute('placeholder');
+    if(synthesis?.hasAttribute('placeholder'))synthesis.removeAttribute('placeholder');
     const tfStatus=document.getElementById('tfDocStatus');
     if(tfStatus&&/RAW por TF|persistencia canónica pendiente|Estructurando RAW|RAW estructurado listo/i.test(tfStatus.textContent||''))tfStatus.textContent='';
 
@@ -28,7 +28,7 @@
         if(/^NOTA CORTA/i.test(el.textContent||''))el.textContent='NOTA';
       });
       const note=followup.querySelector('#fuText');
-      if(note)note.removeAttribute('placeholder');
+      if(note?.hasAttribute('placeholder'))note.removeAttribute('placeholder');
       const status=followup.querySelector('#fust');
       if(status&&/Se añadirá cronológicamente a la APERTURA activa/i.test(status.textContent||''))status.textContent='';
     }
@@ -43,7 +43,7 @@
     requestAnimationFrame(()=>{queued=false;clean();});
   };
   clean();
-  new MutationObserver(schedule).observe(document.body,{subtree:true,childList:true,characterData:true});
+  new MutationObserver(schedule).observe(document.body,{subtree:true,childList:true});
   window.ARI_HOF409_UX_COPY_CLEAN={version:'HOF409-UX-COPY-CLEAN-V1',apply:clean,qa:()=>({
     topDescription:!!document.querySelector('.top .meta'),
     liveDescription:!!document.querySelector('#live .headrow .meta'),
