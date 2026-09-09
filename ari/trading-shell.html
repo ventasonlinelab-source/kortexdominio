@@ -24,7 +24,15 @@ html,body{margin:0;width:100%;height:100%;background:#050505;font-family:Inter,s
     const s=doc.createElement('script');
     s.id='hof409-tf-capture-loader';
     s.src='/ari/trading/live-panel-v3.js?v=1';
-    s.onload=()=>{if(timer){clearInterval(timer);timer=0;}};
+    s.onload=()=>{
+      if(timer){clearInterval(timer);timer=0;}
+      if(!doc.getElementById('hof409-tf-notion-persist-loader')){
+        const p=doc.createElement('script');
+        p.id='hof409-tf-notion-persist-loader';
+        p.src='/ari/trading/tf-notion-persist-v1.js?v=1';
+        doc.body.appendChild(p);
+      }
+    };
     doc.body.appendChild(s);
   }
   frame.addEventListener('load',()=>{
