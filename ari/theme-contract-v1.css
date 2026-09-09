@@ -1,0 +1,46 @@
+html[data-theme="sepia"]{
+  color-scheme:light;
+  --bg:#f4eadb!important;
+  --panel:#f7efe3!important;
+  --panel2:#f4eadb!important;
+  --chrome:#f4eadb!important;
+  --chrome2:#f4eadb!important;
+  --grid:#e2d4c1!important;
+  --grid-strong:#cbb99f!important;
+  --line:#d3c2aa!important;
+  --border:#d3c2aa!important;
+  --text:#2d261f!important;
+  --muted:#7f705e!important;
+  --muted2:#6f6252!important;
+  --gold:#a9792d!important;
+  --accent:#a9792d!important;
+  --accent-soft:#ead9b8!important;
+  --header:rgba(244,234,219,.97)!important;
+  --bottom:rgba(244,234,219,.97)!important;
+  --phase-a:#efe4d2!important;
+  --phase-b:#e8dbc7!important;
+  --phase-border:#c9b99f!important;
+  --task-bg:#ead9b8!important;
+  --task-border:#b9965c!important;
+  --task-accent:#8d6424!important;
+  --ticket:rgba(247,239,227,.99)!important;
+  --chart-sepia:#f4eadb!important;
+  --chart-grid:rgba(76,67,52,.10)!important;
+}
+html[data-theme="sepia"],
+html[data-theme="sepia"] body,
+html[data-theme="sepia"] .app,
+html[data-theme="sepia"] .shell,
+html[data-theme="sepia"] main{
+  background-color:#f4eadb!important;
+}
+html[data-theme="sepia"] .topbar,
+html[data-theme="sepia"] .transport,
+html[data-theme="sepia"] .browser,
+html[data-theme="sepia"] .bottom,
+html[data-theme="sepia"] header,
+html[data-theme="sepia"] .ruler-row,
+html[data-theme="sepia"] .ruler-head,
+html[data-theme="sepia"] .inspector{
+  background-color:#f4eadb!important;
+}
