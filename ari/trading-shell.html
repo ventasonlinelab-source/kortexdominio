@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>A.R.I. · Trading</title>
+<style>
+html,body{margin:0;width:100%;height:100%;background:#050505;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}#ariBase{position:fixed;inset:0;width:100%;height:100%;border:0;background:#050505}.ari-analysis-panel{display:grid;gap:10px}.ari-mode-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.ari-mode{border:1px solid var(--border,#2b241a);background:var(--panel2,#100c08);color:var(--text,#f4efe4);border-radius:11px;padding:10px;font-weight:800;font-size:11px}.ari-mode.active{border-color:var(--gold,#d8a84b);color:var(--gold,#d8a84b)}.ari-analysis-panel textarea{width:100%;min-height:118px;box-sizing:border-box;border:0;outline:0;resize:vertical;background:transparent;color:var(--text,#f4efe4);font:inherit}.ari-upload{border:1px dashed var(--border,#2b241a);border-radius:13px;padding:12px;text-align:center;cursor:pointer;color:var(--muted,#9d927f);font-size:11px}.ari-upload input{display:none}.ari-files{display:grid;gap:8px}.ari-file{display:grid;grid-template-columns:54px minmax(0,1fr) 82px 34px;gap:8px;align-items:center;border:1px solid var(--border,#2b241a);background:var(--panel2,#100c08);border-radius:12px;padding:8px}.ari-file img{width:54px;height:44px;object-fit:cover;border-radius:8px;background:#17130e}.ari-file-name{min-width:0;font-size:10px;color:var(--muted,#9d927f);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ari-file select{width:100%;border:1px solid var(--border,#2b241a);background:var(--panel,#0c0a07);color:var(--text,#f4efe4);border-radius:9px;padding:7px;font-size:10px}.ari-remove{border:1px solid var(--border,#2b241a);background:transparent;color:var(--muted,#9d927f);border-radius:9px;height:32px}.ari-save{width:100%;border:1px solid var(--gold,#d8a84b);background:var(--panel2,#100c08);color:var(--gold,#d8a84b);border-radius:11px;padding:12px;font-weight:850}.ari-note{font-size:10px;color:var(--muted,#9d927f)}.ari-status{font-size:10px;color:var(--muted,#9d927f)}@media(max-width:520px){.ari-file{grid-template-columns:46px minmax(0,1fr) 74px 30px}.ari-file img{width:46px;height:40px}.ari-mode{padding:9px 5px;font-size:10px}}
+</style>
+</head>
+<body>
+<iframe id="ariBase" src="/ari/trading/index.html?embedded=1" title="A.R.I. Trading"></iframe>
+<script>
+(()=>{
+ const TF=['MN','W1','D1','H4','H1','M30','M15','M5','M1'];
+ const frame=document.getElementById('ariBase');
+ let records=[]; let mode='APERTURA';
+ function optionHtml(selected=''){return '<option value="">TF</option>'+TF.map(x=>`<option ${x===selected?'selected':''} value="${x}">${x}</option>`).join('')}
+ function renderFiles(doc){
+   const box=doc.getElementById('ariRawFiles'); if(!box)return;
+   box.innerHTML='';
+   records.forEach((r,i)=>{
+     const row=doc.createElement('div'); row.className='ari-file';
+     row.innerHTML=`<img src="${r.url}" alt=""><div class="ari-file-name" title="${r.file.name}">${r.file.name}</div><select data-i="${i}">${optionHtml(r.tf)}</select><button class="ari-remove" data-rm="${i}" type="button">×</button>`;
+     box.appendChild(row);
+   });
+   box.querySelectorAll('select[data-i]').forEach(s=>s.onchange=()=>{records[+s.dataset.i].tf=s.value;});
+   box.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{const i=+b.dataset.rm;URL.revokeObjectURL(records[i].url);records.splice(i,1);renderFiles(doc)});
+ }
+ function inject(){
+   const doc=frame.contentDocument; if(!doc)return;
+   const side=doc.querySelector('#live .side'); if(!side||doc.getElementById('ariRawAnalysis'))return;
+   side.innerHTML=`
+     <div class="field ari-analysis-panel" id="ariRawAnalysis">
+       <label>Tipo de análisis</label>
+       <div class="ari-mode-row"><button class="ari-mode" data-mode="SEMANA" type="button">SEMANA</button><button class="ari-mode active" data-mode="APERTURA" type="button">APERTURA</button><button class="ari-mode" data-mode="SETUP" type="button">SETUP</button></div>
+     </div>
+     <div class="field"><label>Análisis bruto</label><textarea id="ariRawText" placeholder="Escribe una sola vez tu lectura del mercado…"></textarea></div>
+     <div class="field ari-analysis-panel">
+       <label>Capturas + temporalidad</label>
+       <label class="ari-upload">+ AÑADIR IMÁGENES<input id="ariRawImages" type="file" accept="image/*" multiple></label>
+       <div class="ari-files" id="ariRawFiles"></div>
+       <div class="ari-note">Cada imagen debe llevar su TF antes de guardar.</div>
+     </div>
+     <button class="ari-save" id="ariRawSave" type="button">GUARDAR ANÁLISIS</button>
+     <div class="ari-status" id="ariRawStatus">Pendiente de guardar.</div>`;
+   const asset=doc.querySelector('#asset'); if(asset&&asset.value!=='OANDA:XAUUSD')asset.value='OANDA:XAUUSD';
+   doc.querySelectorAll('.ari-mode').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;doc.querySelectorAll('.ari-mode').forEach(x=>x.classList.toggle('active',x===b));});
+   doc.getElementById('ariRawImages').onchange=e=>{[...e.target.files].forEach(file=>records.push({file,tf:'',url:URL.createObjectURL(file)}));e.target.value='';renderFiles(doc)};
+   doc.getElementById('ariRawSave').onclick=()=>{
+     const text=doc.getElementById('ariRawText').value.trim();
+     const status=doc.getElementById('ariRawStatus');
+     if(!text){status.textContent='Falta el análisis.';return}
+     if(!records.length){status.textContent='Añade al menos una captura.';return}
+     if(records.some(r=>!r.tf)){status.textContent='Marca el TF de todas las imágenes.';return}
+     const payload={raw_id:'RAW-'+Date.now(),tipo:mode,activo:'XAUUSD',texto:text,imagenes:records.map((r,i)=>({orden:i,timeframe:r.tf,nombre:r.file.name,tipo:r.file.type,tamano:r.file.size})),created_at:new Date().toISOString(),estado:'NUEVO'};
+     localStorage.setItem('ari-trading-analysis-draft',JSON.stringify(payload));
+     status.textContent='BRUTO PREPARADO · '+mode+' · '+records.length+' imágenes · pendiente conexión backend/Notion';
+     window.dispatchEvent(new CustomEvent('ari:trading-analysis-ready',{detail:payload}));
+   };
+ }
+ frame.addEventListener('load',()=>{setTimeout(inject,120);setInterval(inject,1000)});
+})();
+</script>
+</body>
+</html>
