@@ -9,7 +9,7 @@
   };
   const MAX_IMAGE_BYTES=20*1024*1024;
   const ASSET='XAUUSD';
-  const VERSION='HOF409-TF-V1';
+  const VERSION='HOF409-TF-V2';
   const legacyAsset=document.getElementById('asset');
   if(legacyAsset){legacyAsset.innerHTML='<option value="OANDA:XAUUSD">XAUUSD</option>';legacyAsset.value='OANDA:XAUUSD';}
 
@@ -54,8 +54,8 @@
     .tfdoc-title{font-size:11px;font-weight:900;letter-spacing:.08em}.tfdoc-id{font-size:8px;color:var(--muted);overflow-wrap:anywhere;text-align:right}
     .tfdoc-blocks{display:grid;gap:8px}.tfdoc-block{border:1px solid var(--border);background:var(--panel);border-radius:13px;padding:10px;display:grid;gap:7px}
     .tfdoc-tf{font-size:13px;font-weight:950;color:var(--gold);letter-spacing:.08em}.tfdoc-block textarea,.tfdoc-synthesis textarea{width:100%;min-height:76px;resize:vertical;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:10px;padding:9px;font:inherit;font-size:12px;line-height:1.4;outline:0}
-    .tfdoc-block textarea:focus,.tfdoc-synthesis textarea:focus{border-color:var(--gold)}.tfdoc-upload{display:grid;gap:5px}.tfdoc-upload-label{font-size:9px;color:var(--muted)}
-    .tfdoc-upload input{width:100%;font-size:10px;color:var(--muted)}.tfdoc-upload input::file-selector-button{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:8px;padding:7px;margin-right:6px;font-weight:800}
+    .tfdoc-block textarea:focus,.tfdoc-synthesis textarea:focus{border-color:var(--gold)}.tfdoc-upload{display:grid;gap:6px}.tfdoc-upload-label{font-size:9px;color:var(--muted)}.tfdoc-upload-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center}
+    .tfdoc-upload input{width:100%;font-size:10px;color:var(--muted)}.tfdoc-upload input::file-selector-button{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:8px;padding:7px;margin-right:6px;font-weight:800}.tfdoc-camera-input{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}.tfdoc-media-btn{display:inline-grid;place-items:center;min-height:34px;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:8px;padding:7px 9px;font-size:9px;font-weight:900;letter-spacing:.04em;cursor:pointer}.tfdoc-media-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
     .tfdoc-images{display:grid;gap:5px}.tfdoc-image{display:grid;grid-template-columns:42px minmax(0,1fr) 28px;gap:7px;align-items:center;border:1px solid var(--line);background:var(--panel2);border-radius:9px;padding:5px}
     .tfdoc-image img{width:42px;height:34px;object-fit:cover;border-radius:6px}.tfdoc-image span{font-size:8px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tfdoc-remove{border:1px solid var(--border);background:transparent;color:var(--muted);width:28px;height:28px;border-radius:7px;font-weight:900}
     .tfdoc-synthesis{border:1px solid var(--border);background:var(--panel);border-radius:13px;padding:10px;display:grid;gap:7px}.tfdoc-synthesis label{font-size:9px;font-weight:900;letter-spacing:.06em;color:var(--gold)}
@@ -70,7 +70,7 @@
 
   function blockHtml(block){
     const images=block.imagenes.map(img=>`<div class="tfdoc-image"><img src="${esc(img.url)}" alt="${esc(block.timeframe)}"><span title="${esc(img.name)}">${esc(img.name)}</span><button class="tfdoc-remove" type="button" data-remove-image="${esc(img.id)}" data-remove-tf="${esc(block.timeframe)}" aria-label="Eliminar imagen">×</button></div>`).join('');
-    return `<article class="tfdoc-block" data-tf-block="${esc(block.timeframe)}"><div class="tfdoc-tf">${esc(block.timeframe)}</div><textarea data-tf-text="${esc(block.timeframe)}" placeholder="Lectura ${esc(block.timeframe)}…">${esc(block.texto_raw)}</textarea><div class="tfdoc-upload"><label class="tfdoc-upload-label">IMÁGENES ${esc(block.timeframe)} · opcional · varias permitidas</label><input type="file" accept="image/*" multiple data-tf-upload="${esc(block.timeframe)}"></div><div class="tfdoc-images">${images}</div></article>`;
+    return `<article class="tfdoc-block" data-tf-block="${esc(block.timeframe)}"><div class="tfdoc-tf">${esc(block.timeframe)}</div><textarea data-tf-text="${esc(block.timeframe)}" placeholder="Lectura ${esc(block.timeframe)}…">${esc(block.texto_raw)}</textarea><div class="tfdoc-upload"><label class="tfdoc-upload-label">IMÁGENES ${esc(block.timeframe)} · opcional · varias permitidas · también puedes pegar con ⌘V / Ctrl+V</label><div class="tfdoc-upload-row"><input type="file" accept="image/*" multiple data-tf-upload="${esc(block.timeframe)}"><label class="tfdoc-media-btn">CÁMARA<input class="tfdoc-camera-input" type="file" accept="image/*" capture="environment" data-tf-camera="${esc(block.timeframe)}"></label><button class="tfdoc-media-btn" type="button" data-tf-paste="${esc(block.timeframe)}">PEGAR</button></div></div><div class="tfdoc-images">${images}</div></article>`;
   }
 
   function render(){
@@ -81,12 +81,37 @@
     root.querySelectorAll('[data-tf-text]').forEach(el=>el.addEventListener('input',()=>{const b=draft.blocks.find(x=>x.timeframe===el.dataset.tfText);if(b)b.texto_raw=el.value;}));
     document.getElementById('tfDocSynthesis').addEventListener('input',e=>draft.synthesis=e.target.value);
     root.querySelectorAll('[data-tf-upload]').forEach(input=>input.addEventListener('change',()=>addImages(input.dataset.tfUpload,[...(input.files||[])])));
+    root.querySelectorAll('[data-tf-camera]').forEach(input=>input.addEventListener('change',()=>addImages(input.dataset.tfCamera,[...(input.files||[])])));
+    root.querySelectorAll('[data-tf-paste]').forEach(btn=>btn.addEventListener('click',()=>pasteImages(btn.dataset.tfPaste)));
+    root.querySelectorAll('[data-tf-block]').forEach(block=>block.addEventListener('paste',e=>pasteEvent(block.dataset.tfBlock,e)));
     root.querySelectorAll('[data-remove-image]').forEach(btn=>btn.addEventListener('click',()=>removeImage(btn.dataset.removeTf,btn.dataset.removeImage)));
     document.getElementById('tfDocSave').addEventListener('click',preparePayload);
   }
 
   function setStatus(message,kind=''){
     const el=document.getElementById('tfDocStatus');if(!el)return;el.textContent=message;el.className='tfdoc-status'+(kind?' '+kind:'');
+  }
+  function clipboardImageFiles(data){
+    const out=[];
+    for(const item of [...(data?.items||[])]){
+      if(item.kind!=='file'||!String(item.type||'').startsWith('image/'))continue;
+      const file=item.getAsFile?.();if(file)out.push(file);
+    }
+    return out;
+  }
+  function pasteEvent(tf,event){
+    const files=clipboardImageFiles(event.clipboardData);
+    if(!files.length)return;
+    event.preventDefault();addImages(tf,files);
+  }
+  async function pasteImages(tf){
+    if(!navigator.clipboard?.read){setStatus('Pulsa ⌘V / Ctrl+V dentro del bloque '+tf+' para pegar una imagen.');return;}
+    try{
+      const items=await navigator.clipboard.read(),files=[];
+      for(const item of items){for(const type of item.types||[]){if(!String(type).startsWith('image/'))continue;const blob=await item.getType(type);const ext=(String(type).split('/')[1]||'png').replace('jpeg','jpg');files.push(new File([blob],`clipboard-${Date.now()}.${ext}`,{type,lastModified:Date.now()}));break;}}
+      if(!files.length){setStatus('El portapapeles no contiene una imagen.','error');return;}
+      addImages(tf,files);
+    }catch(err){setStatus('No se pudo leer el portapapeles · usa ⌘V / Ctrl+V dentro del bloque.','error');}
   }
   function addImages(tf,files){
     const block=drafts[mode].blocks.find(x=>x.timeframe===tf);if(!block)return;
@@ -165,6 +190,8 @@
       blocks:root.querySelectorAll('[data-tf-block]').length===MODELS[mode].tfs.length,
       textareas:root.querySelectorAll('[data-tf-text]').length===MODELS[mode].tfs.length,
       uploaders:[...root.querySelectorAll('[data-tf-upload]')].every(x=>x.multiple&&x.accept==='image/*'),
+      cameraInputs:[...root.querySelectorAll('[data-tf-camera]')].every(x=>x.accept==='image/*'&&x.getAttribute('capture')==='environment'),
+      pasteButtons:root.querySelectorAll('[data-tf-paste]').length===MODELS[mode].tfs.length,
       singleCta:root.querySelectorAll('#tfDocSave').length===1,
       legacyFreeform:!document.getElementById('docText')&&!document.getElementById('docImage')
     })

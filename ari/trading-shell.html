@@ -14,6 +14,11 @@ html,body{margin:0;width:100%;height:100%;background:#050505;font-family:Inter,s
 (()=>{
   const frame=document.getElementById('ariBase');
   let timer=0;
+  function ensureEngineRouter(){
+    const doc=frame.contentDocument;if(!doc)return;
+    if(doc.defaultView?.ARI_TRADING_ENGINE_ROUTER||doc.getElementById('hof409-live-engine-router-loader'))return;
+    const r=doc.createElement('script');r.id='hof409-live-engine-router-loader';r.src='/ari/trading/live-engine-router-v1.js?v=2';doc.body.appendChild(r);
+  }
   function ensureCanonicalCapture(){
     const doc=frame.contentDocument;
     if(!doc)return;
@@ -36,8 +41,8 @@ html,body{margin:0;width:100%;height:100%;background:#050505;font-family:Inter,s
     doc.body.appendChild(s);
   }
   frame.addEventListener('load',()=>{
-    setTimeout(ensureCanonicalCapture,100);
-    timer=setInterval(ensureCanonicalCapture,800);
+    setTimeout(()=>{ensureEngineRouter();ensureCanonicalCapture();},100);
+    timer=setInterval(()=>{ensureEngineRouter();ensureCanonicalCapture();},800);
     setTimeout(()=>{if(timer){clearInterval(timer);timer=0;}},12000);
   });
 })();
