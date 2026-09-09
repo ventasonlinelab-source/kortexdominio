@@ -1,11 +1,13 @@
 {
+  "redirects": [
+    {"source":"/ari/trading/","destination":"/ari/trading-shell.html","permanent":false},
+    {"source":"/ari/trading","destination":"/ari/trading-shell.html","permanent":false}
+  ],
   "rewrites": [
     {"source":"/hermes-dashboard/:path*","destination":"https://n8n.kortex10x.com/hermes-dashboard/:path*"},
     {"source":"/ari/trading/data","destination":"https://n8n.kortex10x.com/trading-dashboard/data"},
     {"source":"/ari/trading/health","destination":"https://n8n.kortex10x.com/trading-dashboard/health"},
     {"source":"/ari/trading/price-alerts","destination":"https://n8n.kortex10x.com/trading-dashboard/price-alerts"},
-    {"source":"/ari/trading/","destination":"/ari/trading-shell.html"},
-    {"source":"/ari/trading","destination":"/ari/trading-shell.html"},
     {"source":"/ari/music/audio/:path*","destination":"https://n8n.kortex10x.com/kortex-audio/:path*"},
     {"source":"/ari/music/api/:path*","destination":"https://n8n.kortex10x.com/ari-music-api/api/:path*"}
   ],
