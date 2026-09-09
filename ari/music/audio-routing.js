@@ -108,10 +108,9 @@
       const t=p.tracks.find(x=>x.id===row.dataset.track);const type=row.querySelector('.track-type');if(!t||!type)return;
       if(t.type==='audio'){
         const inTxt=t.armed?short(inputLabel()):'—';
-        type.textContent=`AUDIO · IN ${inTxt} · OUT ${short(outputLabel())}`;
-        type.title=`Entrada: ${t.armed?inputLabel():'No armada'}\nSalida: ${outputLabel()}`;
+        const txt=`AUDIO · IN ${inTxt} · OUT ${short(outputLabel())}`;const ttl=`Entrada: ${t.armed?inputLabel():'No armada'}\nSalida: ${outputLabel()}`;if(type.textContent!==txt)type.textContent=txt;if(type.title!==ttl)type.title=ttl;
       }else{
-        const instr=t.instrument||'INSTRUMENTO';type.textContent=`${instr} · OUT ${short(outputLabel())}`;type.title=`Salida: ${outputLabel()}`;
+        const instr=t.instrument||'INSTRUMENTO',txt=`${instr} · OUT ${short(outputLabel())}`,ttl=`Salida: ${outputLabel()}`;if(type.textContent!==txt)type.textContent=txt;if(type.title!==ttl)type.title=ttl;
       }
     });
   }
@@ -141,7 +140,7 @@
     $('#ari-io-output').onchange=e=>{localStorage.setItem(OUTPUT_KEY,e.target.value);setStatus('SALIDA · '+short(outputLabel(),30));updateTrackRoutes();window.dispatchEvent(new CustomEvent('ari:audio-output-changed'))};
     $('#ari-io-detect').onclick=()=>refreshDevices(true);$('#ari-io-test').onclick=toggleTest;
     refreshDevices(false);
-    const trackRoot=$('#tracks');if(trackRoot)new MutationObserver(()=>requestAnimationFrame(updateTrackRoutes)).observe(trackRoot,{childList:true,subtree:true});
+    const trackRoot=$('#tracks');if(trackRoot)new MutationObserver(()=>requestAnimationFrame(updateTrackRoutes)).observe(trackRoot,{childList:true});
     navigator.mediaDevices?.addEventListener?.('devicechange',()=>refreshDevices(false));
   }
 
