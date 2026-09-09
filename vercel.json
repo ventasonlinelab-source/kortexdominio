@@ -4,11 +4,14 @@
     {"source":"/ari/trading/data","destination":"https://n8n.kortex10x.com/trading-dashboard/data"},
     {"source":"/ari/trading/health","destination":"https://n8n.kortex10x.com/trading-dashboard/health"},
     {"source":"/ari/trading/price-alerts","destination":"https://n8n.kortex10x.com/trading-dashboard/price-alerts"},
+    {"source":"/ari/trading/","destination":"/ari/trading-shell.html"},
+    {"source":"/ari/trading","destination":"/ari/trading-shell.html"},
     {"source":"/ari/music/audio/:path*","destination":"https://n8n.kortex10x.com/kortex-audio/:path*"},
     {"source":"/ari/music/api/:path*","destination":"https://n8n.kortex10x.com/ari-music-api/api/:path*"}
   ],
   "headers": [
     {"source":"/ari/sw.js","headers":[{"key":"Cache-Control","value":"no-cache, no-store, must-revalidate"}]},
-    {"source":"/ari/dashboards.js","headers":[{"key":"Cache-Control","value":"no-cache, no-store, must-revalidate"}]}
+    {"source":"/ari/dashboards.js","headers":[{"key":"Cache-Control","value":"no-cache, no-store, must-revalidate"}]},
+    {"source":"/ari/trading-shell.html","headers":[{"key":"Cache-Control","value":"no-cache, no-store, must-revalidate"}]}
   ]
 }
