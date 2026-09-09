@@ -38,7 +38,7 @@
     let label=mixers.querySelector('.vol-label');
     if(!label){label=document.createElement('span');label.className='vol-label';label.textContent='VOL';mixers.insertBefore(label,slider)}
     let readout=mixers.querySelector('.pan');
-    if(readout){readout.classList.add('vol-db');readout.textContent=db(Number(slider.value)||0)}
+    if(readout){readout.classList.add('vol-db');const txt=db(Number(slider.value)||0);if(readout.textContent!==txt)readout.textContent=txt}
     if(slider.dataset.ariDbBound!=='1'){
       slider.dataset.ariDbBound='1';
       const paint=()=>{const r=mixers.querySelector('.vol-db');if(r)r.textContent=db(Number(slider.value)||0)};
@@ -60,7 +60,7 @@
     enhance();
     if(observer)observer.disconnect();
     observer=new MutationObserver(()=>requestAnimationFrame(enhance));
-    observer.observe(root,{childList:true,subtree:true});
+    observer.observe(root,{childList:true});
   }
 
   window.ARI_TRACK_VOLUME_UI=true;
