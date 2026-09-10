@@ -18,7 +18,7 @@ module.exports=async(req,res)=>{
   const method=String(req.method||'GET').toUpperCase();
   const path=String(req.query.path||'').replace(/^\/+|\/+$/g,'');
   if(!allowed(path,method))return send(res,404,{ok:false,error:'NOT_FOUND'});
-  const token=process.env.VERCEL_OIDC_TOKEN;
+  const token=req.headers['x-vercel-oidc-token']||process.env.VERCEL_OIDC_TOKEN;
   if(!token)return send(res,503,{ok:false,error:'OIDC_UNAVAILABLE'});
   try{
     const headers={Authorization:`Bearer ${token}`,Accept:'application/json'};
