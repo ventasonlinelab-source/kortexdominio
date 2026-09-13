@@ -1,0 +1,42 @@
+name: HOF417 search dashboard history read only
+on:
+  push:
+    branches: [hof417-alt-route]
+permissions:
+  contents: read
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Search public dashboard JSON for HOF417 cohort
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsS --max-time 20 'https://n8n.kortex10x.com/hermes-dashboard/api/dashboard' -o /tmp/d.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/d.json'))
+          needles=['HOF417','INBOCA','ESTEVE','DENTALI','MARÍA JIMÉNEZ','MARIA JIMENEZ','DENTAL MAR','ORTODONCIA EXCLUSIVA','DR. HUESO','MOSQUEIRA','RIDERE','CARDOZO']
+          hits=[]
+          def walk(x,path='$'):
+              if isinstance(x,dict):
+                  s=json.dumps(x,ensure_ascii=False)
+                  if any(n.lower() in s.lower() for n in needles):
+                      hits.append((path,x))
+                  for k,v in x.items(): walk(v,f'{path}.{k}')
+              elif isinstance(x,list):
+                  for i,v in enumerate(x): walk(v,f'{path}[{i}]')
+          walk(d)
+          print('TOP_KEYS', list(d.keys()))
+          print('ACTIVE_COHORT', json.dumps(d.get('active_cohort'),ensure_ascii=False)[:5000])
+          print('HITS', len(hits))
+          seen=set()
+          for p,x in hits:
+              s=json.dumps(x,ensure_ascii=False,sort_keys=True)
+              if s in seen: continue
+              seen.add(s)
+              print('PATH',p)
+              print(json.dumps(x,ensure_ascii=False)[:12000])
+              if len(seen)>=40: break
+          PY
