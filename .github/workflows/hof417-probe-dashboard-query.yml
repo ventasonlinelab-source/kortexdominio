@@ -1,0 +1,21 @@
+name: HOF417 probe dashboard cohort read only
+on:
+  push:
+    branches: [hof417-alt-route]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Probe HOF417 cohort selectors
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://n8n.kortex10x.com/hermes-dashboard/api/dashboard'
+          for Q in 'run_id=HOF417-BATCH10-20260913' 'cohort=HOF417-BATCH10-20260913' 'cohort_id=HOF417-BATCH10-20260913'; do
+            echo "=== $Q ==="
+            curl -fsS --max-time 20 "${BASE}?${Q}" | jq -c '{cohort:(.cohort // .cohort_id // .run_id // .meta?.cohort // .data?.cohort), keys:(keys), candidates:(.candidates // .data?.candidates // .rows // .data?.rows // [])}' | head -c 12000
+            echo
+          done
