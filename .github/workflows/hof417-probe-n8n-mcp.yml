@@ -1,0 +1,41 @@
+name: HOF417 probe n8n MCP read only
+on:
+  push:
+    branches: [hof417-alt-route]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: MCP initialize and tools list only
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://n8n.kortex10x.com/kortex-mcp'
+          rm -f /tmp/h1 /tmp/b1 /tmp/h2 /tmp/b2
+          curl -sS --max-time 20 -D /tmp/h1 -o /tmp/b1 \
+            -X POST "$URL" \
+            -H 'Accept: application/json, text/event-stream' \
+            -H 'Content-Type: application/json' \
+            --data '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"hof417-readonly-probe","version":"1.0"}}}' || true
+          echo '=== INIT STATUS/HEADERS ==='
+          sed -n '1,20p' /tmp/h1 || true
+          echo '=== INIT BODY ==='
+          cat /tmp/b1 || true
+          SID=$(awk 'BEGIN{IGNORECASE=1} /^mcp-session-id:/ {gsub("\r",""); print $2}' /tmp/h1 | tail -1)
+          if [ -n "$SID" ]; then
+            curl -sS --max-time 20 -D /tmp/h2 -o /tmp/b2 \
+              -X POST "$URL" \
+              -H 'Accept: application/json, text/event-stream' \
+              -H 'Content-Type: application/json' \
+              -H "Mcp-Session-Id: $SID" \
+              --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}' || true
+            echo '=== TOOLS STATUS/HEADERS ==='
+            sed -n '1,20p' /tmp/h2 || true
+            echo '=== TOOLS BODY ==='
+            cat /tmp/b2 || true
+          else
+            echo 'NO_MCP_SESSION_ID'
+          fi
