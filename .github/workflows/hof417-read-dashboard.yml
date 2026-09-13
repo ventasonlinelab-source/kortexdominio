@@ -1,0 +1,24 @@
+name: HOF417 read dashboard
+on:
+  push:
+    branches: [hof417-alt-route]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  read:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read HERMES machine
+        run: |
+          set -euo pipefail
+          echo '=== MACHINE ==='
+          curl -fsS --max-time 20 'https://n8n.kortex10x.com/hermes-dashboard/api/machine'
+          echo
+      - name: Read HERMES dashboard
+        run: |
+          set -euo pipefail
+          echo '=== DASHBOARD ==='
+          curl -fsS --max-time 20 'https://n8n.kortex10x.com/hermes-dashboard/api/dashboard'
+          echo
